@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">HahaClass</string>
+    <string name="title_app_name">행복을 만드는 아리랑</string>
+    <string name="subtitle_app_name">하박수 웃음교실</string>
+    <string name="forgot_pwd">비밀번호를 잊으셨나요?</string>
+    <string name="goback">기존 계정으로 로그인</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="custom_sign_in">Custom</string>
+    <string name="action_sign_up">Create Account</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_repassword">비밀번호 확인</string>
+    <string name="prompt_name">name</string>
+    <string name="prompt_phone">phone</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_name">이름이 정확하지 않습니다</string>
+    <string name="error_invalid_phone">번호가 정확하지 않습니다</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_account">sign up</string>
 </resources>
