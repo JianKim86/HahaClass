@@ -78,7 +78,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private View mProgressView;
     private View mLoginFormView;
     private ImageView mImg;
-    private String picPath;
+    private String picPath="";
     UserInfo userInfo = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -422,7 +422,8 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
 
             if (success) {
                 moveActivity(mEmail,mPassword,GOLOGIN);
-                if((!picPath.equals(""))||picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath);
+               // Toast.makeText(AccountActivity.this, ""+picPath, Toast.LENGTH_SHORT).show();
+                if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath);
                 else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

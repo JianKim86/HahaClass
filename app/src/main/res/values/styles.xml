@@ -13,5 +13,26 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="AppTheme.Applayout">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="titleTextColor">@color/colorTitle</item>
+        <item name="subtitleTextColor">@color/colorTitle</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
 
+    </style>
+    <style name="AppTheme.Tablayout">
+        <!-- Customize your theme here. -->
+        <item name="tabTextColor">@color/colorGray</item>
+        <item name="tabSelectedTextColor">@color/colorPoint</item>
+        <item name="selectableItemBackground">@color/colorGray</item>
+        </style>
+
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="titleTextColor">@color/colorTitle</item>
+        <item name="android:textColorSecondary">@color/colorTitle</item>
+        <item name="android:textColorPrimary">@color/colorPoint</item>
+
+
+    </style>
 </resources>
