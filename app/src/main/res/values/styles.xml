@@ -32,7 +32,13 @@
         <item name="titleTextColor">@color/colorTitle</item>
         <item name="android:textColorSecondary">@color/colorTitle</item>
         <item name="android:textColorPrimary">@color/colorPoint</item>
-
+    </style>
+    <style name="FragTeme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="titleTextColor">@color/colorTitle</item>
+        <item name="android:textColorSecondary">@color/colorTitle</item>
+        <item name="android:textColorPrimary">@color/colorPoint</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:padding">4dp</item>
 
     </style>
 </resources>

@@ -29,8 +29,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,6 +50,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
+    private static final String HELLOLOGIN = "환영합니다!";
     private static final int GOMAIN = 1;
     private static final int GOFORGOTPWD = 2;
     private static final int GOSIGNUP = 3;
@@ -72,6 +77,8 @@ public class LoginActivity extends AppCompatActivity  {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private  ImageView iv_myimg ;
+    private TextView tvTitle,tvSubtitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +138,9 @@ public class LoginActivity extends AppCompatActivity  {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
+        iv_myimg= findViewById(R.id.iv_myimg);
+        tvTitle =findViewById(R.id.tv_title);
+        tvSubtitle =findViewById(R.id.tv_subtitle);
 
     }//onCreate
 
@@ -371,7 +380,7 @@ public class LoginActivity extends AppCompatActivity  {
             }
             /**서버에서 이메일 유무 확인*/
             //잇으면 true
-            isUser = true;
+            //isUser=true;
             if(isUser) {
                 /**서버에서 유저정보를 읽어와서 userinfo에 담음*/
                 String uName = "김지안";
@@ -483,7 +492,17 @@ public class LoginActivity extends AppCompatActivity  {
             String name =  bundleData.getString("Name");
             String img = bundleData.getString("Image");
             String phone = bundleData.getString("Phone");
-            moveActivity(GOMAIN,new UserInfo(name,email,phone,pwd,img,level));
+            userinfo = new UserInfo(name,email,phone,pwd,img,level);
+            if(img !=null &&!(img.equals(""))){
+            Uri uRi = Uri.parse(img);
+            Picasso.get().load(uRi).into(iv_myimg);}
+            mEmailView.setText(email);
+            mPasswordView.setText(pwd);
+            tvTitle.setText(HELLOLOGIN);
+            tvSubtitle.setText(name+"님");
+            /**서버 작업이 되면 서버에서 회원정보를 읽어와서 isUser=true 로바꾸고 비교해서 액티비티 이동**/
+           // isUser = true;
+           // moveActivity(GOMAIN,new UserInfo(name,email,phone,pwd,img,level));
         }
        }//GOSIGNUP
 

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:theme="@style/FragTeme">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/layout_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="0dp"
+                android:layout_centerHorizontal="true"
+
+                >
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="윤나영"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="프로필"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/layout_relative"
+                android:layout_width="140dp"
+                android:padding="0dp"
+                android:layout_height="140dp"
+                android:layout_below="@+id/layout_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                >
+                <ImageView
+                    android:id="@+id/iv_infoimg"
+                    android:clickable="true"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher_background" />
+                <ImageView
+                    android:id="@+id/iv_edit"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/layout_relative"
+                android:padding="0dp"
+               >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="자격"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_centerVertical="true"/>
+                    <ImageView
+                        android:id="@+id/iv_edit_license"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/edit"
+                        android:clickable="true"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        />
+                </RelativeLayout>
+                <ListView
+                    android:id="@+id/list_license"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></ListView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="강의분야"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageView
+                        android:id="@+id/iv_edit_field"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="true"
+                        android:src="@drawable/edit" />
+                </RelativeLayout>
+                <ListView
+                    android:id="@+id/list_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></ListView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="학력및 이력"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_centerVertical="true"/>
+                    <ImageView
+                        android:id="@+id/iv_edit_career"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/edit"
+                        android:clickable="true"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        />
+                </RelativeLayout>
+                <ListView
+                    android:id="@+id/list_career"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></ListView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

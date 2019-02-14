@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -80,6 +82,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private View mLoginFormView;
     private ImageView mImg;
     private String picPath="";
+
     UserInfo userInfo = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,13 +128,14 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         goBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                moveActivity(CUSTOMER,CUSTOMER,GOBACK);
+                moveActivity(GOBACK);
             }
         });
 
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
     }
 
     private void populateAutoComplete() {
@@ -422,10 +426,11 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
             showProgress(false);
 
             if (success) {
-                moveActivity(mEmail,mPassword,GOLOGIN);
+
                // Toast.makeText(AccountActivity.this, ""+picPath, Toast.LENGTH_SHORT).show();
-                if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath,CUSTOMERLEVEL);
+                if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, CUSTOMERLEVEL);
                 else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",CUSTOMERLEVEL);
+                moveActivity(GOLOGIN);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -440,7 +445,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     }
 
 
-    public void moveActivity(String email, String pwd, int state){
+    public void moveActivity(int state){
         Intent intent = null;
         Bundle bundle = null;
         switch (state){
@@ -467,6 +472,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                     finish(); // 두번째 화면 종료
                 }else{
                     //가입실패 TODO::dialog
+                    Toast.makeText(this, "가입실패", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
