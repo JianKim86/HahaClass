@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,13 +41,15 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-
+public class LoginActivity extends AppCompatActivity  {
+//implements LoaderCallbacks<Cursor>
 
     private static final String CUSTOMER = "customer";
+    private static final String USER = "user";
     private static final int GOMAIN = 1;
     private static final int GOFORGOTPWD = 2;
     private static final int GOSIGNUP = 3;
+    public UserInfo userinfo; //읽어들어올 정보를 담을 userinfo;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -56,8 +59,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-
-
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
@@ -78,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+      //  populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -91,6 +92,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
+        /** 데이터를 읽어와서 이메일 확인후 받아오기
+         */
+
 //btn signin
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -105,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mCustomerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveActivity(CUSTOMER,CUSTOMER,GOMAIN);
+                moveActivity(GOMAIN,null);
             }
         });
 //btn signforgotpwd
@@ -113,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mForgotButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveActivity(CUSTOMER,CUSTOMER,GOFORGOTPWD);
+                moveActivity(GOFORGOTPWD,null);
             }
         });
 //btn signup
@@ -121,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mSignupButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveActivity(CUSTOMER,CUSTOMER,GOSIGNUP);
+                moveActivity(GOSIGNUP,null);
             }
         });
 
@@ -131,13 +135,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }//onCreate
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
+//    private void populateAutoComplete() {
+//        if (!mayRequestContacts()) {
+//            return;
+//        }
+//
+//        getLoaderManager().initLoader(0, null, this);
+//    }
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -164,15 +168,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Callback received when a permissions request has been completed.
      */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        if (requestCode == REQUEST_READ_CONTACTS) {
+//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                populateAutoComplete();
+//            }
+//        }
+//    }
 
 
     /**
@@ -180,11 +184,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+
+    private boolean isUser = false;
+    private static final int LEVELCUSTOMER = 0;
+    private static final int LEVELADMIN = 1;
+    private static final int LEVELSUPERADMIN = 2;
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -282,40 +290,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
+//
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+//        return new CursorLoader(this,
+//                // Retrieve data rows for the device user's 'profile' contact.
+//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
+//                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+//
+//                // Select only email addresses.
+//                ContactsContract.Contacts.Data.MIMETYPE +
+//                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
+//                .CONTENT_ITEM_TYPE},
+//
+//                // Show primary email addresses first. Note that there won't be
+//                // a primary email address if the user hasn't specified one.
+//                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+//        List<String> emails = new ArrayList<>();
+//        cursor.moveToFirst();
+//        while (!cursor.isAfterLast()) {
+//            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+//            cursor.moveToNext();
+//        }
+//
+//        addEmailsToAutoComplete(emails);
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+//
+//    }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
@@ -361,8 +369,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch (InterruptedException e) {
                 return false;
             }
+            /**서버에서 이메일 유무 확인*/
+            //잇으면 true
+            isUser = true;
+            if(isUser) {
+                /**서버에서 유저정보를 읽어와서 userinfo에 담음*/
+                String uName = "김지안";
+                String uEmail = "o0x0oa86@gmail.com";
+                String uPhone = "01062593352";
+                String uPassword = "123456";
+                String uImagePath = "";
+                int uLevel = 2;
+                /** 서버 작업들어가면 담아서 함*/
+                userinfo = new UserInfo(uName, uEmail, uPhone, uPassword, uImagePath, uLevel);
 
-            for (String credential : DUMMY_CREDENTIALS) {
+                if(!(userinfo.getEmail().equals(mEmail)&&userinfo.getPassword().equals(mPassword))) return false;
+
+            }
+
+
+                for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
@@ -374,14 +400,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
 //액티비티 넘기기
+
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
 
             if (success) {
-                moveActivity(mEmail,mPassword,GOMAIN);
+
+
+                    moveActivity(GOMAIN,userinfo);
+
+
             } else {
+
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
@@ -394,42 +426,64 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+//액티비티 이동
+    public void moveActivity(int state, UserInfo userInfo){
+        Bundle bundle=null;
 
-    public void moveActivity(String email, String pwd, int state){
         Intent intent = null;
         switch (state){
             case GOMAIN:
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("Email", email);
-                intent.putExtra("Password", pwd);
+                if(userInfo != null) {
+                    bundle = new Bundle();
+                    int userLevel = userInfo.getLevel();
+                    String userPhone = userInfo.getPhone();
+                    String userName = userInfo.getName();
+                    String userImgPath = userInfo.getImagePath();
+                    String userEmail =userInfo.getEmail();
+                    String userPassword =userInfo.getPassword();
+                    bundle.putInt("Level",userLevel);
+                    bundle.putString("Name",userName);
+                    bundle.putString("Image",userImgPath);
+                    bundle.putString("Phone",userPhone);
+                    bundle.putString("Email",userEmail);
+                    bundle.putString("Pass",userPassword);
+                    bundle.putString("state",USER);
+                }else{
+                    bundle = new Bundle();
+                    bundle.putString("state",CUSTOMER);
+                }
+                intent = new Intent(LoginActivity.this, PIntroActivity.class);
+                intent.putExtra("Bundle", bundle);
                 startActivity(intent);
-                finish();
+                //finish();
                 break;
             case GOFORGOTPWD:
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("Email", email);
-                intent.putExtra("Password", pwd);
-                startActivity(intent);
-                finish();
+//                intent = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(intent);
+                //finish();
                 break;
             case GOSIGNUP:
                 intent = new Intent(LoginActivity.this, AccountActivity.class);
                 startActivityForResult(intent,GOSIGNUP);
-                break;
+                //break;
         }
 
     }//moveActivity
 //인텐트 돌려받고 로그인
+    Bundle bundleData;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
        if(requestCode == GOSIGNUP){
-           Toast.makeText(this, "ddd", Toast.LENGTH_SHORT).show();
         if (resultCode==RESULT_OK) { // 정상 반환일 경우에만 동작하겠다
-            String email = data.getStringExtra("Email");
-            String pwd = data.getStringExtra("Password");
-
-            moveActivity(email,pwd,GOMAIN);
+            bundleData = data.getBundleExtra("userinfo");
+            int level = bundleData.getInt("Level");
+            String email =  bundleData.getString("Email");
+            String pwd = bundleData.getString("Pass");
+            String name =  bundleData.getString("Name");
+            String img = bundleData.getString("Image");
+            String phone = bundleData.getString("Phone");
+            moveActivity(GOMAIN,new UserInfo(name,email,phone,pwd,img,level));
         }
        }//GOSIGNUP
 

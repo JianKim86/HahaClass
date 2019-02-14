@@ -38,7 +38,8 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".AccountActivity"
-            android:label="@string/title_activity_account"></activity>
+            android:label="@string/title_activity_account" />
+        <activity android:name=".PIntroActivity"></activity>
     </application>
 
 </manifest>

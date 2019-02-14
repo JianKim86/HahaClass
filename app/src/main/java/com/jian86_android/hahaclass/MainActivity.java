@@ -56,12 +56,7 @@ public class MainActivity extends AppCompatActivity  {
         fab4.setOnClickListener(onClickListener);
 
     }//onCreate
-    @Override
-    public void onPause() {
-        super.onPause();
-        //intent전환 효과 무효
-        overridePendingTransition(0, 0);
-    }
+//fab버튼 클릭시 화면전환 이벤트
  View.OnClickListener onClickListener = new View.OnClickListener() {
      @Override
      public void onClick(View v) {
@@ -116,5 +111,12 @@ public class MainActivity extends AppCompatActivity  {
             fab4.setClickable(true);
             isFabOpen = true;
         }
+    }//anim
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //intent전환 효과 무효
+        overridePendingTransition(0, 0);
     }
 }//MainActivity

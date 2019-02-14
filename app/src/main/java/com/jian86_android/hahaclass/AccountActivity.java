@@ -53,6 +53,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private static final int GOBACK = 1;
     private static final int PIC = 1000;
     private static final String CUSTOMER = "customer";
+    private static final int CUSTOMERLEVEL = 0;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -423,8 +424,8 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
             if (success) {
                 moveActivity(mEmail,mPassword,GOLOGIN);
                // Toast.makeText(AccountActivity.this, ""+picPath, Toast.LENGTH_SHORT).show();
-                if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath);
-                else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword);
+                if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath,CUSTOMERLEVEL);
+                else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",CUSTOMERLEVEL);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -441,14 +442,33 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
 
     public void moveActivity(String email, String pwd, int state){
         Intent intent = null;
+        Bundle bundle = null;
         switch (state){
             case GOLOGIN :
                 intent = new Intent();
-                intent.putExtra("Email", email);
-                intent.putExtra("Password", pwd);
-                setResult(RESULT_OK, intent); // 호출한 화면으로 되돌려주기
-                // resultCode : 결과 돌려주는 상태
-                finish(); // 두번째 화면 종료
+                if(userInfo != null) {
+                    bundle = new Bundle();
+                    int userLevel = userInfo.getLevel();
+                    String userPhone = userInfo.getPhone();
+                    String userName = userInfo.getName();
+                    String userImgPath = userInfo.getImagePath();
+                    String userEmail =userInfo.getEmail();
+                    String userPassword =userInfo.getPassword();
+                    bundle.putInt("Level",userLevel);
+                    bundle.putString("Name",userName);
+                    bundle.putString("Image",userImgPath);
+                    bundle.putString("Phone",userPhone);
+                    bundle.putString("Email",userEmail);
+                    bundle.putString("Pass",userPassword);
+
+                    intent.putExtra("userinfo", bundle);
+                    setResult(RESULT_OK, intent); // 호출한 화면으로 되돌려주기
+                    // resultCode : 결과 돌려주는 상태
+                    finish(); // 두번째 화면 종료
+                }else{
+                    //가입실패 TODO::dialog
+                }
+
                 break;
             case GOBACK :
                 intent = new Intent(AccountActivity.this, LoginActivity.class);

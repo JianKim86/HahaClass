@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/item1"
+        android:title="내계정"
+        >
+    </item>
+    <item android:id="@+id/item2"
+    android:title="비밀번호 변경"/>
+    <item android:id="@+id/item3"
+        android:title="내 활동 로그 관리"/>
+    <item android:id="@+id/item4"
+        android:title="문의하기"/>
 
 </menu>

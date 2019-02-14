@@ -1,11 +1,20 @@
 package com.jian86_android.hahaclass;
 
 public class UserInfo {
-    private static String name;
-    private static String email;
-    private static String phone;
-    private static String password;
-    private static String imagePath;
+    private  String name;
+    private  String email;
+    private  String phone;
+    private  String password;
+    private  String imagePath;
+    private  int level;
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
     public String getImagePath() {
         return imagePath;
@@ -47,15 +56,9 @@ public class UserInfo {
         this.password = password;
     }
 
-    public UserInfo(String name, String email, String phone, String password) {
 
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-    }
-
-    public UserInfo(String name, String email, String phone, String password, String imagePath) {
+    public UserInfo(String name, String email, String phone, String password, String imagePath, int level) {
+        this.level = level;
         this.name = name;
         this.email = email;
         this.phone = phone;
