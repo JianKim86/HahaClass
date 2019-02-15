@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class PIntroActivity extends AppCompatActivity {
+    private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
     private Toolbar toolbar;
@@ -41,6 +42,7 @@ public class PIntroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pintro);
+        applicationClass =(ApplicationClass)getApplicationContext();
         getintent = getIntent();
         getIntentData();
 
@@ -54,13 +56,13 @@ public class PIntroActivity extends AppCompatActivity {
 
         View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
         //View nav_header_view = navigationView.getHeaderView(0);
-
-        String name = getintent.getBundleExtra("Bundle").getString("Name");
+       // String name = getintent.getBundleExtra("Bundle").getString("Name");
         TextView nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.tv_name);
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
             else nav_header_id_text.setText(name);
-        if(img != null) {
+
+        if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
             Picasso.get().load(uRi).into(profile_image);
         }
@@ -72,6 +74,11 @@ public class PIntroActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                 //Todo: 아이탬 연결
+                    case R.id.item1 :goSetting(0);break;
+                    case R.id.item2 :goSetting(1);break;
+                    case R.id.item3 :goSetting(2);break;
+                    case R.id.item4 :goSetting(3);break;
+
                 }//switch
                 drawerLayout.closeDrawer(navMenu,true);
                 return false;
@@ -83,23 +90,24 @@ public class PIntroActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent();
-                Bundle userBundle = new Bundle();
+                Intent intent;
+//                Bundle userBundle = new Bundle();
+//
+//
+//                userBundle.putString("state",state);
+//                if(state.equals(USER)){
+//                    userBundle.putString("Name",userInfo.getName());
+//                    userBundle.putString("Email",userInfo.getEmail());
+//                    userBundle.putString("Phone",userInfo.getPhone());
+//                    userBundle.putString("Pass",userInfo.getPassword());
+//                    userBundle.putString("Image",userInfo.getImagePath());
+//                    userBundle.putInt("Level",userInfo.getLevel());
+//                }
+
                 Bundle selectTeacher = new Bundle();
-
-                userBundle.putString("state",state);
-                if(state.equals(USER)){
-                    userBundle.putString("Name",userInfo.getName());
-                    userBundle.putString("Email",userInfo.getEmail());
-                    userBundle.putString("Phone",userInfo.getPhone());
-                    userBundle.putString("Pass",userInfo.getPassword());
-                    userBundle.putString("Image",userInfo.getImagePath());
-                    userBundle.putInt("Level",userInfo.getLevel());
-                }
-
                 selectTeacher.putString("Instructor",itemInstructors.get(position).getSubTitle());
                 intent = new Intent(PIntroActivity.this, MainActivity.class);
-                intent.putExtra("userBundle", userBundle);
+               // intent.putExtra("userBundle", userBundle);
                 intent.putExtra("selectTeacher",selectTeacher);
                 startActivity(intent);
 
@@ -130,18 +138,34 @@ public class PIntroActivity extends AppCompatActivity {
 
 
     }
+
+
+
     private void  getIntentData(){
-        Bundle bundle = getintent.getBundleExtra("Bundle");
-         state = bundle.getString("state");
-        if(state.equals(USER)) {
-             name = bundle.getString("Name");
-             email = bundle.getString("Email");
-             phone = bundle.getString("Phone");
-             pass = bundle.getString("Pass");
-             img = bundle.getString("Image");
-             level = bundle.getInt("Level", 0);
-            userInfo = new UserInfo(name, email, phone, pass, img, level);
-        }else userInfo = null;
+        state = applicationClass.getState();
+        if(state.equals(USER)){
+        userInfo= applicationClass.getUserInfo();
+            name =userInfo.getName();
+             email = userInfo.getEmail();
+             phone = userInfo.getPhone();
+             pass = userInfo.getPassword();
+             img = userInfo.getImagePath();
+             level = userInfo.getLevel();
+        }else{
+            userInfo = null;
+        }
+//        Bundle bundle = getintent.getBundleExtra("Bundle");
+//         state = bundle.getString("state");
+//        if(state.equals(USER)) {
+//             name = bundle.getString("Name");
+//             email = bundle.getString("Email");
+//             phone = bundle.getString("Phone");
+//             pass = bundle.getString("Pass");
+//             img = bundle.getString("Image");
+//             level = bundle.getInt("Level", 0);
+//            userInfo = new UserInfo(name, email, phone, pass, img, level);
+//        }else userInfo = null;
+
 
     }//getIntentData;
     private void dataSetting(){
@@ -158,6 +182,11 @@ public class PIntroActivity extends AppCompatActivity {
         listView.setAdapter(mMyAdapter);
 
     }//dataSetting
+    private void goSetting(int item){
+        Intent intent= new Intent(PIntroActivity.this,SettingActivity.class);
+        intent.putExtra("Item",item);
+        startActivity(intent);
+    }
 
 
 }//PIntroActivity

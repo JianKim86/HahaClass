@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity  {
     private static final int GOFORGOTPWD = 2;
     private static final int GOSIGNUP = 3;
     public UserInfo userinfo; //읽어들어올 정보를 담을 userinfo;
+    private ApplicationClass applicationClass;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -84,6 +85,8 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        applicationClass = (ApplicationClass) getApplicationContext();
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
       //  populateAutoComplete();
@@ -380,7 +383,7 @@ public class LoginActivity extends AppCompatActivity  {
             }
             /**서버에서 이메일 유무 확인*/
             //잇으면 true
-            //isUser=true;
+            isUser=true;
             if(isUser) {
                 /**서버에서 유저정보를 읽어와서 userinfo에 담음*/
                 String uName = "김지안";
@@ -388,7 +391,7 @@ public class LoginActivity extends AppCompatActivity  {
                 String uPhone = "01062593352";
                 String uPassword = "123456";
                 String uImagePath = "";
-                int uLevel = 2;
+                int uLevel = 3;
                 /** 서버 작업들어가면 담아서 함*/
                 userinfo = new UserInfo(uName, uEmail, uPhone, uPassword, uImagePath, uLevel);
 
@@ -443,26 +446,32 @@ public class LoginActivity extends AppCompatActivity  {
         switch (state){
             case GOMAIN:
                 if(userInfo != null) {
-                    bundle = new Bundle();
-                    int userLevel = userInfo.getLevel();
-                    String userPhone = userInfo.getPhone();
-                    String userName = userInfo.getName();
-                    String userImgPath = userInfo.getImagePath();
-                    String userEmail =userInfo.getEmail();
-                    String userPassword =userInfo.getPassword();
-                    bundle.putInt("Level",userLevel);
-                    bundle.putString("Name",userName);
-                    bundle.putString("Image",userImgPath);
-                    bundle.putString("Phone",userPhone);
-                    bundle.putString("Email",userEmail);
-                    bundle.putString("Pass",userPassword);
-                    bundle.putString("state",USER);
+                    applicationClass.setUserInfo(userInfo);
+                    applicationClass.setLevel(userInfo.getLevel());
+                    applicationClass.setState(USER);
+//                    bundle = new Bundle();
+//                    int userLevel = userInfo.getLevel();
+//                    String userPhone = userInfo.getPhone();
+//                    String userName = userInfo.getName();
+//                    String userImgPath = userInfo.getImagePath();
+//                    String userEmail =userInfo.getEmail();
+//                    String userPassword =userInfo.getPassword();
+//                    bundle.putInt("Level",userLevel);
+//                    bundle.putString("Name",userName);
+//                    bundle.putString("Image",userImgPath);
+//                    bundle.putString("Phone",userPhone);
+//                    bundle.putString("Email",userEmail);
+//                    bundle.putString("Pass",userPassword);
+//                    bundle.putString("state",USER);
                 }else{
-                    bundle = new Bundle();
-                    bundle.putString("state",CUSTOMER);
+//                    bundle = new Bundle();
+//                    bundle.putString("state",CUSTOMER);
+                    applicationClass.setUserInfo(null);
+                    applicationClass.setState(CUSTOMER);
+
                 }
                 intent = new Intent(LoginActivity.this, PIntroActivity.class);
-                intent.putExtra("Bundle", bundle);
+                //intent.putExtra("Bundle", bundle);
                 startActivity(intent);
                 //finish();
                 break;
@@ -501,7 +510,7 @@ public class LoginActivity extends AppCompatActivity  {
             tvTitle.setText(HELLOLOGIN);
             tvSubtitle.setText(name+"님");
             /**서버 작업이 되면 서버에서 회원정보를 읽어와서 isUser=true 로바꾸고 비교해서 액티비티 이동**/
-           // isUser = true;
+            //isUser = true;
            // moveActivity(GOMAIN,new UserInfo(name,email,phone,pwd,img,level));
         }
        }//GOSIGNUP

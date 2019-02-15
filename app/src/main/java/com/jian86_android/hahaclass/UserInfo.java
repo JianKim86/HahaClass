@@ -65,4 +65,10 @@ public class UserInfo {
         this.password = password;
         this.imagePath = imagePath;
     }
+
+    public UserInfo(String name, String email, int level) {
+        this.name = name;
+        this.email = email;
+        this.level = level;
+    }
 }

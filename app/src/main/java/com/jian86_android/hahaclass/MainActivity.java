@@ -2,10 +2,13 @@ package com.jian86_android.hahaclass;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -30,12 +33,13 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity  {
+    private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
+    private static final int PIC = 1000;
     private Toolbar toolbar;
     private NavigationView navMenu;
     private DrawerLayout drawerLayout;
-    private ListView listView;
     private ArrayList<ItemInstructor> itemInstructors = new ArrayList<>();
     private UserInfo userInfo;
     private Intent getintent;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getintent = getIntent();
+        applicationClass =(ApplicationClass)getApplicationContext();
         getIntentData();
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);
@@ -73,11 +78,14 @@ public class MainActivity extends AppCompatActivity  {
         adapter = new AdapterFragment(getSupportFragmentManager());
         pagerLayout.setAdapter(adapter);
 
-
         navMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
+                    case R.id.item1 :goSetting(0); break;
+                    case R.id.item2 :goSetting(1);break;
+                    case R.id.item3 :goSetting(2);break;
+                    case R.id.item4 :goSetting(3);break;
                 }//switch
                 drawerLayout.closeDrawer(navMenu,true);
                 return false;
@@ -92,13 +100,13 @@ public class MainActivity extends AppCompatActivity  {
 
         View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
         //View nav_header_view = navigationView.getHeaderView(0);
-        String name = getintent.getBundleExtra("userBundle").getString("Name");
+      //  String name = getintent.getBundleExtra("userBundle").getString("Name");
 
         TextView nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.tv_name);
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
         else nav_header_id_text.setText(name);
-        if(img != null) {
+        if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
             Picasso.get().load(uRi).into(profile_image);
         }
@@ -126,7 +134,6 @@ public class MainActivity extends AppCompatActivity  {
              case R.id.fab_btn:
                  anim();
 
-                 Toast.makeText(MainActivity.this, "Floating Action Button", Toast.LENGTH_SHORT).show();
                  break;
              case R.id.fab1_btn:
                  anim();
@@ -189,21 +196,117 @@ public class MainActivity extends AppCompatActivity  {
 
     }
     private void  getIntentData(){
-        Bundle userBundle = getintent.getBundleExtra("userBundle");
+      //  Bundle userBundle = getintent.getBundleExtra("userBundle");
         Bundle selectTeacher =  getintent.getBundleExtra("selectTeacher");
         instructor = selectTeacher.getString("Instructor");
-        state = userBundle.getString("state");
-        if(state.equals(USER)) {
-            name = userBundle.getString("Name");
-            email = userBundle.getString("Email");
-            phone = userBundle.getString("Phone");
-            pass = userBundle.getString("Pass");
-            img = userBundle.getString("Image");
-            level = userBundle.getInt("Level", 0);
-            userInfo = new UserInfo(name, email, phone, pass, img, level);
-        }else userInfo = null;
+//        state = userBundle.getString("state");
+//
+//        if(state.equals(USER)) {
+//            name = userBundle.getString("Name");
+//            email = userBundle.getString("Email");
+//            phone = userBundle.getString("Phone");
+//            pass = userBundle.getString("Pass");
+//            img = userBundle.getString("Image");
+//            level = userBundle.getInt("Level", 0);
+//            userInfo = new UserInfo(name, email, phone, pass, img, level);
+//        }else userInfo = null;
+        state = applicationClass.getState();
+        if(state.equals(USER)){
+            userInfo= applicationClass.getUserInfo();
+            name =userInfo.getName();
+            email = userInfo.getEmail();
+            phone = userInfo.getPhone();
+            pass = userInfo.getPassword();
+            img = userInfo.getImagePath();
+            level = userInfo.getLevel();
+        }else{
+            userInfo = null;
+        }
 
     }//getIntentData;
+    private void goSetting(int item){
+        Intent intent= new Intent(MainActivity.this,SettingActivity.class);
+        intent.putExtra("Item",item);
+        startActivity(intent);
+    }
+
+    void checkState(){
+
+    }
+    void takePic(){
+        Intent intent=new Intent();
+        intent.setAction(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PIC);
+    }
+    private String picPath="";
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+            case PIC:
+
+                //갤러리 화면에서 이미지를 선택하고 돌아왔는지 체크
+                //두 번째 파라미터 : resultCode
+                if (resultCode == RESULT_OK){
+
+                    Uri uri=data.getData();
+                    picPath = uri.toString();
+                    Fragment fragment = (Fragment) adapter.instantiateItem(pagerLayout,0);
+                    if(uri != null){
+                        //Uri 경로로 전달되었다면
+                        //iv.setImageURI(uri);
+                        //라이브러리 쓰자!!!!!!!  Glide(bumptech)
+                        if(pagerLayout.getCurrentItem()==0) {
+                            ((FragInfo)fragment).setPic(picPath);
+                        }
+                    }else{
+                        //아니면 Intent 에 Extra 데이터로 Bitmap 이 전달되어 옴
+                        Bundle bundle=data.getExtras();
+                        Bitmap bm= (Bitmap) bundle.get("data"); // key 값 "data" 는 정해진거야
+                        //iv.setImageBitmap(bm);
+                        if(pagerLayout.getCurrentItem()==0) {
+                            ((FragInfo)fragment).setPic(bm);
+                        }
+
+
+                    }
+
+                }//if
+
+                break;
+        }
+
+    }//onActivityResult
+
+
+//    public Bundle sendData(){
+//        //디비에서 읽어올 회원정보 이름과이메일만 보냄 하지만 지금은 전체 다 보내기
+//        Bundle bundleData = new Bundle();
+//        if(userInfo != null) {
+//            bundleData = new Bundle();
+//            int userLevel = userInfo.getLevel();
+//            String userPhone = userInfo.getPhone();
+//            String userName = userInfo.getName();
+//            String userImgPath = userInfo.getImagePath();
+//            String userEmail =userInfo.getEmail();
+//            String userPassword =userInfo.getPassword();
+//            bundleData.putInt("Level",userLevel);
+//            bundleData.putString("Name",userName);
+//            bundleData.putString("Image",userImgPath);
+//            bundleData.putString("Phone",userPhone);
+//            bundleData.putString("Email",userEmail);
+//            bundleData.putString("Pass",userPassword);
+//            bundleData.putString("state",state);
+//        }else{
+//            bundleData = new Bundle();
+//            bundleData.putString("state",state);
+//        }
+//        return bundleData;
+//    }
+
+
     @Override
     public void onPause() {
         super.onPause();
