@@ -1,12 +1,14 @@
 package com.jian86_android.hahaclass;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
@@ -54,10 +56,15 @@ public class AdapterPIntroList extends BaseAdapter {
         ItemInstructor myItem = (ItemInstructor) getItem(position);
 
         /* 각 위젯에 세팅된 아이템을 뿌려준다 */
-        Glide.with(context).load(myItem.getImgPath()).into(iv_img);
+        String path = myItem.getImgPath();
+
         tv_name.setText(myItem.getTitle());
         tv_desc.setText(myItem.getSubTitle());
-
+        if(path!=null&&!(path.equals(""))){
+            Uri uRi = Uri.parse(path);
+            Picasso.get().load(uRi).into(iv_img);
+        }else {Glide.with(context).load(R.drawable.ic_launcher_background).into(iv_img);}
         return convertView;
     }
+
 }

@@ -1,5 +1,6 @@
 package com.jian86_android.hahaclass;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
@@ -45,7 +48,6 @@ public class PIntroActivity extends AppCompatActivity {
         applicationClass =(ApplicationClass)getApplicationContext();
         getintent = getIntent();
         getIntentData();
-
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);
         navMenu = findViewById(R.id.nav_menu);
@@ -61,7 +63,7 @@ public class PIntroActivity extends AppCompatActivity {
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
             else nav_header_id_text.setText(name);
-
+        Toast.makeText(applicationClass, "nav :"+img, Toast.LENGTH_SHORT).show();
         if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
             Picasso.get().load(uRi).into(profile_image);
@@ -106,9 +108,12 @@ public class PIntroActivity extends AppCompatActivity {
 
                 Bundle selectTeacher = new Bundle();
                 selectTeacher.putString("Instructor",itemInstructors.get(position).getSubTitle());
+                ItemInstructor itemInstructor = itemInstructors.get(position);
+                applicationClass.setItemInstructor(itemInstructor);
+
                 intent = new Intent(PIntroActivity.this, MainActivity.class);
                // intent.putExtra("userBundle", userBundle);
-                intent.putExtra("selectTeacher",selectTeacher);
+                //intent.putExtra("selectTeacher",selectTeacher);
                 startActivity(intent);
 
             }
@@ -151,6 +156,7 @@ public class PIntroActivity extends AppCompatActivity {
              pass = userInfo.getPassword();
              img = userInfo.getImagePath();
              level = userInfo.getLevel();
+            Toast.makeText(applicationClass, "1"+img, Toast.LENGTH_SHORT).show();
         }else{
             userInfo = null;
         }
@@ -168,11 +174,38 @@ public class PIntroActivity extends AppCompatActivity {
 
 
     }//getIntentData;
+
     private void dataSetting(){
         String title ="윤나영";
         String subTitle ="하하 웃음 클레스";
-         int imgPath = R.drawable.ic_launcher_background;
-        ItemInstructor item = new ItemInstructor(title,subTitle, imgPath);
+        String license = "웃음치료1급자격, 레크레이션1급자격, 실버 웃음 전문지도사자격 ,케어세라피1급자격, 시낭송1급지도사자격 스피치 1급 지도자 자격, 명강사 1급 지도사자격, 펀리더십지도사1급자격, 금연 금주 예방지도사자격, 창의인성교육지도사 자격, 부모코칭지도사자격, 평생교육사 2급 자격,  사회복지사 2급 자격, 심리웃음치료사1급 자격, 건강걷기2급지도사자격, 산업카운셀러1급자격, 심리상담 2급자격(논문: 유머감각이 자아 존중감과 대인관계에 미치는 영향)"
+        ;
+        String field ="감성 리더십, 펀(웃음) 리더십(자아,관계,미래리더십), 감성 스피치,  소통, 강의 코칭, 자원봉사교육, 스피치코칭 PING과 함께 (청소년, 기업, 학부모) 동기부여, 펀 리더십강사 양성 과정, 생애재설계교육, 인성, 금연,금주 학부모코칭, 시낭송 코칭"
+        ;
+        String career ="학력:명지대 사회교육대학원 졸업\n"+
+        "現) (행복을 만드는)창의융합교육 연구소(대표)\n"+
+        "現) 구리아리랑연구보존회 이사 및 사무국장\n"+
+        "現) 아리랑컨텐츠협의회 회장\n"+
+        "現) (행복한 세상 만들기) 하하하웃음크럽 회장\n"+
+        "現) 구리시 평화통일 자문위원회 위원\n"+
+        "現) 구리전통시장ict보이는 라디오 DJ\n"+
+        "現) 이천여성장애인자립센터\n"+
+        "웃음 지도사자격과정 전임강사\n"+
+        "前) 고대평교명품명강사과정,스피치과정지도강사\n"+
+        "前) 한성대 평생교육원 명강사과정 코칭교수\n"+
+        "前) 명지대 사회교육대학원 3대 총동문회장\n"+
+        "前) 시니어 파트너즈  리스타트 전문강사\n"+
+        "前) 한울촌 노인요양원  요양보호사 힐링전문강사\n"+
+        "前) 서울특별시새마을협의회 부설 사회교육원  웃음전문강사\n"+
+        "前) 이대최고명강사과정 코칭교수,\n"+
+        "      구리경찰서 보안협력위원회 위원\n"+
+        "前) 동인초등학교 운영위원장\n"+
+        "前) 대한적십자 경기도지사 구리나누미 회장,\n"+
+        "구리남양주교육지원청\n"+
+        "      (교육공무원(영양교사)인사위원회 위원,친절평가위원)\n"+
+        "前) 구리청소년통합지원체계(CYS_NET) 운영협의회 위원\n";
+        String imgPath = "";
+        ItemInstructor item = new ItemInstructor(title,subTitle,imgPath,license, field, career);
         /**
          * 서버에서 instructors 정보 읽어와서 add시키기**/
 
@@ -183,9 +216,27 @@ public class PIntroActivity extends AppCompatActivity {
 
     }//dataSetting
     private void goSetting(int item){
+        if(state.equals(USER)){
         Intent intent= new Intent(PIntroActivity.this,SettingActivity.class);
-        intent.putExtra("Item",item);
+            intent.putExtra("Item",item);
+            intent.putExtra("stage",1);
         startActivity(intent);
+        }else {
+            //TODO::dial 회원만 가능
+            String msg =getString(R.string.cont_use_custom);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //builder.setTitle("AlertDialog Title");
+            builder.setMessage(msg);
+            builder.setPositiveButton("예",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(PIntroActivity.this,AccountActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+            builder.setNegativeButton("아니오", null);
+            builder.show();
+        }
     }
 
 

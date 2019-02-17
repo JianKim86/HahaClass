@@ -10,7 +10,15 @@ public class ApplicationClass extends Application {
     public UserInfo userInfo;
     public String state;
     public int level;
+    public ItemInstructor itemInstructor;
 
+    public ItemInstructor getItemInstructor() {
+        return itemInstructor;
+    }
+
+    public void setItemInstructor(ItemInstructor itemInstructor) {
+        this.itemInstructor = itemInstructor;
+    }
 
     public UserInfo getUserInfo() {
         return userInfo;

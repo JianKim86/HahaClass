@@ -35,6 +35,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +58,8 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private static final int PIC = 1000;
     private static final String CUSTOMER = "customer";
     private static final int CUSTOMERLEVEL = 0;
+    private static final int ADMINLEVEL = 1;
+    private ApplicationClass applicationClass;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -82,12 +86,14 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private View mLoginFormView;
     private ImageView mImg;
     private String picPath="";
-
+    private RadioGroup rg;
+    private RadioButton rb;
     UserInfo userInfo = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        applicationClass = (ApplicationClass)getApplicationContext();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -135,6 +141,9 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+          rg = (RadioGroup)findViewById(R.id.radioGroup1);
+          rb = (RadioButton) findViewById(R.id.radio0);
 
     }
 
@@ -428,9 +437,16 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
             if (success) {
 
                // Toast.makeText(AccountActivity.this, ""+picPath, Toast.LENGTH_SHORT).show();
-                if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, CUSTOMERLEVEL);
-                else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",CUSTOMERLEVEL);
-                moveActivity(GOLOGIN);
+                if(rb.isChecked()){
+                    Toast.makeText(applicationClass, ""+picPath, Toast.LENGTH_SHORT).show();
+                    if((!(picPath.equals("")))&&picPath!= null) {userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, ADMINLEVEL);}
+                    else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",ADMINLEVEL);
+                    moveActivity(GOLOGIN);
+                }else{
+                    if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, CUSTOMERLEVEL);
+                    else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",CUSTOMERLEVEL);
+                    moveActivity(GOLOGIN);
+                }
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -452,21 +468,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
             case GOLOGIN :
                 intent = new Intent();
                 if(userInfo != null) {
-                    bundle = new Bundle();
-                    int userLevel = userInfo.getLevel();
-                    String userPhone = userInfo.getPhone();
-                    String userName = userInfo.getName();
-                    String userImgPath = userInfo.getImagePath();
-                    String userEmail =userInfo.getEmail();
-                    String userPassword =userInfo.getPassword();
-                    bundle.putInt("Level",userLevel);
-                    bundle.putString("Name",userName);
-                    bundle.putString("Image",userImgPath);
-                    bundle.putString("Phone",userPhone);
-                    bundle.putString("Email",userEmail);
-                    bundle.putString("Pass",userPassword);
-
-                    intent.putExtra("userinfo", bundle);
+                    applicationClass.setUserInfo(userInfo);
                     setResult(RESULT_OK, intent); // 호출한 화면으로 되돌려주기
                     // resultCode : 결과 돌려주는 상태
                     finish(); // 두번째 화면 종료

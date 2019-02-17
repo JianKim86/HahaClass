@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:theme="@style/FragTeme">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -60,6 +61,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:visibility="gone"
+                    android:background="@color/colorAlpa"
                     />
             </RelativeLayout>
 
@@ -71,6 +73,7 @@
                 android:layout_below="@+id/layout_relative"
                 android:padding="0dp"
                >
+
                 <RelativeLayout
                     android:layout_marginTop="8dp"
                     android:layout_width="match_parent"
@@ -93,14 +96,16 @@
                         android:visibility="gone"
                         />
                 </RelativeLayout>
+
                 <TextView
                     android:id="@+id/list_license"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:textSize="16sp"
                     android:lineSpacingMultiplier="1.2"
-                    android:text="웃음치료1급자격, 레크레이션1급자격, 실버 웃음 전문지도사자격 ,케어세라피1급자격, 시낭송1급지도사자격 스피치 1급 지도자 자격, 명강사 1급 지도사자격, 펀리더십지도사1급자격, 금연 금주 예방지도사자격, 창의인성교육지도사 자격, 부모코칭지도사자격, 평생교육사 2급 자격,  사회복지사 2급 자격, 심리웃음치료사1급 자격, 건강걷기2급지도사자격, 산업카운셀러1급자격, 심리상담 2급자격(논문: 유머감각이 자아 존중감과 대인관계에 미치는 영향)"/>
+                    android:padding="4dp"
+                    android:text="웃음치료1급자격, 레크레이션1급자격, 실버 웃음 전문지도사자격 ,케어세라피1급자격, 시낭송1급지도사자격 스피치 1급 지도자 자격, 명강사 1급 지도사자격, 펀리더십지도사1급자격, 금연 금주 예방지도사자격, 창의인성교육지도사 자격, 부모코칭지도사자격, 평생교육사 2급 자격,  사회복지사 2급 자격, 심리웃음치료사1급 자격, 건강걷기2급지도사자격, 산업카운셀러1급자격, 심리상담 2급자격(논문: 유머감각이 자아 존중감과 대인관계에 미치는 영향)"
+                    android:textSize="16sp" />
+
                 <RelativeLayout
                     android:layout_marginTop="8dp"
                     android:layout_width="match_parent"
@@ -188,7 +193,16 @@
        (교육공무원(영양교사)인사위원회 위원,친절평가위원)\n
 前) 구리청소년통합지원체계(CYS_NET) 운영협의회 위원\n
 "/>
-
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/save_edit"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/btn_str"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </RelativeLayout>

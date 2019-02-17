@@ -1,6 +1,7 @@
 package com.jian86_android.hahaclass;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -41,9 +43,10 @@ public class MainActivity extends AppCompatActivity  {
     private NavigationView navMenu;
     private DrawerLayout drawerLayout;
     private ArrayList<ItemInstructor> itemInstructors = new ArrayList<>();
+    private ItemInstructor instructor;
     private UserInfo userInfo;
     private Intent getintent;
-    String state,name,email,phone,pass,img,instructor;
+    String state,name,email,phone,pass,img,instructorTitle;
     int level;
     private ActionBarDrawerToggle drawerToggle;
 
@@ -106,11 +109,14 @@ public class MainActivity extends AppCompatActivity  {
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
         else nav_header_id_text.setText(name);
+        Toast.makeText(applicationClass, "nav :"+img, Toast.LENGTH_SHORT).show();
         if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
             Picasso.get().load(uRi).into(profile_image);
         }
         else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
+
+
         //자바로 액션메뉴에 햄버거 버튼 만들기
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.draw_open, R.string.draw_close);
         //토글버튼 아이콘이 보이도록 붙이기
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity  {
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록
         drawerLayout.addDrawerListener(drawerToggle);
         //타이틀 변경
-        getSupportActionBar().setTitle(instructor);
+        getSupportActionBar().setTitle(instructorTitle);
 
     }//onCreate
 //fab버튼 클릭시 화면전환 이벤트
@@ -197,8 +203,11 @@ public class MainActivity extends AppCompatActivity  {
     }
     private void  getIntentData(){
       //  Bundle userBundle = getintent.getBundleExtra("userBundle");
-        Bundle selectTeacher =  getintent.getBundleExtra("selectTeacher");
-        instructor = selectTeacher.getString("Instructor");
+       // Bundle selectTeacher =  getintent.getBundleExtra("selectTeacher");
+        instructor = applicationClass.getItemInstructor();
+        instructorTitle = instructor.getSubTitle();
+
+
 //        state = userBundle.getString("state");
 //
 //        if(state.equals(USER)) {
@@ -210,6 +219,7 @@ public class MainActivity extends AppCompatActivity  {
 //            level = userBundle.getInt("Level", 0);
 //            userInfo = new UserInfo(name, email, phone, pass, img, level);
 //        }else userInfo = null;
+
         state = applicationClass.getState();
         if(state.equals(USER)){
             userInfo= applicationClass.getUserInfo();
@@ -219,15 +229,34 @@ public class MainActivity extends AppCompatActivity  {
             pass = userInfo.getPassword();
             img = userInfo.getImagePath();
             level = userInfo.getLevel();
+
         }else{
             userInfo = null;
         }
 
     }//getIntentData;
     private void goSetting(int item){
-        Intent intent= new Intent(MainActivity.this,SettingActivity.class);
-        intent.putExtra("Item",item);
-        startActivity(intent);
+        if(state.equals(USER)){
+            Intent intent= new Intent(MainActivity.this,SettingActivity.class);
+            intent.putExtra("Item",item);
+            intent.putExtra("stage",0);
+            startActivity(intent);
+        }else {
+            //TODO::dial 회원만 가능
+            String msg =getString(R.string.cont_use_custom);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //builder.setTitle("AlertDialog Title");
+            builder.setMessage(msg);
+            builder.setPositiveButton("예",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(MainActivity.this,AccountActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+            builder.setNegativeButton("아니오", null);
+            builder.show();
+        }
     }
 
     void checkState(){

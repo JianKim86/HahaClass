@@ -7,7 +7,7 @@ public class UserInfo {
     private  String password;
     private  String imagePath;
     private  int level;
-
+    private ItemInstructor itemInstructor;
     public int getLevel() {
         return level;
     }
@@ -21,7 +21,7 @@ public class UserInfo {
     }
 
     public void setImagePath(String imagePath) {
-        imagePath = imagePath;
+        this.imagePath = imagePath;
     }
 
     public String getName() {

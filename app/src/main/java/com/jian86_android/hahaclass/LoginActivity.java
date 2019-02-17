@@ -383,17 +383,16 @@ public class LoginActivity extends AppCompatActivity  {
             }
             /**서버에서 이메일 유무 확인*/
             //잇으면 true
-            isUser=true;
-            if(isUser) {
+            if(isUser&& userinfo!=null) {
                 /**서버에서 유저정보를 읽어와서 userinfo에 담음*/
-                String uName = "김지안";
-                String uEmail = "o0x0oa86@gmail.com";
-                String uPhone = "01062593352";
-                String uPassword = "123456";
-                String uImagePath = "";
-                int uLevel = 3;
+                String uName = userinfo.getName();
+                String uEmail = userinfo.getEmail();
+                String uPhone = userinfo.getPhone();
+                String uPassword = userinfo.getPassword();
+                String uImagePath =userinfo.getImagePath();
+                int uLevel = userinfo.getLevel();
                 /** 서버 작업들어가면 담아서 함*/
-                userinfo = new UserInfo(uName, uEmail, uPhone, uPassword, uImagePath, uLevel);
+               // userinfo = new UserInfo(uName, uEmail, uPhone, uPassword, uImagePath, uLevel);
 
                 if(!(userinfo.getEmail().equals(mEmail)&&userinfo.getPassword().equals(mPassword))) return false;
 
@@ -440,7 +439,7 @@ public class LoginActivity extends AppCompatActivity  {
 
 //액티비티 이동
     public void moveActivity(int state, UserInfo userInfo){
-        Bundle bundle=null;
+
 
         Intent intent = null;
         switch (state){
@@ -449,23 +448,7 @@ public class LoginActivity extends AppCompatActivity  {
                     applicationClass.setUserInfo(userInfo);
                     applicationClass.setLevel(userInfo.getLevel());
                     applicationClass.setState(USER);
-//                    bundle = new Bundle();
-//                    int userLevel = userInfo.getLevel();
-//                    String userPhone = userInfo.getPhone();
-//                    String userName = userInfo.getName();
-//                    String userImgPath = userInfo.getImagePath();
-//                    String userEmail =userInfo.getEmail();
-//                    String userPassword =userInfo.getPassword();
-//                    bundle.putInt("Level",userLevel);
-//                    bundle.putString("Name",userName);
-//                    bundle.putString("Image",userImgPath);
-//                    bundle.putString("Phone",userPhone);
-//                    bundle.putString("Email",userEmail);
-//                    bundle.putString("Pass",userPassword);
-//                    bundle.putString("state",USER);
                 }else{
-//                    bundle = new Bundle();
-//                    bundle.putString("state",CUSTOMER);
                     applicationClass.setUserInfo(null);
                     applicationClass.setState(CUSTOMER);
 
@@ -488,20 +471,17 @@ public class LoginActivity extends AppCompatActivity  {
 
     }//moveActivity
 //인텐트 돌려받고 로그인
-    Bundle bundleData;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
        if(requestCode == GOSIGNUP){
         if (resultCode==RESULT_OK) { // 정상 반환일 경우에만 동작하겠다
-            bundleData = data.getBundleExtra("userinfo");
-            int level = bundleData.getInt("Level");
-            String email =  bundleData.getString("Email");
-            String pwd = bundleData.getString("Pass");
-            String name =  bundleData.getString("Name");
-            String img = bundleData.getString("Image");
-            String phone = bundleData.getString("Phone");
-            userinfo = new UserInfo(name,email,phone,pwd,img,level);
+            String email =  applicationClass.getUserInfo().getEmail();
+            String pwd = applicationClass.getUserInfo().getPassword();
+            String name =  applicationClass.getUserInfo().getName();
+            String img = applicationClass.getUserInfo().getImagePath();
+
+            userinfo = applicationClass.getUserInfo();
             if(img !=null &&!(img.equals(""))){
             Uri uRi = Uri.parse(img);
             Picasso.get().load(uRi).into(iv_myimg);}
@@ -510,8 +490,9 @@ public class LoginActivity extends AppCompatActivity  {
             tvTitle.setText(HELLOLOGIN);
             tvSubtitle.setText(name+"님");
             /**서버 작업이 되면 서버에서 회원정보를 읽어와서 isUser=true 로바꾸고 비교해서 액티비티 이동**/
-            //isUser = true;
-           // moveActivity(GOMAIN,new UserInfo(name,email,phone,pwd,img,level));
+            isUser = true;
+            Toast.makeText(applicationClass, "로그인시:"+applicationClass.getUserInfo().getImagePath(), Toast.LENGTH_SHORT).show();
+            moveActivity(GOMAIN,userinfo);
         }
        }//GOSIGNUP
 

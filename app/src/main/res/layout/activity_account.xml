@@ -25,7 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <RelativeLayout
             android:layout_width="200dp"
@@ -57,6 +59,26 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center">
+                <RadioGroup
+                    android:id="@+id/radioGroup1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radio0"
+                    android:text="강사" />
+                    <RadioButton
+                        android:layout_marginLeft="4dp"
+                        android:id="@+id/radio1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="일반" />
+                </RadioGroup>
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="240dp"
                     android:layout_height="wrap_content">

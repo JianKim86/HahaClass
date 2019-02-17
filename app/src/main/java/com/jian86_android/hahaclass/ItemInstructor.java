@@ -3,9 +3,35 @@ package com.jian86_android.hahaclass;
 public class ItemInstructor {
     private String title;
     private String subTitle;
-    private int imgPath;
+    private String imgPath; //메인 이미지
+    private String  license,field,career;
 
-    public ItemInstructor(String title, String subTitle, int imgPath) {
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+
+        this.license = license;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getCareer() {
+        return career;
+    }
+
+    public void setCareer(String career) {
+        this.career = career;
+    }
+
+    public ItemInstructor(String title, String subTitle, String imgPath) {
         this.title = title;
         this.subTitle = subTitle;
         this.imgPath = imgPath;
@@ -27,11 +53,20 @@ public class ItemInstructor {
         this.subTitle = subTitle;
     }
 
-    public int getImgPath() {
+    public String getImgPath() {
         return imgPath;
     }
 
-    public void setImgPath(int imgPath) {
+    public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public ItemInstructor(String title, String subTitle, String imgPath, String license, String field, String career) {
+        this.title = title;
+        this.subTitle = subTitle;
+        this.imgPath = imgPath;
+        this.license = license;
+        this.field = field;
+        this.career = career;
     }
 }

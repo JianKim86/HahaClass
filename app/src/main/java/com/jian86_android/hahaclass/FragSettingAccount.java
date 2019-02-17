@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
@@ -35,8 +36,8 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
 
     String state,name,email,phone,pass,img;
     int level;
-    private String picPath= null;
-    private Bitmap btmapPicPath= null;
+    private String picPath;
+    private Bitmap btmapPicPath;
 
     private TextView tv_name,tv_email,tv_phon;
     private ImageView edit_phone,iv_infoimg;
@@ -45,6 +46,11 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
     Button submit_account;
 
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Nullable
     @Override
@@ -52,27 +58,28 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_setting_account,container,false);
         context = container.getContext();
         applicationClass = (ApplicationClass) (context.getApplicationContext());
-        getData();
+
         return view;
     }
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getData();
         //binding
         tv_name= view.findViewById(R.id.tv_name);
         tv_email= view.findViewById(R.id.tv_email);
         tv_phon= view.findViewById(R.id.tv_phon);
-        edit_phone= view.findViewById(R.id.edit_phone);
         iv_infoimg= view.findViewById(R.id.iv_myimg);
-        edit_layout= view.findViewById(R.id.edit_layout);
         submit_account= view.findViewById(R.id.submit_account);
+        edit_phone= view.findViewById(R.id.edit_phone);
+        edit_layout= view.findViewById(R.id.edit_layout);
         phone_numer =view.findViewById(R.id.phone_numer);
-        iv_infoimg.setOnClickListener(this);
+        settingData();
         edit_phone.setOnClickListener(this);
+        iv_infoimg.setOnClickListener(this);
         submit_account.setOnClickListener(this);
         //필터
         phone_numer.setFilters(new InputFilter[]{filterAlphaNum});
-        settingData();
+
     }
 
     //inforImg
@@ -81,6 +88,8 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
         Uri uRi = Uri.parse(picPath);
         Picasso.get().load(uRi).into(iv_infoimg);
         btmapPicPath = null;
+        //applicationClass.getUserInfo().setImagePath(picPath);
+
     }//setPic
     public void setPic(Bitmap pic){
         btmapPicPath = pic;
@@ -120,37 +129,44 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
         tv_name.setText(userInfo.getName());
         tv_email.setText(userInfo.getEmail());
         tv_phon.setText(userInfo.getPhone());
-        String pth =userInfo.getImagePath();
-        if(pth!=null&&!(pth.equals(""))){
-            setPic(pth);
+
+        if(img!=null&&!(img.equals(""))){
+            setPic(img);
+        }else if (btmapPicPath!=null) {
+            setPic(btmapPicPath);
         }
+
+
     }
     private void editPhone(){
         edit_layout.setVisibility(View.VISIBLE);
-
     }
     private  void submit_frg(){
+        phone_numer.setError(null);
         boolean cancel = false;
         View focusView = null;
         // Store values at the time of the login attempt.
         String phonenum= phone_numer.getText().toString();
-
         if (TextUtils.isEmpty(phonenum)) {
-            phone_numer.setError(getString(R.string.error_field_required));
-            focusView = phone_numer;
-            cancel = true;
+            cancel = false;
         } else if (!isPoneValid(phonenum)) {
             phone_numer.setError(getString(R.string.error_invalid_phone));
             focusView = phone_numer;
             cancel = true;
+       // if()
         }
         if (cancel) {
             focusView.requestFocus();
         } else {
-            applicationClass.getUserInfo().setPhone(phone_numer.getText().toString());
+            String chanegeText;
+            if(TextUtils.isEmpty(phonenum)){chanegeText= tv_phon.getText().toString();}
+            else { chanegeText= phone_numer.getText().toString(); tv_phon.setText(chanegeText);}
+            applicationClass.getUserInfo().setPhone(chanegeText);
             applicationClass.getUserInfo().setImagePath(picPath);
-            edit_layout.setVisibility(View.INVISIBLE);
-
+           // Toast.makeText(applicationClass, ""+ , Toast.LENGTH_SHORT).show();
+            phone_numer.setText("");
+            edit_layout.setVisibility(View.GONE);
+            ((SettingActivity)context).setUpNav();
             //TODO: 확인 후 돌아가기
         }
 
@@ -168,6 +184,27 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
             case R.id.submit_account: submit_frg(); break;
         }
 
-
     }//onclick
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if(getActivity()!=null){
+            if(isVisibleToUser)
+            {
+
+
+            }
+            else
+            {
+                Toast.makeText(context, "사라질때", Toast.LENGTH_SHORT).show();
+                //화면이 사라질때
+
+            }
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+
+
+    }//setUserVisibleHint
+
 }//FragSettingAccount

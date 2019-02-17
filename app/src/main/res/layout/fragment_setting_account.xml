@@ -12,15 +12,15 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
     <ScrollView
-        android:layout_below="@id/setting_title"
+        android:layout_below="@+id/setting_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
+            android:layout_gravity="center_horizontal"
             android:padding="8dp">
             <RelativeLayout
                 android:id="@+id/img"
@@ -130,7 +130,8 @@
                 android:id="@+id/edit_layout"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"
-               >
+                android:visibility="gone"
+                >
                 <EditText
                     android:id="@+id/phone_numer"
                     android:layout_width="match_parent"
@@ -139,9 +140,10 @@
                     android:imeActionId="6"
                     android:imeActionLabel="@string/prompt_phone"
                     android:imeOptions="actionUnspecified"
-                    android:inputType="numberDecimal"
+                    android:inputType="number"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                  />
             </android.support.design.widget.TextInputLayout>
             <Button
                 android:id="@+id/submit_account"
@@ -151,7 +153,5 @@
                 android:text="확인"/>
         </LinearLayout>
     </ScrollView>
-
-
 
 </RelativeLayout>
