@@ -104,6 +104,11 @@ public class LoginActivity extends AppCompatActivity  {
         });
         /** 데이터를 읽어와서 이메일 확인후 받아오기
          */
+        Intent getintentsettiong = getIntent();
+        int i = getintentsettiong.getIntExtra("want",0);
+        if (i==GOSIGNUP){
+            moveActivity(GOSIGNUP,null);
+        }
 
 //btn signin
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
@@ -483,15 +488,16 @@ public class LoginActivity extends AppCompatActivity  {
 
             userinfo = applicationClass.getUserInfo();
             if(img !=null &&!(img.equals(""))){
-            Uri uRi = Uri.parse(img);
-            Picasso.get().load(uRi).into(iv_myimg);}
-            mEmailView.setText(email);
-            mPasswordView.setText(pwd);
-            tvTitle.setText(HELLOLOGIN);
-            tvSubtitle.setText(name+"님");
-            /**서버 작업이 되면 서버에서 회원정보를 읽어와서 isUser=true 로바꾸고 비교해서 액티비티 이동**/
-            isUser = true;
-            Toast.makeText(applicationClass, "로그인시:"+applicationClass.getUserInfo().getImagePath(), Toast.LENGTH_SHORT).show();
+                Uri uRi = Uri.parse(img);
+                Picasso.get().load(uRi)
+                        .resize(400,400).into(iv_myimg);}
+                mEmailView.setText(email);
+                mPasswordView.setText(pwd);
+                tvTitle.setText(HELLOLOGIN);
+                tvSubtitle.setText(name+"님");
+                /**서버 작업이 되면 서버에서 회원정보를 읽어와서 isUser=true 로바꾸고 비교해서 액티비티 이동**/
+                isUser = true;
+              //  Toast.makeText(applicationClass, "로그인시:"+applicationClass.getUserInfo().getImagePath(), Toast.LENGTH_SHORT).show();
             moveActivity(GOMAIN,userinfo);
         }
        }//GOSIGNUP

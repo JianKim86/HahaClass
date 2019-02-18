@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.regex.Pattern;
@@ -85,8 +87,25 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
     //inforImg
     public void setPic(String pic){
         picPath =pic;
-        Uri uRi = Uri.parse(picPath);
-        Picasso.get().load(uRi).into(iv_infoimg);
+        if(picPath != null && !(picPath.equals(""))) {
+            Uri uRi = Uri.parse(picPath);
+            Picasso.get().load(uRi)
+                    .resize(400,400).into(iv_infoimg, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d("picPath ", "pIntor img: load failed "+ picPath);
+                }
+            });
+        }else{Glide.with(this).load(R.drawable.ic_launcher_background).into(iv_infoimg);}
+//        Uri uRi = Uri.parse(picPath);
+//        Picasso.get().load(uRi).into(iv_infoimg);
+//
+//
         btmapPicPath = null;
         //applicationClass.getUserInfo().setImagePath(picPath);
 

@@ -186,7 +186,7 @@ public class FragInfo extends Fragment implements View.OnClickListener {
             }
             else
             {
-                Toast.makeText(context, "사라질때", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "사라질때", Toast.LENGTH_SHORT).show();
                 //화면이 사라질때
                 if(level==3){
                     if(!isSave&&isChanege) saveInstructor();

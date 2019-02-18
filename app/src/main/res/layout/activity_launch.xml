@@ -10,7 +10,9 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_relative">
+    android:id="@+id/layout_relative"
+    android:theme="@style/AppTheme.bg"
+    >
     <ImageView
         android:id="@+id/iv_loding"
         android:layout_width="50dp"

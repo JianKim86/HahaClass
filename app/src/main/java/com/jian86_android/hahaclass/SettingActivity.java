@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -143,14 +145,24 @@ public class SettingActivity extends AppCompatActivity {
     }
     public void setUpNav(){
         getIntentData();
-       Toast.makeText(applicationClass, "2::"+applicationClass.getUserInfo().getImagePath(), Toast.LENGTH_SHORT).show();
+      // Toast.makeText(applicationClass, "2::"+applicationClass.getUserInfo().getImagePath(), Toast.LENGTH_SHORT).show();
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
         else nav_header_id_text.setText(name);
         if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
-            Toast.makeText(applicationClass, ""+applicationClass.getUserInfo().getImagePath(), Toast.LENGTH_SHORT).show();
-            Picasso.get().load(uRi).into(profile_image);
-        } else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
+            Picasso.get().load(uRi)
+                    .resize(400,400).into(profile_image, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d("picPath ", "pIntor img: load failed "+ img);
+                }
+            });
+        }else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
     }
     public void setFragmentPlace(){
         Intent intent = getIntent();
@@ -213,10 +225,7 @@ public class SettingActivity extends AppCompatActivity {
 
                     }else{
                         //아니면 Intent 에 Extra 데이터로 Bitmap 이 전달되어 옴
-                        Bundle bundle=data.getExtras();
-                        Bitmap bm= (Bitmap) bundle.get("data"); // key 값 "data" 는 정해진거야
-                        //iv.setImageBitmap(bm);
-
+                        String bm="";
                             ((FragSettingAccount)fragment).setPic(bm);
 
 

@@ -26,6 +26,7 @@ import android.provider.ContactsContract;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -463,7 +464,6 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
 
     public void moveActivity(int state){
         Intent intent = null;
-        Bundle bundle = null;
         switch (state){
             case GOLOGIN :
                 intent = new Intent();
@@ -472,6 +472,9 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                     setResult(RESULT_OK, intent); // 호출한 화면으로 되돌려주기
                     // resultCode : 결과 돌려주는 상태
                     finish(); // 두번째 화면 종료
+
+
+
                 }else{
                     //가입실패 TODO::dialog
                     Toast.makeText(this, "가입실패", Toast.LENGTH_SHORT).show();
@@ -543,7 +546,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                             Uri uRi = Uri.parse(userInfo.getImagePath());
                             Picasso.get().load(uRi).into(mImg);
                         }
-
+                        Log.d("picPath ", "Account: "+picPath);
                     }else{
                         //아니면 Intent 에 Extra 데이터로 Bitmap 이 전달되어 옴
                         Bundle bundle=data.getExtras();

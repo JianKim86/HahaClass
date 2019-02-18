@@ -1,10 +1,21 @@
 package com.jian86_android.hahaclass;
 
+import java.util.ArrayList;
+
 public class ItemInstructor {
     private String title;
     private String subTitle;
     private String imgPath; //메인 이미지
-    private String  license,field,career;
+    private String license,field,career; //intro
+    private ArrayList<Schedule>schedules;
+
+    public ArrayList<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(ArrayList<Schedule> schedules) {
+        this.schedules = schedules;
+    }
 
     public String getLicense() {
         return license;
@@ -30,13 +41,6 @@ public class ItemInstructor {
     public void setCareer(String career) {
         this.career = career;
     }
-
-    public ItemInstructor(String title, String subTitle, String imgPath) {
-        this.title = title;
-        this.subTitle = subTitle;
-        this.imgPath = imgPath;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -60,6 +64,13 @@ public class ItemInstructor {
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
     }
+    public ItemInstructor(String title, String subTitle, String imgPath) {
+        this.title = title;
+        this.subTitle = subTitle;
+        this.imgPath = imgPath;
+    }
+
+
 
     public ItemInstructor(String title, String subTitle, String imgPath, String license, String field, String career) {
         this.title = title;

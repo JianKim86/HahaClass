@@ -21,6 +21,14 @@
         <item name="colorControlNormal">@color/colorPrimary</item>
 
     </style>
+    <style name="AppTheme.bg">
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/colorWhite</item>
+        <item name="titleTextColor">@color/colorTitle</item>
+        <item name="subtitleTextColor">@color/colorTitle</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
     <style name="AppTheme.Tablayout">
         <!-- Customize your theme here. -->
         <item name="tabTextColor">@color/colorGray</item>
@@ -33,10 +41,9 @@
         <item name="android:textColorSecondary">@color/colorTitle</item>
         <item name="android:textColorPrimary">@color/colorPoint</item>
     </style>
-    <style name="FragTeme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="FragTeme">
         <item name="titleTextColor">@color/colorTitle</item>
         <item name="android:textColorSecondary">@color/colorTitle</item>
-        <item name="android:textColorPrimary">@color/colorPoint</item>
         <item name="android:background">@color/colorWhite</item>
         <item name="android:padding">4dp</item>
 

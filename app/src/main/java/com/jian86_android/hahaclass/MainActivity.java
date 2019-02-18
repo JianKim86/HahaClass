@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -29,6 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -77,7 +81,6 @@ public class MainActivity extends AppCompatActivity  {
         fab3 =findViewById(R.id.fab3_btn);
         fab4 =findViewById(R.id.fab4_btn);
         pagerLayout =findViewById(R.id.pager_layout);
-
         adapter = new AdapterFragment(getSupportFragmentManager());
         pagerLayout.setAdapter(adapter);
 
@@ -107,12 +110,29 @@ public class MainActivity extends AppCompatActivity  {
 
         TextView nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.tv_name);
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
+
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
         else nav_header_id_text.setText(name);
-        Toast.makeText(applicationClass, "nav :"+img, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(applicationClass, "nav :"+img, Toast.LENGTH_SHORT).show();
+//        if(state.equals(USER)){ img = applicationClass.getUserInfo().getImagePath();
+//            Toast.makeText(applicationClass, "main img :"+ img, Toast.LENGTH_SHORT).show();
+//            Log.d("picPath ", "main img:"+img);
+//
+//        }
         if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
-            Picasso.get().load(uRi).into(profile_image);
+            Picasso.get().load(uRi)
+                    .resize(400,400).into(profile_image, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d("picPath ", "pIntor img: load failed "+ img);
+                }
+            });
         }
         else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
 
@@ -206,20 +226,6 @@ public class MainActivity extends AppCompatActivity  {
        // Bundle selectTeacher =  getintent.getBundleExtra("selectTeacher");
         instructor = applicationClass.getItemInstructor();
         instructorTitle = instructor.getSubTitle();
-
-
-//        state = userBundle.getString("state");
-//
-//        if(state.equals(USER)) {
-//            name = userBundle.getString("Name");
-//            email = userBundle.getString("Email");
-//            phone = userBundle.getString("Phone");
-//            pass = userBundle.getString("Pass");
-//            img = userBundle.getString("Image");
-//            level = userBundle.getInt("Level", 0);
-//            userInfo = new UserInfo(name, email, phone, pass, img, level);
-//        }else userInfo = null;
-
         state = applicationClass.getState();
         if(state.equals(USER)){
             userInfo= applicationClass.getUserInfo();
@@ -229,7 +235,6 @@ public class MainActivity extends AppCompatActivity  {
             pass = userInfo.getPassword();
             img = userInfo.getImagePath();
             level = userInfo.getLevel();
-
         }else{
             userInfo = null;
         }
@@ -250,8 +255,10 @@ public class MainActivity extends AppCompatActivity  {
             builder.setPositiveButton("예",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(MainActivity.this,AccountActivity.class);
+                            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                            intent.putExtra("want",3);
                             startActivity(intent);
+                            finish();
                         }
                     });
             builder.setNegativeButton("아니오", null);

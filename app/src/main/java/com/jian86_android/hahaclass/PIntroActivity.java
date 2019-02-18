@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,6 +43,7 @@ public class PIntroActivity extends AppCompatActivity {
     private UserInfo userInfo;
     private Intent getintent;
     String state,name,email,phone,pass,img;
+    private ArrayList<Schedule>schedules = new ArrayList<>();
     int level;
     private ActionBarDrawerToggle drawerToggle;
     @Override
@@ -63,10 +68,35 @@ public class PIntroActivity extends AppCompatActivity {
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
             else nav_header_id_text.setText(name);
-        Toast.makeText(applicationClass, "nav :"+img, Toast.LENGTH_SHORT).show();
+
+//        if(state.equals(USER)){img = applicationClass.getUserInfo().getImagePath();
+//            Toast.makeText(applicationClass, "pIntor img :"+ img, Toast.LENGTH_SHORT).show();
+//            Log.d("picPath ", "pIntor img:"+img);
+//        }
+
         if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
-            Picasso.get().load(uRi).into(profile_image);
+
+//            Picasso picasso = new Picasso.Builder(PIntroActivity.this).listener(new Picasso.Listener(){
+//                @Override
+//                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+//                    exception.printStackTrace();
+//                    Log.d("picPath ", "pIntor img: load failed "+ img);
+//                }
+//            }).build();
+//            picasso.load(uRi).fit().centerCrop().into(profile_image);
+                Picasso.get().load(uRi)
+                        .resize(400,400).into(profile_image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.d("picPath ", "pIntor img: load failed "+ img);
+                    }
+                });
         }
         else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
 
@@ -156,7 +186,7 @@ public class PIntroActivity extends AppCompatActivity {
              pass = userInfo.getPassword();
              img = userInfo.getImagePath();
              level = userInfo.getLevel();
-            Toast.makeText(applicationClass, "1"+img, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(applicationClass, "1"+img, Toast.LENGTH_SHORT).show();
         }else{
             userInfo = null;
         }
@@ -207,7 +237,22 @@ public class PIntroActivity extends AppCompatActivity {
         String imgPath = "";
         ItemInstructor item = new ItemInstructor(title,subTitle,imgPath,license, field, career);
         /**
-         * 서버에서 instructors 정보 읽어와서 add시키기**/
+         * 서버에서 instructors 정보 읽어와서 add시키기 **서버작업시 따로 리스트로 빼야됨 db따로 설계**/
+        Schedule sitem = new Schedule();
+        sitem.setProjectImgPath("");
+        sitem.setHost("(행복을 만드는)\n창의융합교육연구소");
+        sitem.setDate("2019.10.22~2019.12.11");
+        sitem.setProjectTitle("하박수웃음지도사 12주 프로그램");
+        sitem.setSupport("블라블라");
+        schedules.add(sitem);
+        sitem = new Schedule();
+        sitem.setProjectImgPath("");
+        sitem.setHost("(행복을 만드는)\n창의융합교육연구소");
+        sitem.setDate("2119.10.22~2119.12.11");
+        sitem.setProjectTitle("하박수웃음지도사 12주 프로그램");
+        sitem.setSupport("블라블라");
+        schedules.add(sitem);
+        item.setSchedules(schedules);
 
         itemInstructors.add(item);
         AdapterPIntroList mMyAdapter = new AdapterPIntroList(itemInstructors,PIntroActivity.this);
@@ -228,10 +273,13 @@ public class PIntroActivity extends AppCompatActivity {
             //builder.setTitle("AlertDialog Title");
             builder.setMessage(msg);
             builder.setPositiveButton("예",
+
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(PIntroActivity.this,AccountActivity.class);
+                            Intent intent = new Intent(PIntroActivity.this,LoginActivity.class);
+                            intent.putExtra("want",3);
                             startActivity(intent);
+                            finish();
                         }
                     });
             builder.setNegativeButton("아니오", null);
