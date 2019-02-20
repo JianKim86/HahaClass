@@ -5,6 +5,7 @@
     <string name="forgot_pwd">비밀번호를 잊으셨나요?</string>
     <string name="goback">기존 계정으로 로그인</string>
     <string name="cont_use_custom">회원 전용입니다 회원가입하시겠습니까?</string>
+    <string name="list_add">추가</string>
     <string name="save_edit">저장</string>
     <string name="save_instructor">수정을 저장하시겠습니까?</string>
     <string name="prompt_changes_info">변경사항</string>

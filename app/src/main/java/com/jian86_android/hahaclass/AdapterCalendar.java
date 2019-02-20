@@ -73,7 +73,7 @@ public class AdapterCalendar extends BaseAdapter {
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
             }
         });
 
