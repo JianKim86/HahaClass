@@ -41,6 +41,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -79,7 +80,7 @@ public class FragCalendar extends Fragment {
         context = container.getContext();
         applicationClass = (ApplicationClass) (context.getApplicationContext());
         getData();
-        header = inflater.inflate(R.layout.fragment_calendar_header, null, false);
+        header = inflater.inflate(R.layout.pcalendar_list_header, null, false);
         return view;
 
     }//onCreateView
@@ -88,13 +89,22 @@ public class FragCalendar extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         lv_schedule = view.findViewById(R.id.lv_schedule);
-//        View header = getLayoutInflater().inflate(R.layout.fragment_calendar_header, null, false);
         setData();
 
 
     }//onViewCreated
+
+
+
+    EditDialogShowSchedule customDialog;
+    private void editDial(int[] position, String today){
+        //Todo:커스텀 다이얼 로그
+        customDialog = new EditDialogShowSchedule(context, this);
+        customDialog.callFunction(today, position);
+    }//editDial
+
+
 
     void setupCalender() {
         materialCalendarView = header.findViewById(R.id.calendarView);
@@ -132,31 +142,125 @@ public class FragCalendar extends Fragment {
                 Log.i("Month test", Month + "");
                 Log.i("Day test", Day + "");
 
-                String shot_Day = Year + "," + Month + "," + Day;
-
+                String shot_Day= String.format("%04d-%02d-%02d",Year,Month,Day);
                 Log.i("shot_Day test", shot_Day + "");
+
+                ArrayList<Integer>positions = noticCal(shot_Day);
+
+
+
+
+                if (positions!=null && positions.size()!=0) {
+                    int[] position = new int[positions.size()];
+                        for(int i = 0; i<positions.size(); i++){
+                            position[i] = i;
+                        }
+
+
+
+                       // String src = schedules.get(position).getProjectTitle();
+                        Log.i("position1", Arrays.toString(position));
+                        Log.i("positionsSize",positions.size()+"");
+                        editDial(position , shot_Day);
+
+
+
+
+
+
+
+                    } else {
+                        Toast.makeText(applicationClass, "해당 날짜에 수업이 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
+
                 materialCalendarView.clearSelection();
 
-                Toast.makeText(applicationClass.getApplicationContext(), shot_Day, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(applicationClass.getApplicationContext(), shot_Day, Toast.LENGTH_SHORT).show();
             }
         });
 
-        String[] result = {"2019,01,18", "2019,01,19", "2019,01,20", "2019,01,21"};
+
+
+
         for (Schedule s : schedules) {
-            String date = s.getDate();
-            String[] str = date.split("~");
-            int size = (int) (doDiffOfDate(str[0], str[1]));
-            for (int i = 0; i < size; i++) {
-//                result[i]= TODO:
+
+
+            String start =s.getStart();
+            String end =s.getEnd();
+            int size = (int) (doDiffOfDate(start, end));
+            ArrayList<String>days = getDateData(size,start,end);
+            String []result = new String [days.size()];
+            for(int i=0; i<days.size();i++){
+
+                result[i]=days.get(i);
             }
-
+            new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+            resultStr.add(result);
         }
-        ;
 
 
-        new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+        //입력받은 데이터 분리
 
     }//setupCalender
+    public ArrayList<String[]> resultStr = new ArrayList<>();
+
+
+    public ArrayList<Integer> noticCal(String getdate){
+
+        ArrayList<Integer>integers= new ArrayList<>();
+
+//        String getdate = String.format("%04d-%02d-%02d",year,month,day);
+
+        for(int f=0; f<resultStr.size(); f++){
+
+            String [] arr = resultStr.get(f);
+
+            for(int i=0; i<arr.length;i++){
+
+               if (arr[i].contains(getdate)){
+                   int position = f;
+                   integers.add(f);
+                   Log.i("f.size()",f+"");
+               }
+            }
+                //Log.i("resultStr.size()",resultStr.size()+"");
+        }
+
+
+        return integers;
+
+    }//noticCal
+
+
+    //날짜 계산
+    public ArrayList<String> getDateData(int size,String start, String end){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        ArrayList<String> strs = new ArrayList<String>();
+        strs.add(start);
+        String day = start;
+            for(int i=0; i<=size; i++){
+                Date date = null;
+                try {
+                    date = df.parse(day);
+                    // 날짜 더하기
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    cal.add(Calendar.DATE, 1);
+
+                    Date d = new Date(cal.getTimeInMillis());
+                    day = df.format(d);
+                    strs.add(day);
+                    //if(day.equals(end)) break;
+                } catch (ParseException e) { e.printStackTrace(); }
+            }
+
+            return strs;
+
+
+
+
+    }//getDateData
 
     //날짜차이
     public long doDiffOfDate(String start, String end) {
@@ -169,9 +273,6 @@ public class FragCalendar extends Fragment {
             // 시간차이를 시간,분,초를 곱한 값으로 나누면 하루 단위가 나옴
             long diff = endDate.getTime() - beginDate.getTime();
             diffDays = diff / (24 * 60 * 60 * 1000);
-
-
-
         } catch (ParseException e) {
             e.printStackTrace();
 
@@ -217,7 +318,7 @@ public class FragCalendar extends Fragment {
 
 
     void setData(){
-        schedules = applicationClass.getItemInstructor().getSchedules();
+
 
         //TODO:서버 작업 진행시 Main에서 정보 읽어서 ItemInstructor에 넣고 거기서 빼옴
         mMyAdapter = new AdapterCalendar(schedules, context);
@@ -233,6 +334,7 @@ public class FragCalendar extends Fragment {
     void getData(){
         //유저정보 가져오기,
         instructor= applicationClass.getItemInstructor();
+        schedules = applicationClass.getItemInstructor().getSchedules();
         state = applicationClass.getState();
         if(state.equals(USER)){
             userInfo= applicationClass.getUserInfo();
@@ -274,10 +376,10 @@ public class FragCalendar extends Fragment {
 
             /*특정날짜 달력에 점표시해주는곳*/
             /*월은 0이 1월 년,일은 그대로*/
-            //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
+            //string 문자열인 Time_Result 을 받아와서 -를 기준으로짜르고 string을 int 로 변환
             for(int i = 0 ; i < Time_Result.length ; i ++){
                 CalendarDay day = CalendarDay.from(calendar);
-                String[] time = Time_Result[i].split(",");
+                String[] time = Time_Result[i].split("-");
                 int year = Integer.parseInt(time[0]);
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
@@ -322,12 +424,14 @@ public class FragCalendar extends Fragment {
 
         @Override
         public void decorate(DayViewFacade view) {
+
             view.setSelectionDrawable(drawable);
             view.addSpan(new DotSpan(5, color)); // 날자밑에 점
+
         }
     }
 
-//이벤트
+    //이벤트
     public class OneDayDecorator implements DayViewDecorator {
 
         private CalendarDay date;

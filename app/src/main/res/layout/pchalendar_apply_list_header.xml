@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+   >
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="240dp"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_name"
+                    android:imeActionId="6"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:enabled="false"
+                    />
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="240dp"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:enabled="false"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="240dp"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_phone"
+                    android:imeActionId="6"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="240dp"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_password"
+                    android:imeActionId="6"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    <Button
+        android:id="@+id/btn_apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_str"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:text="수강신청"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="강의 일정표"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@color/colorGraym"
+        >
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="주"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:background="@color/colorDarkGray"
+            android:textColor="@color/colorWhite"
+            android:layout_marginRight="1dp"/>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="날 짜"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@color/colorDarkGray"
+            android:textColor="@color/colorWhite"
+            android:layout_marginRight="1dp"
+            android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_gravity="center">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:text="제 목"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:maxLines="100"
+                android:ellipsize="none"
+                android:scrollHorizontally="false"
+                android:singleLine="false"
+                android:background="@color/colorDarkGray"
+                android:textColor="@color/colorWhite"
+                android:layout_marginRight="1dp"
+                android:padding="2dp"
+                />
+            <TextView
+                android:id="@+id/tv_config"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="구 성"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:maxLines="100"
+                android:ellipsize="none"
+                android:scrollHorizontally="false"
+                android:singleLine="false"
+                android:layout_weight="1"
+                android:background="@color/colorDarkGray"
+                android:textColor="@color/colorWhite"
+                android:padding="2dp"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

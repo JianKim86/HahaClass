@@ -7,12 +7,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="AppTheme.Applayout">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorWhite</item>
@@ -21,6 +23,7 @@
         <item name="colorControlNormal">@color/colorPrimary</item>
 
     </style>
+
     <style name="AppTheme.bg">
         <!-- Customize your theme here. -->
         <item name="android:background">@color/colorWhite</item>
@@ -29,18 +32,20 @@
         <item name="colorAccent">@color/colorAccent</item>
 
     </style>
+
     <style name="AppTheme.Tablayout">
         <!-- Customize your theme here. -->
         <item name="tabTextColor">@color/colorGray</item>
         <item name="tabSelectedTextColor">@color/colorPoint</item>
         <item name="selectableItemBackground">@color/colorGray</item>
-        </style>
+    </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="titleTextColor">@color/colorTitle</item>
         <item name="android:textColorSecondary">@color/colorTitle</item>
         <item name="android:textColorPrimary">@color/colorPoint</item>
     </style>
+
     <style name="FragTeme">
         <item name="titleTextColor">@color/colorTitle</item>
         <item name="android:textColorSecondary">@color/colorTitle</item>
@@ -48,4 +53,8 @@
         <item name="android:padding">4dp</item>
 
     </style>
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

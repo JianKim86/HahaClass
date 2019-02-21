@@ -128,13 +128,15 @@ public class FragInfo extends Fragment implements View.OnClickListener {
         }
 
     }
-    EditDialog customDialog;
     public void setEditmsg(String msg, TextView tv){
         tv.setText(msg);
         isChanege = true;
         isSave= false;
         btn_save.setVisibility(View.VISIBLE);
     }
+
+
+    EditDialog customDialog;
     private void editDial(TextView tv){
         //Todo:커스텀 다이얼 로그
         customDialog = new EditDialog(context, this);

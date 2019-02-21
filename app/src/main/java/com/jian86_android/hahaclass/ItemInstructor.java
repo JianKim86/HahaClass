@@ -9,6 +9,10 @@ public class ItemInstructor {
     private String license,field,career; //intro
     private ArrayList<Schedule>schedules;
 
+
+
+
+
     public ArrayList<Schedule> getSchedules() {
         return schedules;
     }

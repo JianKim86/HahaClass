@@ -12,6 +12,13 @@ public class ApplicationClass extends Application {
     public int level;
     public ItemInstructor itemInstructor;
 
+
+
+
+
+
+
+
     public ItemInstructor getItemInstructor() {
         return itemInstructor;
     }

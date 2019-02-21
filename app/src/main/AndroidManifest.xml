@@ -41,7 +41,8 @@
             android:name=".AccountActivity"
             android:label="@string/title_activity_account" />
         <activity android:name=".PIntroActivity" />
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".ApplyActivity"></activity>
     </application>
 
 </manifest>

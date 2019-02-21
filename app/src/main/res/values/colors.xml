@@ -19,4 +19,8 @@
     <color name="colorligntBlueL">#33aed1fa</color>
     <color name="colorDarkGray">#353535</color>
 
+
+    <color name="colorCel1">@color/colorGrayl</color>
+    <color name="colorCel2">@color/colorGray</color>
+
 </resources>

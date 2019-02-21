@@ -8,7 +8,41 @@ public class Schedule {
     private String host;
     private String support;
     private String date;
-    private ArrayList<DatasItem>datas;
+    private String start;
+    private String end;
+
+    //detailed schedule
+    private ArrayList<DatasItem>datas= new ArrayList<>();
+
+
+
+
+    public Schedule(){}
+
+    public Schedule(String projectTitle, String host, String start, String end) {
+        this.projectTitle = projectTitle;
+        this.host = host;
+        this.start = start;
+        this.end = end;
+        setDate(start+"~"+end);
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
     public String getDate() {
         return date;
     }

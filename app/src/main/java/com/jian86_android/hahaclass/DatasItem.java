@@ -5,7 +5,8 @@ public class DatasItem {
     private String week;
     private String date;
     private String title;
-    private String Configuration;
+    private String configuration;
+
 
     public String getWeek() {
         return week;
@@ -32,10 +33,10 @@ public class DatasItem {
     }
 
     public String getConfiguration() {
-        return Configuration;
+        return configuration;
     }
 
     public void setConfiguration(String configuration) {
-        Configuration = configuration;
+        this.configuration =configuration;
     }
 }//DatasItem
