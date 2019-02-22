@@ -75,9 +75,11 @@ public class AdapterCalendar extends BaseAdapter {
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(context, ApplyActivity.class);
                 intent.putExtra("position", i);
                 context.startActivity(intent);
+
 
               //  Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
             }

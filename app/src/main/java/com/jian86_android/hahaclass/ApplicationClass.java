@@ -3,6 +3,8 @@ package com.jian86_android.hahaclass;
 import android.app.Application;
 import android.content.res.Configuration;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 
 public class ApplicationClass extends Application {
@@ -11,11 +13,27 @@ public class ApplicationClass extends Application {
     public String state;
     public int level;
     public ItemInstructor itemInstructor;
+    public int instructorNo;
+    public HashSet<Integer> applySchedule = new HashSet<>();
+
+    public HashSet<Integer> getApplySchedule() {
+        return applySchedule;
+    }
+
+    public void setApplySchedule(int applySchedule) {
+
+        this.applySchedule.add(applySchedule);
+    }
 
 
 
+    public int getInstructorNo() {
+        return instructorNo;
+    }
 
-
+    public void setInstructorNo(int instructorNo) {
+        this.instructorNo = instructorNo; //강사 번호
+    }
 
 
 

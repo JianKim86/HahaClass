@@ -18,6 +18,7 @@
     <color name="colorGraym">#b1b1b1</color>
     <color name="colorligntBlueL">#33aed1fa</color>
     <color name="colorDarkGray">#353535</color>
+    <color name="colorDialTitle">@color/colorPoint</color>
 
 
     <color name="colorCel1">@color/colorGrayl</color>

@@ -317,6 +317,17 @@ public class MainActivity extends AppCompatActivity  {
     }//onActivityResult
 
 
+    int APPLYITEM;
+    public void turnActivity(int i){
+        Intent intent = new Intent(MainActivity.this, ApplyActivity.class);
+        intent.putExtra("position", i);
+        APPLYITEM = i;
+        startActivityForResult(intent, APPLYITEM);
+
+    }
+
+
+
 //    public Bundle sendData(){
 //        //디비에서 읽어올 회원정보 이름과이메일만 보냄 하지만 지금은 전체 다 보내기
 //        Bundle bundleData = new Bundle();

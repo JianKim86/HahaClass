@@ -290,7 +290,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     }
     private boolean isPoneValid(String phone) {
         //TODO: Replace this with your own logic
-        return phone.length() > 10;
+        return phone.length() == 11 || phone.length() == 10;
     }
     private boolean isNameValid(String name) {
         //TODO: Replace this with your own logic

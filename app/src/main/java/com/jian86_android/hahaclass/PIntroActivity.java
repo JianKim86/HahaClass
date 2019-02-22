@@ -140,6 +140,7 @@ public class PIntroActivity extends AppCompatActivity {
                 selectTeacher.putString("Instructor",itemInstructors.get(position).getSubTitle());
                 ItemInstructor itemInstructor = itemInstructors.get(position);
                 applicationClass.setItemInstructor(itemInstructor);
+                applicationClass.setInstructorNo(position);
 
                 intent = new Intent(PIntroActivity.this, MainActivity.class);
                // intent.putExtra("userBundle", userBundle);
@@ -215,6 +216,7 @@ public class PIntroActivity extends AppCompatActivity {
     private String itemTitle;
     private String itemConfiguration;
     private void dataSetting(){
+
         String title ="윤나영";
         String subTitle ="하하 웃음 클레스";
         String license = "웃음치료1급자격, 레크레이션1급자격, 실버 웃음 전문지도사자격 ,케어세라피1급자격, 시낭송1급지도사자격 스피치 1급 지도자 자격, 명강사 1급 지도사자격, 펀리더십지도사1급자격, 금연 금주 예방지도사자격, 창의인성교육지도사 자격, 부모코칭지도사자격, 평생교육사 2급 자격,  사회복지사 2급 자격, 심리웃음치료사1급 자격, 건강걷기2급지도사자격, 산업카운셀러1급자격, 심리상담 2급자격(논문: 유머감각이 자아 존중감과 대인관계에 미치는 영향)"
@@ -244,7 +246,9 @@ public class PIntroActivity extends AppCompatActivity {
         "      (교육공무원(영양교사)인사위원회 위원,친절평가위원)\n"+
         "前) 구리청소년통합지원체계(CYS_NET) 운영협의회 위원\n";
         String imgPath = "";
+
         ItemInstructor item = new ItemInstructor(title,subTitle,imgPath,license, field, career);
+
 
         /**
          * 서버에서 instructors 정보 읽어와서 add시키기 **서버작업시 따로 리스트로 빼야됨 db따로 설계**/
