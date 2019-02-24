@@ -16,9 +16,39 @@ public class ApplicationClass extends Application {
     public int instructorNo;
     public HashSet<Integer> applySchedule = new HashSet<>();//강사강의 번호
 
+    public ArrayList<Board>boards= new ArrayList<>();
+
+
+    public String board_title;
+    public String board_imgpath;
+    public ArrayList<Board> getBoards() {
+        return boards;
+    }
+
+    public String getBoard_title() {
+        return board_title;
+    }
+
+    public void setBoard_title(String board_title) {
+        this.board_title = board_title;
+    }
+
+    public String getBoard_imgpath() {
+        return board_imgpath;
+    }
+
+    public void setBoard_imgpath(String board_imgpath) {
+        this.board_imgpath = board_imgpath;
+    }
+
+    public void setBoards(ArrayList<Board> boards) {
+        this.boards = boards;
+    }
+
     public HashSet<Integer> getApplySchedule() {
         return applySchedule;
-    }
+    }//강사별 스케쥴을 담음
+
 
     public void setApplySchedule(int applySchedule) {
 

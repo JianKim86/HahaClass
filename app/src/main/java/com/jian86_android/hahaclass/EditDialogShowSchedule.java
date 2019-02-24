@@ -67,7 +67,7 @@ public class EditDialogShowSchedule {
         mkdlg();
 
         if(position.length!=0){
-            for(int i=0; i<position.length;i++){
+            for(int i=0; i<position.length; i++){
                 Schedule schedule = applicationClass.getItemInstructor().getSchedules().get(i);
                 items.add(schedule);
             }

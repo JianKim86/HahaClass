@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private Animation fab_open, fab_close, fab_action_close, fab_action_open;
     private Boolean isFabOpen = false;
-    private FloatingActionButton fab, fab1, fab2,fab3, fab4;
+    private FloatingActionButton fab, fab1, fab2,fab3 ;
 
     private ViewPager pagerLayout;
     private AdapterFragment adapter;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity  {
         fab1 =findViewById(R.id.fab1_btn);
         fab2 =findViewById(R.id.fab2_btn);
         fab3 =findViewById(R.id.fab3_btn);
-        fab4 =findViewById(R.id.fab4_btn);
+       // fab4 =findViewById(R.id.fab4_btn);
         pagerLayout =findViewById(R.id.pager_layout);
         adapter = new AdapterFragment(getSupportFragmentManager());
         pagerLayout.setAdapter(adapter);
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity  {
         fab1.setOnClickListener(onClickListener);
         fab2.setOnClickListener(onClickListener);
         fab3.setOnClickListener(onClickListener);
-        fab4.setOnClickListener(onClickListener);
+      //  fab4.setOnClickListener(onClickListener);
 
         View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
         //View nav_header_view = navigationView.getHeaderView(0);
@@ -176,11 +176,11 @@ public class MainActivity extends AppCompatActivity  {
                  pagerLayout.setCurrentItem(2);
                  Toast.makeText(MainActivity.this, "Button3", Toast.LENGTH_SHORT).show();
                  break;
-             case R.id.fab4_btn:
-                 anim();
-                 pagerLayout.setCurrentItem(3);
-                 Toast.makeText(MainActivity.this, "Button4", Toast.LENGTH_SHORT).show();
-                 break;
+//             case R.id.fab4_btn:
+//                 anim();
+//                 pagerLayout.setCurrentItem(3);
+//                 Toast.makeText(MainActivity.this, "Button4", Toast.LENGTH_SHORT).show();
+//                 break;
          }
 
      }
@@ -192,22 +192,22 @@ public class MainActivity extends AppCompatActivity  {
             fab1.startAnimation(fab_close);
             fab2.startAnimation(fab_close);
             fab3.startAnimation(fab_close);
-            fab4.startAnimation(fab_close);
+     //       fab4.startAnimation(fab_close);
             fab1.setClickable(false);
             fab2.setClickable(false);
             fab3.setClickable(false);
-            fab4.setClickable(false);
+      //      fab4.setClickable(false);
             isFabOpen = false;
         } else {
             fab.startAnimation(fab_action_close);
             fab1.startAnimation(fab_open);
             fab2.startAnimation(fab_open);
             fab3.startAnimation(fab_open);
-            fab4.startAnimation(fab_open);
+   //         fab4.startAnimation(fab_open);
             fab1.setClickable(true);
             fab2.setClickable(true);
             fab3.setClickable(true);
-            fab4.setClickable(true);
+  //          fab4.setClickable(true);
             isFabOpen = true;
         }
     }//anim
@@ -266,9 +266,6 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    void checkState(){
-
-    }
     void takePic(){
         Intent intent=new Intent();
         intent.setAction(Intent.ACTION_PICK);

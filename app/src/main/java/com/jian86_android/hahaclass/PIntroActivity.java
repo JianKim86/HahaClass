@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class PIntroActivity extends AppCompatActivity {
     private ArrayList<Schedule>schedules = new ArrayList<>();
     int level;
     private ActionBarDrawerToggle drawerToggle;
+    private Button tv_goto_instructor,tv_goto_board;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,27 @@ public class PIntroActivity extends AppCompatActivity {
         navMenu = findViewById(R.id.nav_menu);
         drawerLayout =findViewById(R.id.drawer_layout);
         listView = findViewById(R.id.lv_instructor);
+        tv_goto_instructor =findViewById(R.id.tv_goto_instructor);
+        tv_goto_board =findViewById(R.id.tv_goto_board);
+        if(itemInstructors.size()<2) listView.setVisibility(View.VISIBLE);
+        tv_goto_instructor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listView.getVisibility()!= View.GONE){
+                    listView.setVisibility(View.GONE);
+                }else{listView.setVisibility(View.VISIBLE);}
+            }
+        });
+        tv_goto_board.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //넘기기
+                Intent intent = new Intent(PIntroActivity.this,BoardActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
        // navMenu.setNavigationItemSelectedListener(this);
 

@@ -6,13 +6,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class AdapterFragment extends FragmentPagerAdapter {
 
-    Fragment[] frags = new Fragment[4];
+    Fragment[] frags = new Fragment[3];
     public AdapterFragment(FragmentManager fm) {
         super(fm);
         frags[0] = new FragInfo();
         frags[1] = new FragLog();
         frags[2] = new FragCalendar();
-        frags[3] = new FragBoard();
     }//AdapterFragment
 
     @Override

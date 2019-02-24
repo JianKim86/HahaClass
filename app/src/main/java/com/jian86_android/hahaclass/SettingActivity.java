@@ -98,6 +98,7 @@ public class SettingActivity extends AppCompatActivity {
     private int stage;
     private final int MAINACTIVITY=0;
     private final int PINTROACTIVITY=1;
+    private final int BOARDACTIVITY=2;
     //토글 버튼과 drawer 연결
     //엑티비티 입장에서 토글버튼도 액션바 메뉴 인가 느낌
     @Override
@@ -116,6 +117,10 @@ public class SettingActivity extends AppCompatActivity {
                         startActivity(new Intent(SettingActivity.this,PIntroActivity.class));
                         finish();
                         break;
+                    case BOARDACTIVITY :
+                    startActivity(new Intent(SettingActivity.this,BoardActivity.class));
+                    finish();
+                    break;
                 }
                 break;
         }

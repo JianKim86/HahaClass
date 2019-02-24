@@ -42,7 +42,10 @@
             android:label="@string/title_activity_account" />
         <activity android:name=".PIntroActivity" />
         <activity android:name=".SettingActivity" />
-        <activity android:name=".ApplyActivity"  android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".ApplyActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".BoardActivity"></activity>
     </application>
 
 </manifest>
