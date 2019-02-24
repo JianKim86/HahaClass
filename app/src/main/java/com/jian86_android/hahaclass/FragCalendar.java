@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -67,6 +68,7 @@ public class FragCalendar extends Fragment {
     String time, kcal, menu;
 
     View header;
+
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
     Cursor cursor;
     MaterialCalendarView materialCalendarView;
@@ -90,6 +92,7 @@ public class FragCalendar extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         lv_schedule = view.findViewById(R.id.lv_schedule);
+
         setData();
 
 
@@ -316,9 +319,7 @@ public class FragCalendar extends Fragment {
 //    }//setListViewHeightBasedOnChildren
 
 
-
     void setData(){
-
 
         //TODO:서버 작업 진행시 Main에서 정보 읽어서 ItemInstructor에 넣고 거기서 빼옴
         mMyAdapter = new AdapterCalendar(schedules, context);

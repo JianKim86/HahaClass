@@ -58,8 +58,8 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private static final int GOBACK = 1;
     private static final int PIC = 1000;
     private static final String CUSTOMER = "customer";
-    private static final int CUSTOMERLEVEL = 0;
-    private static final int ADMINLEVEL = 1;
+    private static final int CUSTOMERLEVEL = 1;
+    private static final int ADMINLEVEL = 2;
     private ApplicationClass applicationClass;
     /**
      * Id to identity READ_CONTACTS permission request.

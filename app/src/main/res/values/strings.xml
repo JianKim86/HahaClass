@@ -25,9 +25,9 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_name">이름이 정확하지 않습니다</string>
     <string name="error_invalid_phone">번호가 정확하지 않습니다</string>
-
-    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_password">비밀번호가 정확하지 않습니다</string>
     <string name="error_incorrect_password">비밀번호가 정확하지 않습니다</string>
+    <string name="error_incorrect_rpassword">재입력 번호가 다릅니다</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
@@ -39,4 +39,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_apply">ApplyActivity</string>
+
+
+    <string name="title_setting_myclass">내 강의 확인</string>
+    <string name="title_setting_mylog">내 활동 Log 확인</string>
+
+
 </resources>

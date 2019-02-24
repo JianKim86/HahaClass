@@ -10,13 +10,8 @@ public class Schedule {
     private String date;
     private String start;
     private String end;
-
     //detailed schedule
     private ArrayList<DatasItem>datas= new ArrayList<>();
-
-
-
-
     public Schedule(){}
 
     public Schedule(String projectTitle, String host, String start, String end) {

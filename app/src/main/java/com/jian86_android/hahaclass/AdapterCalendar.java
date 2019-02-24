@@ -1,8 +1,10 @@
 package com.jian86_android.hahaclass;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +22,12 @@ import java.util.ArrayList;
 public class AdapterCalendar extends BaseAdapter {
     ArrayList<Schedule> items;
     Context context;
+    ApplicationClass applicationClass;
 
     public AdapterCalendar(ArrayList<Schedule> items, Context context) {
         this.items = items;
         this.context = context;
+        applicationClass= (ApplicationClass)context.getApplicationContext();
     }
 
     @Override
@@ -76,9 +80,12 @@ public class AdapterCalendar extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(context, ApplyActivity.class);
-                intent.putExtra("position", i);
-                context.startActivity(intent);
+
+                    Intent intent = new Intent(context, ApplyActivity.class);
+                    intent.putExtra("position", i);
+                    context.startActivity(intent);
+
+
 
 
               //  Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();

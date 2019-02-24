@@ -14,7 +14,7 @@ public class ApplicationClass extends Application {
     public int level;
     public ItemInstructor itemInstructor;
     public int instructorNo;
-    public HashSet<Integer> applySchedule = new HashSet<>();
+    public HashSet<Integer> applySchedule = new HashSet<>();//강사강의 번호
 
     public HashSet<Integer> getApplySchedule() {
         return applySchedule;

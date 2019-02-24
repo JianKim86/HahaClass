@@ -185,7 +185,7 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
            // Toast.makeText(applicationClass, ""+ , Toast.LENGTH_SHORT).show();
             phone_numer.setText("");
             edit_layout.setVisibility(View.GONE);
-            ((SettingActivity)context).setUpNav();
+            ((SettingActivity)getActivity()).setUpNav();
             //TODO: 확인 후 돌아가기
         }
 
@@ -198,7 +198,7 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
 
         int id = v.getId();
         switch (id){
-            case R.id.iv_myimg: ((SettingActivity)context).takePic(); break;
+            case R.id.iv_myimg: ((SettingActivity)getActivity()).takePic(); break;
             case R.id.edit_phone: editPhone(); break;
             case R.id.submit_account: submit_frg(); break;
         }

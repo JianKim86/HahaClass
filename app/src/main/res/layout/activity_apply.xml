@@ -25,6 +25,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
             <ListView
                 android:id="@+id/lv_apply"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"

@@ -80,21 +80,24 @@ public class FragSettingPwd extends Fragment implements View.OnClickListener {
         String renPwd = reNewPwd.getText().toString();
 
         if (TextUtils.isEmpty(pwd)) {
+            nowPwd.setError(getString(R.string.error_invalid_password));
             focusView = nowPwd;
             cancel = true;
         } else if (TextUtils.isEmpty(nPwd)) {
+            nowPwd.setError(getString(R.string.error_invalid_password));
             focusView = newPwd;
             cancel = true;
         } else if (TextUtils.isEmpty(renPwd)) {
+            nowPwd.setError(getString(R.string.error_invalid_password));
             focusView = reNewPwd;
             cancel = true;
             // if()
         } else if (!comparePwd(pwd)) {
-            nowPwd.setError(getString(R.string.error_incorrect_password));
+            nowPwd.setError(getString(R.string.error_invalid_password));
             focusView = nowPwd;
             cancel = true;
         } else if (!isPasswordValid(nPwd, renPwd)) {
-            reNewPwd.setError(getString(R.string.error_incorrect_password));
+            reNewPwd.setError(getString(R.string.error_incorrect_rpassword));
             focusView = newPwd;
             cancel = true;
         }

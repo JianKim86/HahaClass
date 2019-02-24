@@ -18,6 +18,8 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +57,8 @@ public class ApplyActivity extends AppCompatActivity {
 
     private View header;
     private ListView lv_apply;
+    private LinearLayout layout_not_user;
+    private Button sign_up_btn;
     private AdapterDetailedSchedule mMyAdapter;
     private TextInputEditText et_name,et_phone,et_email,et_pwd;
     private Button btn_apply;
@@ -64,6 +68,28 @@ public class ApplyActivity extends AppCompatActivity {
     private static final int PASSWORD = 1;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//메뉴
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.setting_menu,menu);
+    return super.onCreateOptionsMenu(menu);
+}//onCreateOptionsMenu
+//메뉴
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id){
+            case R.id.goback:
+                    finish();
+                break;
+        }
+        //아이템 클릭상황을 토글 버튼에 전달
+        return super.onOptionsItemSelected(item);
+
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +101,6 @@ public class ApplyActivity extends AppCompatActivity {
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("강의 신청하기");
-
         setData();
 
     }
@@ -110,19 +135,25 @@ public class ApplyActivity extends AppCompatActivity {
     public void setData(){
         //리스트뷰
         header = getLayoutInflater().inflate(R.layout.pchalendar_apply_list_header, null, false);
-        lv_apply = findViewById(R.id.lv_apply);
-        submit_form = (LinearLayout)header.findViewById(R.id.submit_form);
-        et_name = (TextInputEditText)header.findViewById(R.id.name);
-        et_email = (TextInputEditText)header.findViewById(R.id.email);
-        et_phone = (TextInputEditText)header.findViewById(R.id.phone);
-        et_pwd = (TextInputEditText)header.findViewById(R.id.password);
-        btn_apply = header.findViewById(R.id.btn_apply);
         mMyAdapter = new AdapterDetailedSchedule(datasItems, this);
-
+        lv_apply = findViewById(R.id.lv_apply);
 
         /* 리스트뷰에 어댑터 등록 */
         lv_apply.setAdapter(mMyAdapter);
-        lv_apply.addHeaderView(header);
+            submit_form = (LinearLayout)header.findViewById(R.id.submit_form);
+            et_name = (TextInputEditText) header.findViewById(R.id.name);
+            et_email = (TextInputEditText) header.findViewById(R.id.email);
+            et_phone = (TextInputEditText) header.findViewById(R.id.phone);
+            et_pwd = (TextInputEditText) header.findViewById(R.id.password);
+            btn_apply = header.findViewById(R.id.btn_apply);
+
+
+            layout_not_user= header.findViewById(R.id.layout_not_user);
+            sign_up_btn= header.findViewById(R.id.sign_up_btn);
+
+            if(level==0){layout_not_user.setVisibility(View.VISIBLE); submit_form.setVisibility(View.GONE);}
+            else{submit_form.setVisibility(View.VISIBLE);layout_not_user.setVisibility(View.GONE);}
+            lv_apply.addHeaderView(header);
 
 
         if(userInfo != null) {
@@ -149,6 +180,7 @@ public class ApplyActivity extends AppCompatActivity {
         btn_apply.setOnClickListener(onClickListener);
         et_phone.setOnClickListener(onClickListener);
         et_pwd.setOnClickListener(onClickListener);
+        sign_up_btn.setOnClickListener(onClickListener);
     }//setData
 
 
@@ -274,7 +306,17 @@ public class ApplyActivity extends AppCompatActivity {
 
     }//confirmUserInfo
 
+    //회원 가입여부 묻기
+    private void goMainActivity(){
 
+
+        Intent intent = new Intent(ApplyActivity.this,LoginActivity.class);
+        intent.putExtra("want",3);
+        startActivity(intent);
+        finish();
+
+
+    }//goMainActivity
 
     private boolean isPoneValid(String phone) {
         return phone.length() == 11 || phone.length() == 10;
@@ -308,6 +350,7 @@ public class ApplyActivity extends AppCompatActivity {
                 case R.id.phone: et_phone.requestFocus(); isFocus=PHONE; break;
                 case R.id.password: et_pwd.requestFocus(); isFocus=PASSWORD; break; //
                 case R.id.btn_apply: confirmUserInfo(); break;// 비밀번호 검사로
+                case R.id.sign_up_btn: goMainActivity(); break;// 회원가입
             }
         }
     };
