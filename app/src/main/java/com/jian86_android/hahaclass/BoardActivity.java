@@ -18,10 +18,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
@@ -85,11 +87,11 @@ public class BoardActivity extends AppCompatActivity {
         navMenu = findViewById(R.id.nav_menu);
         drawerLayout =findViewById(R.id.drawer_layout);
 
-        getSupportActionBar().setTitle("게시판");
         lv_board = findViewById(R.id.lv_board);
         btn_write = findViewById(R.id.btn_write);
         setData();
         navSetting();
+        selectListitem();
     }//onCreate
     private void navSetting(){
         View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
@@ -140,6 +142,8 @@ public class BoardActivity extends AppCompatActivity {
         drawerToggle.syncState();
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록
         drawerLayout.addDrawerListener(drawerToggle);
+        getSupportActionBar().setTitle("게시판");
+
     }//navSetting
     private void setData(){
         adapterBoard = new AdapterBoard(boards,BoardActivity.this);
@@ -147,6 +151,7 @@ public class BoardActivity extends AppCompatActivity {
         tv_total_count = header.findViewById(R.id.tv_total_count);
         iv_title_img = header.findViewById(R.id.iv_title_img);
         iv_edit_img = header.findViewById(R.id.iv_edit);
+
         tv_board_title = header.findViewById(R.id.tv_board_title);
         iv_edit_title = header.findViewById(R.id.iv_edit_title);
         if(level==4){
@@ -198,6 +203,22 @@ public class BoardActivity extends AppCompatActivity {
 
 
     }//getData
+    private int cPosition;
+    private void selectListitem(){
+        lv_board.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position>0){
+                    cPosition= position-1;
+                    Intent intent = new Intent(BoardActivity.this,BoarderDetailsActivity.class);
+                    intent.putExtra("position",cPosition);
+                    startActivity(intent);
+                }//if 헤더 제외
+            }
+        });
+    }//selectListitem
+
+
 
     public void setPic(String pic) {
         picPath = pic;

@@ -100,7 +100,6 @@ public boolean onCreateOptionsMenu(Menu menu) {
         getData();
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("강의 신청하기");
         setData();
 
     }
@@ -133,6 +132,7 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
     }//getIntentData
     public void setData(){
+        getSupportActionBar().setTitle("강의 신청하기");
         //리스트뷰
         header = getLayoutInflater().inflate(R.layout.pchalendar_apply_list_header, null, false);
         mMyAdapter = new AdapterDetailedSchedule(datasItems, this);

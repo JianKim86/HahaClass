@@ -10,6 +10,27 @@ public class Board {
     private String board_header_title;
     private String board_writer;
     private String board_instructor;
+
+    private String board_msg;
+    private String board_pwd;
+
+
+    public String getBoard_msg() {
+        return board_msg;
+    }
+
+    public void setBoard_msg(String board_msg) {
+        this.board_msg = board_msg;
+    }
+
+    public String getBoard_pwd() {
+        return board_pwd;
+    }
+
+    public void setBoard_pwd(String board_pwd) {
+        this.board_pwd = board_pwd;
+    }
+
     public String getBoard_imgpath() {
         return board_imgpath;
     }

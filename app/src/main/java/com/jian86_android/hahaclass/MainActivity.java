@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
     private ItemInstructor instructor;
     private UserInfo userInfo;
     private Intent getintent;
-    String state,name,email,phone,pass,img,instructorTitle;
+    String state,name,email,phone,pass,img;
     int level;
     private ActionBarDrawerToggle drawerToggle;
 
@@ -60,6 +61,28 @@ public class MainActivity extends AppCompatActivity  {
 
     private ViewPager pagerLayout;
     private AdapterFragment adapter;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.setting_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }//onCreateOptionsMenu
+    //메뉴
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id){
+            case R.id.goback:
+                finish();
+                break;
+        }
+        drawerToggle.onOptionsItemSelected(item);
+        //아이템 클릭상황을 토글 버튼에 전달
+        return super.onOptionsItemSelected(item);
+
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,19 +107,7 @@ public class MainActivity extends AppCompatActivity  {
         adapter = new AdapterFragment(getSupportFragmentManager());
         pagerLayout.setAdapter(adapter);
 
-        navMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.item1 :goSetting(0); break;
-                    case R.id.item2 :goSetting(1);break;
-                    case R.id.item3 :goSetting(2);break;
-                    case R.id.item4 :goSetting(3);break;
-                }//switch
-                drawerLayout.closeDrawer(navMenu,true);
-                return false;
-            }//onNavigationItemSelected
-        });//listener
+
 
         fab.setOnClickListener(onClickListener);
         fab1.setOnClickListener(onClickListener);
@@ -104,30 +115,26 @@ public class MainActivity extends AppCompatActivity  {
         fab3.setOnClickListener(onClickListener);
       //  fab4.setOnClickListener(onClickListener);
 
-        View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
-        //View nav_header_view = navigationView.getHeaderView(0);
-      //  String name = getintent.getBundleExtra("userBundle").getString("Name");
+        navSetting();
 
+
+    }//onCreate
+
+    private void navSetting(){
+        View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
         TextView nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.tv_name);
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
-
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
         else nav_header_id_text.setText(name);
-        //Toast.makeText(applicationClass, "nav :"+img, Toast.LENGTH_SHORT).show();
-//        if(state.equals(USER)){ img = applicationClass.getUserInfo().getImagePath();
-//            Toast.makeText(applicationClass, "main img :"+ img, Toast.LENGTH_SHORT).show();
-//            Log.d("picPath ", "main img:"+img);
-//
-//        }
+
         if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
+
             Picasso.get().load(uRi)
                     .resize(400,400).into(profile_image, new Callback() {
                 @Override
                 public void onSuccess() {
-
                 }
-
                 @Override
                 public void onError(Exception e) {
                     Log.d("picPath ", "pIntor img: load failed "+ img);
@@ -136,7 +143,21 @@ public class MainActivity extends AppCompatActivity  {
         }
         else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
 
+        navMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    //Todo: 아이탬 연결
+                    case R.id.item1 :goSetting(0);break;
+                    case R.id.item2 :goSetting(1);break;
+                    case R.id.item3 :goSetting(2);break;
+                    case R.id.item4 :goSetting(3);break;
 
+                }//switch
+                drawerLayout.closeDrawer(navMenu,true);
+                return false;
+            }//onNavigationItemSelected
+        });//listener
         //자바로 액션메뉴에 햄버거 버튼 만들기
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.draw_open, R.string.draw_close);
         //토글버튼 아이콘이 보이도록 붙이기
@@ -148,9 +169,11 @@ public class MainActivity extends AppCompatActivity  {
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록
         drawerLayout.addDrawerListener(drawerToggle);
         //타이틀 변경
+        String instructorTitle = instructor.getTitle()+"의 "+instructor.getSubTitle();
         getSupportActionBar().setTitle(instructorTitle);
 
-    }//onCreate
+    }//navSetting
+
 //fab버튼 클릭시 화면전환 이벤트
  View.OnClickListener onClickListener = new View.OnClickListener() {
      @Override
@@ -211,21 +234,12 @@ public class MainActivity extends AppCompatActivity  {
             isFabOpen = true;
         }
     }//anim
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
 
-        //아이템 클릭상황을 토글 버튼에 전달
-        drawerToggle.onOptionsItemSelected(item);
-
-        return super.onOptionsItemSelected(item);
-
-
-    }
     private void  getIntentData(){
       //  Bundle userBundle = getintent.getBundleExtra("userBundle");
        // Bundle selectTeacher =  getintent.getBundleExtra("selectTeacher");
         instructor = applicationClass.getItemInstructor();
-        instructorTitle = instructor.getSubTitle();
+
         state = applicationClass.getState();
         if(state.equals(USER)){
             userInfo= applicationClass.getUserInfo();

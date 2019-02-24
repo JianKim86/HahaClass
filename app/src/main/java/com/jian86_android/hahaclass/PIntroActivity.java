@@ -352,7 +352,7 @@ public class PIntroActivity extends AppCompatActivity {
         datasItemArrayList = new ArrayList<>();
         ditem = new DatasItem();
         itemWeek="1";
-        itemDate="2월14일";
+        itemDate="3월14일";
         itemTitle="개 강 식";
         itemConfiguration="오랜테이션, 동기부여, 하박수란?";
         ditem.setWeek(itemWeek);
@@ -362,7 +362,7 @@ public class PIntroActivity extends AppCompatActivity {
         datasItemArrayList.add(ditem);
         ditem = new DatasItem();
         itemWeek="2";
-        itemDate="2월21일";
+        itemDate="3월21일";
         itemTitle="셀프리더십1 나는 누구인가?";
         itemConfiguration="(DISC)나의 유형?, 스피치훈련 ,셀프웃음운동 ,시낭송(감성훈련과 심신치유)";
         ditem.setWeek(itemWeek);
