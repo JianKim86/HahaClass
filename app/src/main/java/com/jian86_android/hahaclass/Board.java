@@ -9,11 +9,20 @@ public class Board {
     private String board_imgpath;
     private String board_header_title;
     private String board_writer;
+
     private String board_instructor;
 
     private String board_msg;
     private String board_pwd;
+    private String board_id;
 
+    public String getBoard_id() {
+        return board_id;
+    }
+
+    public void setBoard_id(String board_id) {
+        this.board_id = board_id;
+    }
 
     public String getBoard_msg() {
         return board_msg;

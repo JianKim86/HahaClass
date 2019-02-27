@@ -133,6 +133,8 @@ public boolean onCreateOptionsMenu(Menu menu) {
     }//getIntentData
     public void setData(){
         getSupportActionBar().setTitle("강의 신청하기");
+
+
         //리스트뷰
         header = getLayoutInflater().inflate(R.layout.pchalendar_apply_list_header, null, false);
         mMyAdapter = new AdapterDetailedSchedule(datasItems, this);
@@ -162,6 +164,7 @@ public boolean onCreateOptionsMenu(Menu menu) {
             et_phone.setText(userInfo.getPhone());
 
         }
+
         lv_apply.setItemsCanFocus(true);
         lv_apply.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -178,10 +181,14 @@ public boolean onCreateOptionsMenu(Menu menu) {
         });
         et_phone.setFilters(new InputFilter[]{filterAlphaNum});
         btn_apply.setOnClickListener(onClickListener);
-        et_phone.setOnClickListener(onClickListener);
-        et_pwd.setOnClickListener(onClickListener);
+//        et_phone.setOnClickListener(onClickListener);
+//        et_pwd.setOnClickListener(onClickListener);
         sign_up_btn.setOnClickListener(onClickListener);
+
+
+
     }//setData
+
 
 
 

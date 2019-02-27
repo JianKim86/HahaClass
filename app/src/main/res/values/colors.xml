@@ -2,24 +2,24 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#f1592a</color>
-    <color name="colorTitle">#3d3d3d</color>
+    <color name="colorAccent">#ef6c00</color>
+    <color name="colorTitle">#3a3a3a</color>
     <color name="colorBlack">#000</color>
 
-    <color name="colorPoint">#f1592a</color>
-    <color name="app_primary">#f1592a</color>
-    <color name="app_primary_pressed">#cb4b23</color>
+    <color name="colorPoint">#ef6c00</color>
+    <color name="app_primary">#ef6c00</color>
+    <color name="app_primary_pressed">#db4c10</color>
 
     <color name="colorWhite">#fff</color>
     <color name="colorAlpa">#00ffffff</color>
     <color name="colorGrayll">#f9f9f9</color>
     <color name="colorGrayl">#d6d7d7</color>
-    <color name="colorGray">#c8c8c8</color>
-    <color name="colorGraym">#b1b1b1</color>
+    <color name="colorGray">#bdbdbd</color>
+    <color name="colorGraym">#757575</color>
     <color name="colorligntBlueL">#33aed1fa</color>
-    <color name="colorDarkGray">#353535</color>
+    <color name="colorDarkGray">#3a3a3a</color>
     <color name="colorDialTitle">@color/colorPoint</color>
-
+    <color name="colorlightOrange">#f6996d</color>
 
     <color name="colorCel1">@color/colorGrayl</color>
     <color name="colorCel2">@color/colorGray</color>

@@ -20,8 +20,15 @@
 
     <string name="prompt_name">name</string>
     <string name="prompt_phone">phone</string>
+    <string name="prompt_board_msg">메세지수정</string>
+    <string name="prompt_board_title">제목 수정</string>
+
+
+
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="action_no_msg">메세지가 없습니다</string>
+    <string name="action_no_title">제목을 입력해주세요</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_name">이름이 정확하지 않습니다</string>
     <string name="error_invalid_phone">번호가 정확하지 않습니다</string>

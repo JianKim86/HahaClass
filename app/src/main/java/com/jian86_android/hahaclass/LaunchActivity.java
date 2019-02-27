@@ -45,53 +45,64 @@ public class LaunchActivity extends AppCompatActivity {
         applicationClass.setBoard_imgpath(board_img);
         Board board;
         board= new Board();
-        board.setBoard_no("1");
+//        board.setBoard_no("1");
         board.setBoard_date("2018-02-22");
         board.setImg(true);
         board.setBoard_reply("(10)");
         board.setBoard_title("블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라");
-        board.setBoard_writer("김지안");
         board.setBoard_instructor("윤나영 / 하하 웃음 클레스");
+        board.setBoard_writer("김지안");
+        board.setBoard_id("o0x0oa@naver.com");
+        board.setBoard_msg("내용1");
+
         boards.add(board);
 
         board = new Board();
-        board.setBoard_no("2");
+//        board.setBoard_no("2");
         board.setBoard_date("2018-02-22");
         board.setImg(true);
         board.setBoard_reply("(10)");
         board.setBoard_title("블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라");
-        board.setBoard_writer("김지안");
         board.setBoard_instructor("윤나영 / 하하 웃음 클레스");
+        board.setBoard_writer("김지안");
+        board.setBoard_id("o0x0oa@naver.com");
+        board.setBoard_msg("내용2");
         boards.add(board);
 
         board = new Board();
-        board.setBoard_no("3");
+//        board.setBoard_no("3");
         board.setBoard_date("2018-02-22");
         board.setImg(false);
         board.setBoard_reply("(10)");
         board.setBoard_title("블라블라블라블라블라블라");
-        board.setBoard_writer("김지안");
         board.setBoard_instructor("윤나영 / 하하 웃음 클레스");
+        board.setBoard_writer("김지안");
+        board.setBoard_id("o0x0oa@naver.com");
+        board.setBoard_msg("내용3");
         boards.add(board);
 
         board = new Board();
-        board.setBoard_no("4");
+//        board.setBoard_no("4");
         board.setBoard_date("2018-02-22");
         board.setImg(true);
         board.setBoard_reply("(10)");
         board.setBoard_title("블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라");
-        board.setBoard_writer("김지안");
         board.setBoard_instructor("윤나영 / 하하 웃음 클레스");
+        board.setBoard_writer("김지안");
+        board.setBoard_id("o0x0oa@naver.com");
+        board.setBoard_msg("내용4");
         boards.add(board);
 
         board = new Board();
-        board.setBoard_no("5");
+//        board.setBoard_no("5");
         board.setBoard_date("2018-02-22");
         board.setImg(true);
         board.setBoard_reply("(10)");
         board.setBoard_title("블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라블라");
-        board.setBoard_writer("김지안");
         board.setBoard_instructor("윤나영 / 하하 웃음 클레스");
+        board.setBoard_writer("김지안");
+        board.setBoard_id("o0x0oa@naver.com");
+        board.setBoard_msg("내용5");
         boards.add(board);
 
         applicationClass.setBoards(boards);

@@ -48,7 +48,7 @@ public class AdapterBoard extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.pboard_list_item, parent, false);
         }
-        TextView tv_no=(TextView)convertView.findViewById(R.id.tv_no);
+       // TextView tv_no=(TextView)convertView.findViewById(R.id.tv_no);
         TextView tv_writer=(TextView)convertView.findViewById(R.id.tv_writer);
         TextView tv_instructor=(TextView)convertView.findViewById(R.id.tv_instructor);
         TextView tv_title=(TextView)convertView.findViewById(R.id.tv_title);
@@ -58,7 +58,7 @@ public class AdapterBoard extends BaseAdapter {
 
         Board myItem = (Board) getItem(position);
 
-        tv_no.setText(myItem.getBoard_no());
+      //  tv_no.setText(myItem.getBoard_no());
         tv_title.setText(myItem.getBoard_title());
         tv_date.setText(myItem.getBoard_date());
         tv_reply.setText(myItem.getBoard_reply());

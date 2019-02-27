@@ -85,7 +85,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:clickable="true"
-                />
+                android:tag="1"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="240dp"
@@ -101,7 +101,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:clickable="true"
-                />
+                android:tag="2"/>
         </android.support.design.widget.TextInputLayout>
 
     <Button
