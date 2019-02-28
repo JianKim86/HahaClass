@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.jian86_android.hahaclass.databinding.Lunch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -43,6 +44,18 @@ public class LaunchActivity extends AppCompatActivity {
         applicationClass.setBoard_title(board_title);
         String board_img= "";
         applicationClass.setBoard_imgpath(board_img);
+
+
+        HashMap<String, String> board_write_spinner= new HashMap<>();
+        board_write_spinner.put("1","윤나영"+ "하하 웃음 클레스");//instructor_no, instructor title+subtitle
+        board_write_spinner.put("2","윤나영"+ "하하 호호 클레스");
+        board_write_spinner.put("3","윤나영"+ "하하 흐흐 클레스");
+        board_write_spinner.put("4","윤나영"+ "하하 히히 클레스");
+        board_write_spinner.put("5","윤나영"+ "하하 용용 클레스");
+        applicationClass.setBoard_instructor(board_write_spinner);
+
+
+
         Board board;
         board= new Board();
 //        board.setBoard_no("1");

@@ -26,13 +26,11 @@
         </activity>
         <activity android:name=".MainActivity">
 
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -44,12 +42,17 @@
         <activity android:name=".SettingActivity" />
         <activity
             android:name=".ApplyActivity"
-            android:windowSoftInputMode="stateUnspecified" >
+            android:windowSoftInputMode="stateUnspecified"></activity>
+        <activity android:name=".BoardActivity"  android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".BoarderDetailsActivity" />
+        <activity android:name=".TestActivity" android:windowSoftInputMode="adjustPan">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
 
         </activity>
-        <activity android:name=".BoardActivity" />
-        <activity android:name=".BoarderDetailsActivity"></activity>
     </application>
 
 </manifest>

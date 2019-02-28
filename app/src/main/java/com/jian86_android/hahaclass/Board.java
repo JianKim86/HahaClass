@@ -1,20 +1,22 @@
 package com.jian86_android.hahaclass;
 
 public class Board {
-    private String board_no;
-    private String board_title;
-    private String board_date;
-    private String board_reply;
-    private boolean isImg;
-    private String board_imgpath;
+    private String board_no; //보드 넘버
+    private String board_title;//보드 타이틀
+    private String board_date;//보드 리스트뷰에 들어가는 데이트
+    private String board_reply;//리플수
+
+
+    private boolean isImg;// 보드 리스트뷰에 들어가는 이미지 확인
+    private String board_imgpath;// 이미지 패스
     private String board_header_title;
-    private String board_writer;
+    private String board_writer;//작성자
 
-    private String board_instructor;
+    private String board_instructor;//분류
 
-    private String board_msg;
-    private String board_pwd;
-    private String board_id;
+    private String board_msg;//메세지
+    private String board_pwd;//업로드시 비밀번호
+    private String board_id;//작성자 아이디
 
     public String getBoard_id() {
         return board_id;
@@ -68,10 +70,6 @@ public class Board {
         return board_header_title;
     }
 
-    public void setBoard_header_title(String board_header_title) {
-        this.board_header_title = board_header_title;
-    }
-
     public String getBoard_no() {
         return board_no;
     }
@@ -86,6 +84,7 @@ public class Board {
 
     public void setBoard_title(String board_title) {
         this.board_title = board_title;
+        this.board_header_title = board_title;
     }
 
     public String getBoard_date() {

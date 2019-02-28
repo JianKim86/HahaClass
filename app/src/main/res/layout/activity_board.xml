@@ -44,6 +44,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
 
+    <include
+        android:id="@+id/edit"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/dialog_board_edit_layout"
+        />
+
+
+
 </android.support.design.widget.CoordinatorLayout>
 <android.support.design.widget.NavigationView
 android:id="@+id/nav_menu"

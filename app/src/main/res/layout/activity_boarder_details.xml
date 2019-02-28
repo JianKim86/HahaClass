@@ -33,7 +33,6 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:background="@drawable/text_layout_stroke_normal"
-
            android:orientation="vertical">
            <TextView
                android:id="@+id/tv_date"
@@ -57,12 +56,6 @@
                 android:orientation="horizontal"
                 android:padding="8dp"
                 >
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    ></Spinner>
                 <TextView
                     android:id="@+id/tv_instructor"
                     android:layout_width="wrap_content"
@@ -83,7 +76,6 @@
                     android:layout_marginLeft="4dp"
                     android:layout_gravity="center_vertical|right"
                     android:gravity="center_vertical|right"/>
-
             </LinearLayout>
 
            <TextView
@@ -97,37 +89,6 @@
                android:layout_margin="8dp"
 
                />
-           <LinearLayout
-               android:id="@+id/layout_edit_title"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="vertical"
-               android:visibility="gone"
-
-               >
-               <android.support.design.widget.TextInputLayout
-                   android:id="@+id/input_layout_title"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-
-                   >
-
-                   <android.support.design.widget.TextInputEditText
-                       android:id="@+id/edit_title"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:hint="@string/prompt_board_title"
-                       android:imeActionLabel="@string/action_no_title"
-                       android:imeOptions="actionUnspecified"
-                       android:inputType="textMultiLine"
-                       android:maxLines="2"
-                       android:ems="40"
-                       android:padding="10dp"
-                       />
-               </android.support.design.widget.TextInputLayout>
-           </LinearLayout>
-
-
            <TextView
                android:layout_width="match_parent"
                android:layout_height="1dp"
@@ -136,10 +97,11 @@
                android:layout_marginBottom="4dp"
                />
            <ImageView
-               android:id="@+id/iv_img"
+               android:id="@+id/iv_img_show"
                android:layout_width="match_parent"
                android:layout_height="250dp"
-               android:gravity="center_horizontal"/>
+               android:gravity="center_horizontal"
+               android:visibility="gone"/>
             <TextView
                 android:id="@+id/tv_msg"
                 android:layout_width="match_parent"
@@ -150,68 +112,7 @@
                 android:layout_gravity="center"
                 android:textStyle="normal"
                 android:padding="8dp"
-
                 />
-           <LinearLayout
-               android:id="@+id/layout_edit_msg"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="vertical"
-               android:visibility="gone"
-               >
-           <android.support.design.widget.TextInputLayout
-               android:id="@+id/input_layout_msg"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-
-               >
-
-               <android.support.design.widget.TextInputEditText
-                   android:id="@+id/edit_msg"
-                   android:layout_width="match_parent"
-                   android:layout_height="250dp"
-                   android:hint="@string/prompt_board_msg"
-                   android:imeActionLabel="@string/action_no_msg"
-                   android:imeOptions="actionUnspecified"
-                   android:inputType="textMultiLine"
-                   android:textSize="16sp"
-                   android:gravity="start"
-                   android:ems="1000"
-                   android:imeActionId="6"
-                   android:scrollbars="vertical"
-                   android:padding="10dp"
-                   />
-           </android.support.design.widget.TextInputLayout>
-               <TextView
-                   android:layout_width="match_parent"
-                   android:layout_height="1dp"
-                   android:background="@color/colorGray"
-                   android:paddingTop="4dp"
-                   android:layout_marginBottom="4dp"
-                   />
-           <android.support.design.widget.TextInputLayout
-               android:layout_width="240dp"
-               android:layout_height="wrap_content"
-               android:padding="8dp"
-
-               >
-
-               <EditText
-
-                   android:id="@+id/repassword"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:hint="@string/prompt_repassword"
-                   android:imeActionId="6"
-                   android:imeActionLabel="@string/action_sign_in_short"
-                   android:imeOptions="actionUnspecified"
-                   android:inputType="textPassword"
-                   android:maxLines="1"
-                   android:singleLine="true" />
-           </android.support.design.widget.TextInputLayout>
-
-           </LinearLayout>
-
 
            <TextView
                android:layout_width="match_parent"
@@ -256,7 +157,7 @@
                 android:background="@drawable/btn_str"/>
            <ListView
                android:layout_marginTop="8dp"
-               android:id="@+id/lv_apply"
+               android:id="@+id/lv_repply"
                android:layout_width="match_parent"
                android:layout_height="match_parent"
                android:background="@color/colorWhite"
@@ -265,12 +166,17 @@
                >
            </ListView>
 
-
        </LinearLayout>
-
 
     </ScrollView>
 
+    <include
+        android:id="@+id/edit"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/dialog_board_edit_layout"
+        />
 
 
 </android.support.design.widget.CoordinatorLayout>

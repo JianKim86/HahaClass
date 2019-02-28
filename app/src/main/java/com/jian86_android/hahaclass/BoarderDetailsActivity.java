@@ -1,12 +1,15 @@
 package com.jian86_android.hahaclass;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +17,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,11 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BoarderDetailsActivity extends AppCompatActivity {
     private ApplicationClass applicationClass;
@@ -39,15 +46,24 @@ public class BoarderDetailsActivity extends AppCompatActivity {
     int level;
 
     private int position;
+
+    private View edit;
+    private ImageView  btn_upload_img, btn_upload_cancel;
+    private HashMap<String,String> spinnerHash;
+    private TextView tv_total_count,tv_board_title;
+    private ImageView iv_title_img, iv_edit_img, iv_edit_title;
+    private ArrayList<String> spinnerItems = new ArrayList<>();
+    private ArrayAdapter<String> spinnerAdapter;
+
     private  Board board;
     private Spinner spinner;
     private TextView tv_instructor, tv_date, tv_title,tv_user_name,tv_msg;
-    private Button btn_reply,btn_modify,btn_delete;
+    private Button btn_reply,btn_modify, btn_save, btn_delete, btn_return;
     private LinearLayout layout_edit_title,layout_edit_msg,layout_edit_btn;
     private EditText edit_title,edit_msg,repassword;
     private TextInputLayout input_layout_title,input_layout_msg;
-    private ListView lv_apply;
-    private ImageView iv_img;
+    private ListView lv_repply;
+    private ImageView iv_img,iv_img_show;
     //메뉴
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,52 +95,137 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);
 
-        spinner =findViewById(R.id.spinner);
         tv_instructor =findViewById(R.id.tv_instructor);
         tv_date = findViewById(R.id.tv_date);
         tv_title = findViewById(R.id.tv_title);
-        tv_user_name = findViewById(R.id.tv_user_name);
         tv_msg = findViewById(R.id.tv_msg);
-
         btn_reply = findViewById(R.id.btn_reply);
         btn_modify = findViewById(R.id.btn_modify);
-        btn_delete = findViewById(R.id.btn_delete);
-
-        layout_edit_title = findViewById(R.id.layout_edit_title);
-        layout_edit_msg = findViewById(R.id.layout_edit_msg);
         layout_edit_btn = findViewById(R.id.layout_edit_btn);
 
+        lv_repply = findViewById(R.id.lv_repply);
+
+        iv_img= findViewById(R.id.iv_img);
+        iv_img_show= findViewById(R.id.iv_img_show);
+    //include
+    //include view
+        edit =findViewById(R.id.edit);
+
+        spinner =findViewById(R.id.spinner);
+        tv_instructor =findViewById(R.id.tv_instructor);
+        tv_user_name = findViewById(R.id.tv_user_name);
+
+        btn_save = findViewById(R.id.btn_save);
+        btn_return = findViewById(R.id.btn_return);
+        btn_delete = findViewById(R.id.btn_delete);
+
+        btn_upload_img = findViewById(R.id.btn_upload_img);
+        btn_upload_cancel = findViewById(R.id.btn_upload_cancel);
         edit_title = findViewById(R.id.edit_title);
         edit_msg = findViewById(R.id.edit_msg);
         repassword = findViewById(R.id.repassword);
-        lv_apply = findViewById(R.id.lv_apply);
-        iv_img= findViewById(R.id.iv_img);
+
         input_layout_title = (TextInputLayout)findViewById(R.id.input_layout_title);
         input_layout_msg = (TextInputLayout)findViewById(R.id.input_layout_msg);
 
-
         setData();
-        clicklietnearSet();
+
 
     }//onCreate
-    private void editViewShow(){
 
+    //비밀번호 확인
+    private void checkPwd(final boolean isDelete) {
+        String msg="";
+        if(isDelete) msg = "삭제하시겠습니까?";
+        else msg = "수정 하시겠습니까?";
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(BoarderDetailsActivity.this);
+        //builder.setTitle("AlertDialog Title");
+        builder.setMessage(msg);
+        builder.setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        vsPwd(isDelete);
+                        dialog.dismiss();
+                    }
+                });
+        builder.setNegativeButton("아니오", null);
+        builder.show();
+    }//checkPwd
+
+    //비밀번호 다이알로그
+    private void vsPwd(final boolean viewCase){
+
+        final TextInputEditText edittext = new TextInputEditText(this);
+        edittext.setHint("해당 게시물의 비밀번호를 입력하세요");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("비밀번호 확인");
+        builder.setView(edittext);
+        builder.setPositiveButton("입력",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if( edittext.getText().toString().equals(board.getBoard_pwd())){
+                            editViewShow(viewCase);
+                        }
+                        else  Toast.makeText(getApplicationContext(),"잘못된 입력입니다" ,Toast.LENGTH_LONG).show();
+
+                    }
+                });
+        builder.setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
+
+    }//vsPwd
+
+//수정 뷰 보이기
+    private void editViewShow(boolean viewCase){
+
+        if(viewCase) {deletData(); return;} //삭제뷰 보내기
+
+        edit.setVisibility(View.VISIBLE);
         input_layout_title.setCounterEnabled(true);
         input_layout_msg.setCounterEnabled(true);
         input_layout_title.setCounterMaxLength(30);
         input_layout_msg.setCounterMaxLength(500);
-        layout_edit_title.setVisibility(View.VISIBLE);
-        layout_edit_msg.setVisibility(View.VISIBLE);
-        btn_modify.setText("저장");
-        spinner.setVisibility(View.VISIBLE);
 
+//스피너에 값넣기
+        for (String mapkey : spinnerHash.keySet()){
+            spinnerItems.add(spinnerHash.get(mapkey));
+        }
+        spinnerAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerItems);
+        spinner.setAdapter(spinnerAdapter);
+        //event listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tv_instructor.setText(spinner.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+//이름 아이디 넣기
+        String strId = userInfo.getEmail().substring(0,3)+"***";
+        tv_user_name.setText(userInfo.getName()+"("+strId+")"+"님 안녕하세요 !");
         edit_title.setText(changetitle);
         edit_msg.setText(changemsg);
-        tv_title.setVisibility(View.GONE);
-        tv_msg.setVisibility(View.GONE);
+//이미지 넣기
 
-    }
+        if(board.getBoard_imgpath() !=null && board.getBoard_imgpath() != ""){
+            iv_img.setVisibility(View.VISIBLE); setPic(board.getBoard_imgpath()); isupload = true;
+        }else {iv_img.setVisibility(View.GONE); picPath=null;}
 
+        if(isupload) btn_upload_cancel.setVisibility(View.VISIBLE);
+
+    }//editViewShow
     private String changetitle;
     private String changemsg;
     private  void editViewHide(){
@@ -134,19 +235,21 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         changetitle= edit_title.getText().toString();
         changemsg= edit_msg.getText().toString();
 
-        if (TextUtils.isEmpty(changetitle)) {
-            edit_title.setError(getString(R.string.error_field_required));
+        edit_title.setError(null);
+        edit_msg.setError(null);
+        repassword.setError(null);
+        if (TextUtils.isEmpty(changetitle)||!isTitleValid(changetitle,30)) {
+
             focusView = edit_title;
             cancel = true;
-        } else if(TextUtils.isEmpty(changemsg)) {
-            edit_msg.setError(getString(R.string.error_field_required));
+        } else if(TextUtils.isEmpty(changemsg)||!isTitleValid(changemsg,500)) {
             focusView = edit_msg;
             cancel = true;
-        }else if(TextUtils.isEmpty(changemsg)) {
-            edit_msg.setError(getString(R.string.error_field_required));
-            focusView = edit_msg;
+        } else if (TextUtils.isEmpty(password)) {
+            repassword.setError(getString(R.string.error_invalid_password));
+            focusView = repassword;
             cancel = true;
-        } else if (!TextUtils.isEmpty(password) && !isPasswordValid(board.getBoard_pwd(),password)) {
+        }else if (!isPasswordValid(board.getBoard_pwd(),password)) {
             repassword.setError(getString(R.string.error_invalid_password));
             focusView = repassword;
             cancel = true;
@@ -156,20 +259,13 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            layout_edit_title.setVisibility(View.GONE);
-            layout_edit_msg.setVisibility(View.GONE);
-            btn_modify.setText("수정");
-            spinner.setVisibility(View.GONE);
-            tv_title.setVisibility(View.VISIBLE);
-            tv_msg.setVisibility(View.VISIBLE);
-
             tv_title.setText(changetitle);
             tv_msg.setText(changemsg);
             dataChange();
         }
 
     }
-    //서브밋전 확인
+//서브밋전 확인
     private boolean isPasswordValid(String password,String setPassword) {
         return (password.length() > 4) && (password.equals(setPassword));
     }
@@ -177,6 +273,25 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         return (title.length() <= len);
     }
     private boolean isOpen;
+    private boolean isupload=false;
+
+    final static boolean ISMODIFY =false;
+    final static boolean ISDELETE =true;
+
+//삭제
+    private  void deletData(){
+        applicationClass.getBoards().remove(position);
+    }//deletData
+
+
+    private void dataChange(){
+        applicationClass.getBoards().get(position).setBoard_title(changetitle);
+        applicationClass.getBoards().get(position).setBoard_msg(changemsg);
+        edit.setVisibility(View.GONE);
+    }//dataChange
+    private String picPath=null;
+
+
     public void clicklietnearSet(){
 
 
@@ -186,9 +301,13 @@ public class BoarderDetailsActivity extends AppCompatActivity {
 
                 int id = v.getId();
                 switch (id){
-                    case R.id.btn_modify: if(!isOpen){ editViewShow(); isOpen = true; } else {editViewHide(); isOpen = false; } break;
-                    case R.id.btn_delete: break;
+                    case R.id.btn_modify: checkPwd(ISMODIFY);  break;//else failedChedkPwd();
+                    case R.id.btn_delete: checkPwd(ISDELETE);  break;
+                    case R.id.btn_save: editViewHide(); break;
                     case R.id.btn_reply: break;
+                    case R.id.btn_upload_img: iv_img.setVisibility(View.VISIBLE); takePic(); isupload =true; break;
+                    case R.id.btn_upload_cancel: if(isupload) { isupload =false; iv_img.setVisibility(View.GONE);  btn_upload_cancel.setVisibility(View.GONE); picPath = null; btmapPicPath =null; } break;
+                    case R.id.btn_return:  returnList();  break;
                 }
             }
         };
@@ -197,13 +316,12 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         btn_delete.setOnClickListener(onClickListener);
         btn_reply.setOnClickListener(onClickListener);
 
-    }//clicklietnearSet
+        btn_save.setOnClickListener(onClickListener);
+        btn_return.setOnClickListener(onClickListener);
+        btn_upload_img.setOnClickListener(onClickListener);
+        btn_upload_cancel.setOnClickListener(onClickListener);
 
-    private void dataChange(){
-        applicationClass.getBoards().get(position).setBoard_title(changetitle);
-        applicationClass.getBoards().get(position).setBoard_msg(changemsg);
-    }//dataChange
-    private String picPath=null;
+    }//clicklietnearSet
     public void setData(){
         getSupportActionBar().setTitle("");
         changetitle=board.getBoard_title();
@@ -215,18 +333,16 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         tv_msg.setText(changemsg);
         tv_instructor.setText(board.getBoard_instructor());
 
-
         if(board.getBoard_imgpath() !=null && board.getBoard_imgpath() != ""){
-            iv_img.setVisibility(View.VISIBLE); setPic(board.getBoard_imgpath());
-        }else {iv_img.setVisibility(View.GONE); picPath=null;}
-
+            iv_img_show.setVisibility(View.VISIBLE); setPic(board.getBoard_imgpath()); isupload = true;
+        }else { iv_img_show.setVisibility(View.GONE); picPath=null; }
 
         if(level==3){
             layout_edit_btn.setVisibility(View.VISIBLE);
         }
         isOpen= false;
 
-
+        clicklietnearSet();
     }//setData
 
 
@@ -235,6 +351,8 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         position = getintent.getIntExtra("position",0);
         board = applicationClass.getBoards().get(position);
         //받은 포지션으로 스케쥴리스트의 몇번째인지 확인
+        spinnerHash = applicationClass.getBoard_instructor();
+
 
         //유저정보 가져오기
         state = applicationClass.getState();
@@ -246,13 +364,35 @@ public class BoarderDetailsActivity extends AppCompatActivity {
             pass = userInfo.getPassword();
             img = userInfo.getImagePath();
             level = userInfo.getLevel();
+            if(userInfo.getEmail().equals(board.getBoard_id())){level=3;}
         }else{
-            level = 3;
+            level = 0;
             userInfo = null;
         }
 
     }//getIntentData
 
+//게시판으로 돌아가기
+    private void returnList(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setTitle("AlertDialog Title");
+        String msg = "게시판으로 돌아가시겠습니까?";
+        builder.setMessage(msg);
+        builder.setPositiveButton("예",
+
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(BoarderDetailsActivity.this,BoardActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("아니오", null);
+        builder.show();
+    }
+
+
+    ///이미지작업
     void takePic(){
         Intent intent=new Intent();
         intent.setAction(Intent.ACTION_PICK);
@@ -263,16 +403,20 @@ public class BoarderDetailsActivity extends AppCompatActivity {
     public void setPic(String pic){
         //Toast.makeText(applicationClass, ""+pic, Toast.LENGTH_SHORT).show();
         picPath = pic;
+        ImageView iv;
+        if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);  } else{ iv =iv_img_show; }
         if(picPath!=null&&!(picPath.equals(""))){
             Uri uRi = Uri.parse(picPath);
-            Picasso.get().load(uRi).into(iv_img);
-        }else {Glide.with(this).load(R.drawable.ic_launcher_background).into(iv_img);}
+            Picasso.get().load(uRi).into(iv);
+        }else {Glide.with(this).load(R.drawable.ic_launcher_background).into(iv);}
         applicationClass.getBoards().get(position).setBoard_imgpath(picPath);
     }//setPic
     Bitmap btmapPicPath;
     public void setPic(Bitmap pic){
         btmapPicPath = pic;
-        Glide.with(this).load(pic).into(iv_img);
+        ImageView iv;
+        if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);  } else{ iv =iv_img_show; }
+        Glide.with(this).load(pic).into(iv);
         picPath=null;
 
 

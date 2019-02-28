@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.res.Configuration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Level;
 
@@ -21,6 +22,22 @@ public class ApplicationClass extends Application {
 
     public String board_title;
     public String board_imgpath;
+    public HashMap<String,String > board_instructor= new HashMap<>();//instructor_no, instructor title+subtitle
+
+
+
+
+
+    //게터 셋터
+
+    public HashMap<String, String> getBoard_instructor() {
+        return board_instructor;
+    }
+
+    public void setBoard_instructor(HashMap<String, String> board_instructor) {
+        this.board_instructor = board_instructor;
+    }
+
     public ArrayList<Board> getBoards() {
         return boards;
     }
@@ -48,7 +65,6 @@ public class ApplicationClass extends Application {
     public HashSet<Integer> getApplySchedule() {
         return applySchedule;
     }//강사별 스케쥴을 담음
-
 
     public void setApplySchedule(int applySchedule) {
 
