@@ -34,6 +34,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
@@ -160,28 +166,28 @@ public class LoginActivity extends AppCompatActivity  {
 //
 //        getLoaderManager().initLoader(0, null, this);
 //    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
+//
+//    private boolean mayRequestContacts() {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//            return true;
+//        }
+//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+//            return true;
+//        }
+//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+//                    .setAction(android.R.string.ok, new View.OnClickListener() {
+//                        @Override
+//                        @TargetApi(Build.VERSION_CODES.M)
+//                        public void onClick(View v) {
+//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//                        }
+//                    });
+//        } else {
+//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//        }
+//        return false;
+//    }
 
     /**
      * Callback received when a permissions request has been completed.
@@ -308,60 +314,7 @@ public class LoginActivity extends AppCompatActivity  {
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-//
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-//        return new CursorLoader(this,
-//                // Retrieve data rows for the device user's 'profile' contact.
-//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-//                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-//
-//                // Select only email addresses.
-//                ContactsContract.Contacts.Data.MIMETYPE +
-//                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-//                .CONTENT_ITEM_TYPE},
-//
-//                // Show primary email addresses first. Note that there won't be
-//                // a primary email address if the user hasn't specified one.
-//                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-//        List<String> emails = new ArrayList<>();
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-//            cursor.moveToNext();
-//        }
-//
-//        addEmailsToAutoComplete(emails);
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-//
-//    }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -381,29 +334,24 @@ public class LoginActivity extends AppCompatActivity  {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
             /**서버에서 이메일 유무 확인*/
             //잇으면 true
-            if(isUser&& userinfo!=null) {
-                /**서버에서 유저정보를 읽어와서 userinfo에 담음*/
-                String uName = userinfo.getName();
-                String uEmail = userinfo.getEmail();
-                String uPhone = userinfo.getPhone();
-                String uPassword = userinfo.getPassword();
-                String uImagePath =userinfo.getImagePath();
-                int uLevel = userinfo.getLevel();
-                /** 서버 작업들어가면 담아서 함*/
-               // userinfo = new UserInfo(uName, uEmail, uPhone, uPassword, uImagePath, uLevel);
 
-                if(!(userinfo.getEmail().equals(mEmail)&&userinfo.getPassword().equals(mPassword))) return false;
 
-            }
-
+//            if(isUser&& userinfo!= null) {
+//                /**서버에서 유저정보를 읽어와서 userinfo에 담음*/
+//                String uName = userinfo.getName();
+//                String uEmail = userinfo.getEmail();
+//                String uPhone = userinfo.getPhone();
+//                String uPassword = userinfo.getPassword();
+//                String uImagePath =userinfo.getImagePath();
+//                int uLevel = userinfo.getLevel();
+//                /** 서버 작업들어가면 담아서 함*/
+//
+//               // userinfo = new UserInfo(uName, uEmail, uPhone, uPassword, uImagePath, uLevel);
+//
+//                if(!(userinfo.getEmail().equals(mEmail)&&userinfo.getPassword().equals(mPassword))) return false;
+            searchEmailDB();
 
                 for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
@@ -416,6 +364,65 @@ public class LoginActivity extends AppCompatActivity  {
             // TODO: register the new account here.
             return true;
         }
+
+    private void searchEmailDB(){
+        new Thread(){
+            @Override
+            public void run() {
+                //1. userinfo 에 있는 정보 유저 테이블에 넣기
+                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
+                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl , new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        if(response.equals("nohave")){
+                            isUser = false;
+                            new AlertDialog.Builder(LoginActivity.this).setMessage(response).show();
+                        }
+                        else{
+                            isUser = true;
+                            //비밀번호 비교 TODO:비밀번호 비교해서 userInfo에 담아 글로벌로
+                            //response 가 0이면 비밀번호 맞음
+                            if(response.equals("0"))
+                            new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 맞음").show();
+                            else new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show();
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //서버 요청중 에거라 발생하면 자동 실행
+                        Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        finish(); //화면 종료
+                    }
+                });//세번째 파라미터가 응답을 받아옴
+
+
+                //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
+                multiPartRequest.addStringParam("email", mEmail);
+                multiPartRequest.addStringParam("password", mPassword);
+
+                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
+                RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+                //요청 객체를 우체통에 넣기
+                requestQueue.add(multiPartRequest);
+
+            }//run
+        }.start();
+
+
+
+
+    }//searchEmailDB
+
+
+
+
+
+
+
 //액티비티 넘기기
 
         @Override
@@ -426,8 +433,8 @@ public class LoginActivity extends AppCompatActivity  {
             if (success) {
 
 
-                    moveActivity(GOMAIN,userinfo);
-
+            if(isUser) {new AlertDialog.Builder(LoginActivity.this).setMessage("회원입니다").show();}//moveActivity(GOMAIN,userinfo);
+            else new AlertDialog.Builder(LoginActivity.this).setMessage("회원이 아닙니다").show();
 
             } else {
 
@@ -446,7 +453,7 @@ public class LoginActivity extends AppCompatActivity  {
 //액티비티 이동
     public void moveActivity(int state, UserInfo userInfo){
 
-        new AlertDialog.Builder(LoginActivity.this).setMessage("서비스를 준비중입니다").show();
+   //     new AlertDialog.Builder(LoginActivity.this).setMessage("서비스를 준비중입니다").show();
         Intent intent = null;
         switch (state){
             case GOMAIN:
@@ -482,6 +489,7 @@ public class LoginActivity extends AppCompatActivity  {
         super.onActivityResult(requestCode, resultCode, data);
        if(requestCode == GOSIGNUP){
         if (resultCode==RESULT_OK) { // 정상 반환일 경우에만 동작하겠다
+
             String email =  applicationClass.getUserInfo().getEmail();
             String pwd = applicationClass.getUserInfo().getPassword();
             String name =  applicationClass.getUserInfo().getName();

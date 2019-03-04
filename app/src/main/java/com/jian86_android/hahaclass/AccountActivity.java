@@ -107,7 +107,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         applicationClass = (ApplicationClass)getApplicationContext();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+//        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mRePasswordView = (EditText) findViewById(R.id.repassword);
@@ -165,35 +165,35 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
 
     }//oncreate
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
+//    private void populateAutoComplete() {
+//        if (!mayRequestContacts()) {
+//            return;
+//        }
+//
+//        getLoaderManager().initLoader(0, null, this);
+//    }
 
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
+//    private boolean mayRequestContacts() {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//            return true;
+//        }
+//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+//            return true;
+//        }
+//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+//                    .setAction(android.R.string.ok, new View.OnClickListener() {
+//                        @Override
+//                        @TargetApi(Build.VERSION_CODES.M)
+//                        public void onClick(View v) {
+//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//                        }
+//                    });
+//        } else {
+//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
+//        }
+//        return false;
+//    }
 
     /**
      * Callback received when a permissions request has been completed.
@@ -206,7 +206,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         switch (requestCode) {
             case REQUEST_READ_CONTACTS:
                 if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    populateAutoComplete();
+  //                  populateAutoComplete();
                 }
                 break;
             case IMAGEUPLOAD:
@@ -501,7 +501,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                     finish(); // 두번째 화면 종료
                 }else{
                     //가입실패 TODO::dialog
-                    Toast.makeText(this, "가입실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "중복된 이메일 입니다", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case GOBACK :
@@ -527,12 +527,14 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                         //매개변수로 받은 Stringdl echo된 결과값
 
                       // new AlertDialog.Builder(AccountActivity.this).setMessage(response).show();
-                        if(response.equals("already")){ new AlertDialog.Builder(AccountActivity.this).setMessage(response).show(); }
-                        else{//moveActivity(GOLOGIN);
 
+                        if(response.equals("already")){
+                            userInfo= null;
+                        }
+                        else{
                             new AlertDialog.Builder(AccountActivity.this).setMessage(response).show();
                              }
-
+                        moveActivity(GOLOGIN);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -547,7 +549,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                 //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
                 multiPartRequest.addStringParam("name", userInfo.getName());
                 multiPartRequest.addStringParam("email", userInfo.getEmail());
-                multiPartRequest.addStringParam("phone", userInfo.getPassword());
+                multiPartRequest.addStringParam("phone", userInfo.getPhone());
                 multiPartRequest.addStringParam("password", userInfo.getPassword());
                 multiPartRequest.addStringParam("level", userInfo.getLevel()+"");
                 multiPartRequest.addFile("image_path",picPath);
