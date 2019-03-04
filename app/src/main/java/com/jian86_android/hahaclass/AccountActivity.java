@@ -1,16 +1,19 @@
 package com.jian86_android.hahaclass;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -41,6 +44,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
@@ -57,6 +66,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private static final int GOLOGIN = 3;
     private static final int GOBACK = 1;
     private static final int PIC = 1000;
+    private static final int IMAGEUPLOAD = 100;
     private static final String CUSTOMER = "customer";
     private static final int CUSTOMERLEVEL = 1;
     private static final int ADMINLEVEL = 2;
@@ -86,7 +96,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     private View mProgressView;
     private View mLoginFormView;
     private ImageView mImg;
-    private String picPath="";
+    private String picPath;
     private RadioGroup rg;
     private RadioButton rb;
     UserInfo userInfo = null;
@@ -146,7 +156,14 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
           rg = (RadioGroup)findViewById(R.id.radioGroup1);
           rb = (RadioButton) findViewById(R.id.radio0);
 
-    }
+          //외부저장소에 있는 이미지 파일을 서버로 보내기 위한 퍼미션
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},IMAGEUPLOAD);
+            }
+        }
+
+    }//oncreate
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -184,12 +201,23 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
+
+
+        switch (requestCode) {
+            case REQUEST_READ_CONTACTS:
+                if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    populateAutoComplete();
+                }
+                break;
+            case IMAGEUPLOAD:
+                if(grantResults[0]== PackageManager.PERMISSION_DENIED){
+                    Toast.makeText(this, "외부저장소 사용 불가 \n 이미지 저장 불가", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
         }
-    }
+
+    }//onRequestPermissionsResult
 
 
     /**
@@ -278,7 +306,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+         //   showProgress(true);
             mAuthTask = new UserLoginTask(name, email, phone, password);
             mAuthTask.execute((Void) null);
         }
@@ -378,7 +406,6 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         mEmailView.setAdapter(adapter);
     }
 
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -411,13 +438,21 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+            if(rb.isChecked()){
+                //Toast.makeText(applicationClass, ""+picPath, Toast.LENGTH_SHORT).show();
+                if(picPath!= null&&(!(picPath.equals("")))) {userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, ADMINLEVEL);}
+                else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",ADMINLEVEL);
+                //moveActivity(GOLOGIN);
+             //   showProgress(true);
+            }else{
+                if(picPath!= null&&(!(picPath.equals("")))) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, CUSTOMERLEVEL);
+                else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",CUSTOMERLEVEL);
+               //
             }
+            //네트워크 작업
+            saveDB();
 
+                //비교
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
@@ -433,21 +468,12 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
+           // showProgress(false);
 
             if (success) {
 
                // Toast.makeText(AccountActivity.this, ""+picPath, Toast.LENGTH_SHORT).show();
-                if(rb.isChecked()){
-                    Toast.makeText(applicationClass, ""+picPath, Toast.LENGTH_SHORT).show();
-                    if((!(picPath.equals("")))&&picPath!= null) {userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, ADMINLEVEL);}
-                    else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",ADMINLEVEL);
-                    moveActivity(GOLOGIN);
-                }else{
-                    if((!(picPath.equals("")))&&picPath!= null) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, CUSTOMERLEVEL);
-                    else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",CUSTOMERLEVEL);
-                    moveActivity(GOLOGIN);
-                }
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -457,7 +483,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
+          //  showProgress(false);
         }
     }
 
@@ -469,17 +495,14 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                 intent = new Intent();
                 if(userInfo != null) {
                     applicationClass.setUserInfo(userInfo);
+                 //   showProgress(false);
                     setResult(RESULT_OK, intent); // 호출한 화면으로 되돌려주기
-                    // resultCode : 결과 돌려주는 상태
+//                    // resultCode : 결과 돌려주는 상태
                     finish(); // 두번째 화면 종료
-
-
-
                 }else{
                     //가입실패 TODO::dialog
                     Toast.makeText(this, "가입실패", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             case GOBACK :
                 intent = new Intent(AccountActivity.this, LoginActivity.class);
@@ -489,6 +512,60 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         }
 
     }//moveActivity
+
+    public  void saveDB(){
+
+        new Thread(){
+            @Override
+            public void run() {
+                //1. userinfo 에 있는 정보 유저 테이블에 넣기
+                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/info_list_insert.php";
+                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl , new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //서버로부터 응답을 받을때 자동 실행
+                        //매개변수로 받은 Stringdl echo된 결과값
+
+                      // new AlertDialog.Builder(AccountActivity.this).setMessage(response).show();
+                        if(response.equals("already")){ new AlertDialog.Builder(AccountActivity.this).setMessage(response).show(); }
+                        else{//moveActivity(GOLOGIN);
+
+                            new AlertDialog.Builder(AccountActivity.this).setMessage(response).show();
+                             }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //서버 요청중 에거라 발생하면 자동 실행
+                        Toast.makeText(AccountActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        finish(); // 두번째 화면 종료
+                    }
+                });//세번째 파라미터가 응답을 받아옴
+
+
+                //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
+                multiPartRequest.addStringParam("name", userInfo.getName());
+                multiPartRequest.addStringParam("email", userInfo.getEmail());
+                multiPartRequest.addStringParam("phone", userInfo.getPassword());
+                multiPartRequest.addStringParam("password", userInfo.getPassword());
+                multiPartRequest.addStringParam("level", userInfo.getLevel()+"");
+                multiPartRequest.addFile("image_path",picPath);
+
+                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
+                RequestQueue requestQueue = Volley.newRequestQueue(AccountActivity.this);
+
+                //요청 객체를 우체통에 넣기
+                requestQueue.add(multiPartRequest);
+
+            }//run
+        }.start();
+
+
+
+
+    }//saveDB
+
 
     // 영문 + 한글만 입력 되도록
     public InputFilter filterAlpha = new InputFilter() {
@@ -523,6 +600,17 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         startActivityForResult(intent, PIC);
     }
 
+    //이미지 절대경로로 바꾸기
+    String getRealPathFromUri(Uri uri){
+        String[] proj= {MediaStore.Images.Media.DATA};
+        android.support.v4.content.CursorLoader loader= new android.support.v4.content.CursorLoader(this, uri, proj, null, null, null);
+        Cursor cursor= loader.loadInBackground();
+        int column_index= cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result= cursor.getString(column_index);
+        cursor.close();
+        return  result;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -534,19 +622,17 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                 //두 번째 파라미터 : resultCode
                 if (resultCode == RESULT_OK){
 
-                    Uri uri=data.getData();
-                    picPath = uri.toString();
+                    Uri uri = data.getData();
+                   // picPath = uri.toString();
+                    picPath = getRealPathFromUri(uri);
                     if(uri != null){
-                        //Uri 경로로 전달되었다면
-                        //iv.setImageURI(uri);
-                        //라이브러리 쓰자!!!!!!!  Glide(bumptech)
                         Picasso.get().load(uri).into(mImg);
 
-                            if(userInfo!=null && userInfo.getImagePath() !=null){
-                            Uri uRi = Uri.parse(userInfo.getImagePath());
-                            Picasso.get().load(uRi).into(mImg);
-                        }
-                        Log.d("picPath ", "Account: "+picPath);
+//
+//                            if(userInfo!=null && userInfo.getImagePath() !=null){
+//                            Uri uRi = Uri.parse(userInfo.getImagePath());
+//                            Picasso.get().load(uRi).into(mImg);
+                       // Log.d("picPath ", "Account: "+picPath);
                     }else{
                         //아니면 Intent 에 Extra 데이터로 Bitmap 이 전달되어 옴
                         Bundle bundle=data.getExtras();
@@ -561,9 +647,7 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                 break;
         }
 
-    }
-
-
+    }//onActivityResult
 
     @Override
     public void onPause() {

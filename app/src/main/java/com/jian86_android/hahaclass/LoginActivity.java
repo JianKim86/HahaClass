@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -445,7 +446,7 @@ public class LoginActivity extends AppCompatActivity  {
 //액티비티 이동
     public void moveActivity(int state, UserInfo userInfo){
 
-
+        new AlertDialog.Builder(LoginActivity.this).setMessage("서비스를 준비중입니다").show();
         Intent intent = null;
         switch (state){
             case GOMAIN:
