@@ -1,5 +1,6 @@
 package com.jian86_android.hahaclass;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.toolbox.Volley;
 
 
 public class FragSettingPwd extends Fragment implements View.OnClickListener {
@@ -65,7 +73,7 @@ public class FragSettingPwd extends Fragment implements View.OnClickListener {
         }
     }//getData
     private boolean isPasswordValid(String password,String repassword) {
-        return (password.length() > 4) && (password.equals(repassword));
+        return (password.length() > 4) && (password.length() < 21) && (password.equals(repassword));
     }
     private boolean comparePwd(String pwd){
         return (pwd.length() > 4) && (pwd.equals(pass));
@@ -109,9 +117,52 @@ public class FragSettingPwd extends Fragment implements View.OnClickListener {
             applicationClass.getUserInfo().setPassword(chanegeText);
             //((SettingActivity) context).setUpNav();
             //TODO: 확인 후 돌아가기
+            //db변경
+
+            saveDB();
+
         }//submit_frg
 
     }
+
+    private void saveDB(){
+
+        new Thread() {
+            @Override
+            public void run() {
+
+                //1. userinfo 에 있는 정보 유저 테이블에 넣기
+                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/change_data.php";
+                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        new AlertDialog.Builder(context).setMessage(response).show(); return;
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        return;
+                    }
+                });
+                multiPartRequest.addStringParam("email",userInfo.getEmail());
+                multiPartRequest.addStringParam("password",userInfo.getPassword());
+                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+                //요청 객체를 우체통에 넣기
+                requestQueue.add(multiPartRequest);
+            }
+
+        }.start();
+
+    }//saveDB
+
+
+
     @Override
     public void onClick(View v) {
         int id =v.getId();

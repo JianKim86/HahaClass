@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity  {
+    private static final int img_length =60;
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity  {
         drawerToggle.onOptionsItemSelected(item);
         //아이템 클릭상황을 토글 버튼에 전달
         return super.onOptionsItemSelected(item);
-
 
     }
     @Override
@@ -127,17 +127,16 @@ public class MainActivity extends AppCompatActivity  {
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
         else nav_header_id_text.setText(name);
 
-        if(img != null && !(img.equals(""))) {
+        if(img != null && img.length() != img_length) {
             Uri uRi = Uri.parse(img);
-
             Picasso.get().load(uRi)
-                    .resize(400,400).into(profile_image, new Callback() {
+                    .resize(400,400).centerCrop().into(profile_image, new Callback() {
                 @Override
                 public void onSuccess() {
                 }
                 @Override
                 public void onError(Exception e) {
-                    Log.d("picPath ", "pIntor img: load failed "+ img);
+
                 }
             });
         }
@@ -302,9 +301,6 @@ public class MainActivity extends AppCompatActivity  {
                     picPath = uri.toString();
                     Fragment fragment = (Fragment) adapter.instantiateItem(pagerLayout,0);
                     if(uri != null){
-                        //Uri 경로로 전달되었다면
-                        //iv.setImageURI(uri);
-                        //라이브러리 쓰자!!!!!!!  Glide(bumptech)
                         if(pagerLayout.getCurrentItem()==0) {
                             ((FragInfo)fragment).setPic(picPath);
                         }

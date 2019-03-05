@@ -1,10 +1,13 @@
 package com.jian86_android.hahaclass;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -22,6 +25,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -180,16 +189,66 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
             String chanegeText;
             if(TextUtils.isEmpty(phonenum)){chanegeText= tv_phon.getText().toString();}
             else { chanegeText= phone_numer.getText().toString(); tv_phon.setText(chanegeText);}
-            applicationClass.getUserInfo().setPhone(chanegeText);
-            applicationClass.getUserInfo().setImagePath(picPath);
+
+
+
+            if(ischangePhone) userInfo.setPhone(chanegeText);
+            userInfo.setImagePath(picPath);
+
            // Toast.makeText(applicationClass, ""+ , Toast.LENGTH_SHORT).show();
             phone_numer.setText("");
             edit_layout.setVisibility(View.GONE);
             ((SettingActivity)getActivity()).setUpNav();
+
             //TODO: 확인 후 돌아가기
         }
 
     }//submit_frg
+
+
+    private void saveDB(){
+
+        new Thread() {
+            @Override
+            public void run() {
+
+                //1. userinfo 에 있는 정보 유저 테이블에 넣기
+                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/change_data.php";
+                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        new AlertDialog.Builder(context).setMessage(response).show(); return;
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        return;
+                    }
+                });
+                multiPartRequest.addStringParam("email",userInfo.getEmail());
+                if(ischangeImg) multiPartRequest.addFile("image_path", userInfo.getImagePath());
+                if(ischangePhone) multiPartRequest.addStringParam("phone",userInfo.getPhone());
+                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+                //요청 객체를 우체통에 넣기
+                requestQueue.add(multiPartRequest);
+            }
+
+        }.start();
+
+    }//saveDB
+
+
+
+    private boolean ischangeImg =false;
+    private boolean ischangePhone =false;
+
+
     private boolean isPoneValid(String phone) {
         return phone.length() > 10;
     }
@@ -198,8 +257,8 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
 
         int id = v.getId();
         switch (id){
-            case R.id.iv_myimg: ((SettingActivity)getActivity()).takePic(); break;
-            case R.id.edit_phone: editPhone(); break;
+            case R.id.iv_myimg: if(!ischangeImg){((SettingActivity)getActivity()).takePic(); ischangeImg = true;} break;
+            case R.id.edit_phone: if(!ischangePhone){editPhone(); ischangePhone = true;} else{ ischangePhone= false; phone_numer.setText(""); edit_layout.setVisibility(View.GONE);} break;
             case R.id.submit_account: submit_frg(); break;
         }
 
@@ -225,5 +284,7 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
 
 
     }//setUserVisibleHint
+
+
 
 }//FragSettingAccount

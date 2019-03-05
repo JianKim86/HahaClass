@@ -4,8 +4,10 @@ package com.jian86_android.hahaclass;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -223,8 +225,7 @@ public class SettingActivity extends AppCompatActivity {
                 //두 번째 파라미터 : resultCode
                 if (resultCode == RESULT_OK){
                     Uri uri=data.getData();
-
-                    String picPathh = uri.toString();
+                    String picPathh = getRealPathFromUri(uri);
 
                         //Uri 경로로 전달되었다면
                         //iv.setImageURI(uri);
@@ -245,6 +246,18 @@ public class SettingActivity extends AppCompatActivity {
     }//onActivityResult
 
 
+
+    //이미지 절대경로로 바꾸기
+    String getRealPathFromUri(Uri uri){
+        String[] proj= {MediaStore.Images.Media.DATA};
+        android.support.v4.content.CursorLoader loader= new android.support.v4.content.CursorLoader(SettingActivity.this, uri, proj, null, null, null);
+        Cursor cursor= loader.loadInBackground();
+        int column_index= cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result= cursor.getString(column_index);
+        cursor.close();
+        return  result;
+    }
 
 
 }//SettingActivity

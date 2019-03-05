@@ -494,8 +494,11 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
             case GOLOGIN :
                 intent = new Intent();
                 if(userInfo != null) {
-                    applicationClass.setUserInfo(userInfo);
-                 //   showProgress(false);
+                    //  applicationClass.setUserInfo(userInfo);
+                    //  showProgress(false);
+
+                    intent.putExtra("email",userInfo.getEmail());
+                    intent.putExtra("password",userInfo.getPassword());
                     setResult(RESULT_OK, intent); // 호출한 화면으로 되돌려주기
 //                    // resultCode : 결과 돌려주는 상태
                     finish(); // 두번째 화면 종료
@@ -630,11 +633,6 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                     if(uri != null){
                         Picasso.get().load(uri).into(mImg);
 
-//
-//                            if(userInfo!=null && userInfo.getImagePath() !=null){
-//                            Uri uRi = Uri.parse(userInfo.getImagePath());
-//                            Picasso.get().load(uRi).into(mImg);
-                       // Log.d("picPath ", "Account: "+picPath);
                     }else{
                         //아니면 Intent 에 Extra 데이터로 Bitmap 이 전달되어 옴
                         Bundle bundle=data.getExtras();

@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class PIntroActivity extends AppCompatActivity {
+    private static final int img_length =60;
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
@@ -97,7 +98,7 @@ public class PIntroActivity extends AppCompatActivity {
 //            Log.d("picPath ", "pIntor img:"+img);
 //        }
 
-        if(img != null && !(img.equals(""))) {
+        if(img != null && img.length() != img_length) {
             Uri uRi = Uri.parse(img);
 
 //            Picasso picasso = new Picasso.Builder(PIntroActivity.this).listener(new Picasso.Listener(){
@@ -109,7 +110,7 @@ public class PIntroActivity extends AppCompatActivity {
 //            }).build();
 //            picasso.load(uRi).fit().centerCrop().into(profile_image);
                 Picasso.get().load(uRi)
-                        .resize(400,400).into(profile_image, new Callback() {
+                        .resize(400,400).centerCrop().into(profile_image, new Callback() {
                     @Override
                     public void onSuccess() {
 

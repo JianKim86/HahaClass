@@ -19,7 +19,6 @@ public class ApplicationClass extends Application {
 
     public ArrayList<Board>boards= new ArrayList<>();
 
-
     public String board_title;
     public String board_imgpath;
     public HashMap<String,String > board_instructor= new HashMap<>();//instructor_no, instructor title+subtitle
