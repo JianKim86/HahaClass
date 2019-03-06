@@ -138,7 +138,6 @@ public class FragSettingPwd extends Fragment implements View.OnClickListener {
                     @Override
                     public void onResponse(String response) {
 
-
                         new AlertDialog.Builder(context).setMessage(response).show(); return;
 
                     }

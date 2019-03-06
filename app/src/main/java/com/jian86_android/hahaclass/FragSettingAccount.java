@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 
 public class FragSettingAccount extends Fragment implements View.OnClickListener{
+    private static final int img_length = 60;
     private ApplicationClass applicationClass;
     private Context context;
     private static final String CUSTOMER = "customer";
@@ -94,12 +95,15 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
     }
 
     //inforImg
-    public void setPic(String pic){
-        picPath =pic;
-        if(picPath != null && !(picPath.equals(""))) {
-            Uri uRi = Uri.parse(picPath);
+    String picPathn;
+    public void setPic(String pic, String realpath){
+        picPathn= pic;
+        picPath =realpath;
+
+        if(img != null && img.length() != img_length) {
+            Uri uRi = Uri.parse(picPathn);
             Picasso.get().load(uRi)
-                    .resize(400,400).into(iv_infoimg, new Callback() {
+                    .resize(400,400).centerCrop().into(iv_infoimg, new Callback() {
                 @Override
                 public void onSuccess() {
 
@@ -110,7 +114,22 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
                     Log.d("picPath ", "pIntor img: load failed "+ picPath);
                 }
             });
-        }else{Glide.with(this).load(R.drawable.ic_launcher_background).into(iv_infoimg);}
+        }else if(img != null && !(picPathn.equals(""))){
+            Uri uRi = Uri.parse(picPathn);
+            Picasso.get().load(uRi)
+                    .resize(400,400).centerCrop().into(iv_infoimg, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d("picPath ", "pIntor img: load failed "+ picPath);
+                }
+            });
+        }
+        else{Glide.with(this).load(R.drawable.ic_launcher_background).into(iv_infoimg);}
 //        Uri uRi = Uri.parse(picPath);
 //        Picasso.get().load(uRi).into(iv_infoimg);
 //
@@ -122,7 +141,7 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
     public void setPic(Bitmap pic){
         btmapPicPath = pic;
         Glide.with(this).load(pic).into(iv_infoimg);
-        picPath=null;
+        picPathn=null;
     }
 
 
@@ -158,12 +177,11 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
         tv_email.setText(userInfo.getEmail());
         tv_phon.setText(userInfo.getPhone());
 
-        if(img!=null&&!(img.equals(""))){
-            setPic(img);
+        if(img != null && img.length()!=img_length) {
+            setPic(img,img);
         }else if (btmapPicPath!=null) {
             setPic(btmapPicPath);
         }
-
 
     }
     private void editPhone(){
@@ -192,8 +210,8 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
 
 
 
-            if(ischangePhone) userInfo.setPhone(chanegeText);
-            userInfo.setImagePath(picPath);
+            if(ischangePhone) applicationClass.getUserInfo().setPhone(chanegeText);
+            if(ischangeImg) applicationClass.getUserInfo().setImagePath(picPathn);
 
            // Toast.makeText(applicationClass, ""+ , Toast.LENGTH_SHORT).show();
             phone_numer.setText("");
@@ -201,6 +219,7 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
             ((SettingActivity)getActivity()).setUpNav();
 
             //TODO: 확인 후 돌아가기
+            saveDB();
         }
 
     }//submit_frg
@@ -229,9 +248,9 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
                         return;
                     }
                 });
-                multiPartRequest.addStringParam("email",userInfo.getEmail());
-                if(ischangeImg) multiPartRequest.addFile("image_path", userInfo.getImagePath());
-                if(ischangePhone) multiPartRequest.addStringParam("phone",userInfo.getPhone());
+                multiPartRequest.addStringParam("email",applicationClass.getUserInfo().getEmail());
+                if(ischangeImg) multiPartRequest.addFile("image_path", picPath);
+                if(ischangePhone) multiPartRequest.addStringParam("phone", applicationClass.getUserInfo().getPhone());
                 //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
                 RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -257,7 +276,7 @@ public class FragSettingAccount extends Fragment implements View.OnClickListener
 
         int id = v.getId();
         switch (id){
-            case R.id.iv_myimg: if(!ischangeImg){((SettingActivity)getActivity()).takePic(); ischangeImg = true;} break;
+            case R.id.iv_myimg: ((SettingActivity)getActivity()).takePic(); ischangeImg = true; break;
             case R.id.edit_phone: if(!ischangePhone){editPhone(); ischangePhone = true;} else{ ischangePhone= false; phone_numer.setText(""); edit_layout.setVisibility(View.GONE);} break;
             case R.id.submit_account: submit_frg(); break;
         }

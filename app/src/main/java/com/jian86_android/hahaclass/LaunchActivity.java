@@ -1,13 +1,23 @@
 package com.jian86_android.hahaclass;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.jian86_android.hahaclass.databinding.Lunch;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +27,7 @@ import java.util.TimerTask;
 public class LaunchActivity extends AppCompatActivity {
     Lunch binding;
     Timer timer = new Timer();
+    private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
     ApplicationClass applicationClass;
     //RelativeLayout relativeLayout;
     private ArrayList<Board>boards= new ArrayList<>();
@@ -119,6 +130,12 @@ public class LaunchActivity extends AppCompatActivity {
         boards.add(board);
 
         applicationClass.setBoards(boards);
+
+        //강사리스트 셋업 //강사 이름 , 클레스 타이틀 대표 이미지 가 arrayList로 담겨있음
+        setupInstructors = new Instructors();
+        //데이터 작업
+        DBgetInstructorsList();
+
         //데이터를 다읽어오면 넘김
         timer.schedule(task,4000);
     }
@@ -130,6 +147,71 @@ public class LaunchActivity extends AppCompatActivity {
             finish();
         }//run
     };
+    Instructors setupInstructors;
+    ItemInstructor itemInstructor;
+    //기본세팅
+    void DBgetInstructorsList(){
+        new Thread(){
+            @Override
+            public void run() {
+                //db table : instructor_list 에서 정보 읽어와서 setupInstructors에 담음
+                String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_instructor_list.php";
+
+                StringRequest stringRequest = new StringRequest(serverURL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            String l_num;
+                            String title;
+                            String subTitle;
+                            String imgPath;
+                            String l_license;
+                            String l_field;
+                            String l_career;
+                            //확인용 버퍼
+                            StringBuffer buffer = new StringBuffer();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                l_num = jsonObject.getString("l_num");
+                                title = jsonObject.getString("l_name");
+                                subTitle = jsonObject.getString("l_project_title");
+                                l_license = jsonObject.getString("l_license");
+                                l_field = jsonObject.getString("l_field");
+                                l_career = jsonObject.getString("l_career");
+                                imgPath = jsonObject.getString("l_project_image_path");
+                                imgPath = baseImgePath + imgPath;
+
+//                                buffer.append(l_num);
+//                                buffer.append(title);
+//                                buffer.append(subTitle);
+//                                buffer.append(imgPath);
+                                itemInstructor = new ItemInstructor(l_num,title,subTitle,imgPath,l_license,l_field,l_career);
+                                setupInstructors.getItemInstructors().add(itemInstructor);
+                            }//for
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+                RequestQueue requestQueue = Volley.newRequestQueue(LaunchActivity.this);
+                requestQueue.add(stringRequest);
+
+                applicationClass.setSetupInstructors(setupInstructors);
+
+            }
+        }.start();
+
+    }
+
     @Override
     public void onPause() {
         super.onPause();

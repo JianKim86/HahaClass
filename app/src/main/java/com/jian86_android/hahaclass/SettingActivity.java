@@ -225,16 +225,17 @@ public class SettingActivity extends AppCompatActivity {
                 //두 번째 파라미터 : resultCode
                 if (resultCode == RESULT_OK){
                     Uri uri=data.getData();
-                    String picPathh = getRealPathFromUri(uri);
+                    String picPathh = uri.toString();
+                    String picPath = getRealPathFromUri(uri);
 
                         //Uri 경로로 전달되었다면
                         //iv.setImageURI(uri);
                         //라이브러리 쓰자!!!!!!!  Glide(bumptech)
-                            ((FragSettingAccount)fragment).setPic(picPathh);
+                            ((FragSettingAccount)fragment).setPic(picPathh, picPath);
 
                     }else{
                         //아니면 Intent 에 Extra 데이터로 Bitmap 이 전달되어 옴
-                        String bm="";
+                        Bitmap bm=null;
                             ((FragSettingAccount)fragment).setPic(bm);
 
                 }//if

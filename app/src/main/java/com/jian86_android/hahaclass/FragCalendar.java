@@ -93,8 +93,9 @@ public class FragCalendar extends Fragment {
 
         lv_schedule = view.findViewById(R.id.lv_schedule);
 
-        setData();
 
+        if(schedules != null && schedules.size()>0) setData();
+        else{ new AlertDialog.Builder(context).setMessage("강의가 준비중입니다").show();}
 
     }//onViewCreated
 
@@ -323,7 +324,6 @@ public class FragCalendar extends Fragment {
 
         //TODO:서버 작업 진행시 Main에서 정보 읽어서 ItemInstructor에 넣고 거기서 빼옴
         mMyAdapter = new AdapterCalendar(schedules, context);
-
         lv_schedule.addHeaderView(header) ;
         setupCalender();//켈린더세팅
         /* 리스트뷰에 어댑터 등록 */

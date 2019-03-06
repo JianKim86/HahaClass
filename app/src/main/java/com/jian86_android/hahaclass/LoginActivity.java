@@ -333,10 +333,11 @@ public class LoginActivity extends AppCompatActivity  {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
+    public  String mEmail;
+    public String mPassword;
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
+
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -348,7 +349,7 @@ public class LoginActivity extends AppCompatActivity  {
             // TODO: attempt authentication against a network service.
 
             /**서버에서 이메일 유무 확인*/
-            addUserInfo();
+            DBaddUserInfo();
             // TODO: register the new account here.
             return true;
         }
@@ -376,7 +377,7 @@ public class LoginActivity extends AppCompatActivity  {
                             //response 가 0이면 비밀번호 맞음
                             if(response.equals("0")) {
                                // new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 맞음").show();
-                                addUserInfo(); return;
+                                DBaddUserInfo(); return;
                             }else { new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show(); return;}
                             //new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show();
 
@@ -412,106 +413,7 @@ public class LoginActivity extends AppCompatActivity  {
     }//searchEmailDB
 
 //이메일유무및 비밀번호 확인
-    private void addUserInfo(){
 
-        String serverURL = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
-//            Map<String, String> params = new HashMap<>();
-//            params.put("email",mEmailView.getText().toString() );
-//            params.put("password", mPasswordView.getText().toString());
-        //결과를 json array로 받을 것임으로 JsonArrayRequest요청 객체 생성
-        StringRequest jsonArrayRequest = new StringRequest(serverURL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                //받음
-                //서버로 부터 에코된 데이터 가 JSONArray response
-//                    if(response==null){
-//                        isUser = false;  new AlertDialog.Builder(LoginActivity.this).setMessage("이메일이 없습니다").show(); return;
-//                    }
-
-                isUser = true;
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    StringBuffer buffer1 = new StringBuffer();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String name = jsonObject.getString("name");
-                        String email = jsonObject.getString("email");
-                        String phone = jsonObject.getString("phone");
-                        String password = jsonObject.getString("password");
-                        String level = jsonObject.getString("level");
-                        String image_path = jsonObject.getString("image_path");
-                        String date = jsonObject.getString("date");
-                        //파일경로가 서버 IP가 제외된 주소임
-                        image_path = baseImgePath + image_path;
-                        //userinfo 추가
-                        if (mPassword.equals(password)) {
-                            userinfo = new UserInfo(name, email, phone, password, image_path, Integer.parseInt(level));
-                            moveActivity(GOMAIN, userinfo);
-                        } else
-                            new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 다릅니다").show();
-
-
-                    }
-
-
-                    //  applicationClass.setUserInfo(userinfo);
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-                //new AlertDialog.Builder(LoginActivity.this).setMessage(str.toString()).show();
-                return;
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //에러남 아이디가 없음
-
-                //new AlertDialog.Builder(LoginActivity.this).setMessage(String.valueOf(error)).show();
-                //Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                new AlertDialog.Builder(LoginActivity.this).setMessage("회원이 아닙니다").show();
-            }
-
-
-    })
-             {
-                @Override
-                protected Map<String, String> getParams() {
-                    // Posting parameters to login url
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("email", mEmail);
-                    params.put("password", mPassword);
-                    return params;
-                }
-
-                @Override
-                public int getMethod() {
-                    return Method.POST;
-                }
-            };
-
-//            {
-//                //Pass Your Parameters here
-//                @Override
-//                protected Map<String, String> getParams() throws AuthFailureError{
-//                    Map<String, String> params = new HashMap<>();
-//                    params.put("email", mEmail);
-//                    params.put("password", mPassword);
-//                    return params;
-//                }
-//            };
-//        Map<String, String> params = new HashMap<>();
-//        params.put("email", mEmail);
-//      //  params.put("password", mPassword);
-//
-//        jsonArrayRequest.setParams(params);
-
-        //우체통
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-        requestQueue.add(jsonArrayRequest);
-    }
 
 //액티비티 넘기기
         @Override
@@ -538,6 +440,113 @@ public class LoginActivity extends AppCompatActivity  {
         }
     }
 
+    //정보 불러와서 저장하기
+    public void DBaddUserInfo(){
+        new Thread(){
+            @Override
+            public void run() {
+                String serverURL = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
+//            Map<String, String> params = new HashMap<>();
+//            params.put("email",mEmailView.getText().toString() );
+//            params.put("password", mPasswordView.getText().toString());
+                //결과를 json array로 받을 것임으로 JsonArrayRequest요청 객체 생성
+                StringRequest jsonArrayRequest = new StringRequest(serverURL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        //받음
+                        //서버로 부터 에코된 데이터 가 JSONArray response
+//                    if(response==null){
+//                        isUser = false;  new AlertDialog.Builder(LoginActivity.this).setMessage("이메일이 없습니다").show(); return;
+//                    }
+                        userinfo =null;
+                        isUser = true;
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String name = jsonObject.getString("name");
+                                String email = jsonObject.getString("email");
+                                String phone = jsonObject.getString("phone");
+                                String password = jsonObject.getString("password");
+                                String level = jsonObject.getString("level");
+                                String image_path = jsonObject.getString("image_path");
+                                String date = jsonObject.getString("date");
+                                //파일경로가 서버 IP가 제외된 주소임
+                                image_path = baseImgePath + image_path;
+                                //userinfo 추가
+                                if (mPassword.equals(password)) {
+                                    userinfo = new UserInfo(name, email, phone, password, image_path, Integer.parseInt(level));
+                                    moveActivity(GOMAIN, userinfo);
+                                } else
+                                    new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 다릅니다").show();
+
+
+                            }
+
+
+                            //  applicationClass.setUserInfo(userinfo);
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                        //new AlertDialog.Builder(LoginActivity.this).setMessage(str.toString()).show();
+                        return;
+
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //에러남 아이디가 없음
+
+                        //new AlertDialog.Builder(LoginActivity.this).setMessage(String.valueOf(error)).show();
+                        //Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(LoginActivity.this).setMessage("회원이 아닙니다").show();
+                    }
+
+
+                })
+                {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        // Posting parameters to login url
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("email", mEmail);
+                        params.put("password", mPassword);
+                        return params;
+                    }
+
+                    @Override
+                    public int getMethod() {
+                        return Method.POST;
+                    }
+                };
+
+//            {
+//                //Pass Your Parameters here
+//                @Override
+//                protected Map<String, String> getParams() throws AuthFailureError{
+//                    Map<String, String> params = new HashMap<>();
+//                    params.put("email", mEmail);
+//                    params.put("password", mPassword);
+//                    return params;
+//                }
+//            };
+//        Map<String, String> params = new HashMap<>();
+//        params.put("email", mEmail);
+//      //  params.put("password", mPassword);
+//
+//        jsonArrayRequest.setParams(params);
+
+                //우체통
+                RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+                requestQueue.add(jsonArrayRequest);
+            }
+        }.start();
+
+    }
+
+
 //액티비티 이동
     public void moveActivity(int state, UserInfo userInfo){
 
@@ -546,6 +555,7 @@ public class LoginActivity extends AppCompatActivity  {
         switch (state){
             case GOMAIN:
                 if(userInfo != null) {
+                    applicationClass.setUserInfo(null);
                     applicationClass.setUserInfo(userInfo);
                     applicationClass.setLevel(userInfo.getLevel());
                     applicationClass.setState(USER);
@@ -627,6 +637,28 @@ public class LoginActivity extends AppCompatActivity  {
 
     }//onActivityResult
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(applicationClass!=null&&applicationClass.getUserInfo()!=null){
+        DBaddUserInfo();
+        if(userinfo.getImagePath() != null && userinfo.getImagePath().length()!=img_length) {
+            Uri uRi = Uri.parse(userinfo.getImagePath());
+
+            Picasso.get().load(uRi)
+                    .resize(400,400).centerCrop().into(iv_myimg, new Callback() {
+                @Override
+                public void onSuccess() {
+                }
+                @Override
+                public void onError(Exception e) {
+                    // Log.d("picPath ", "pIntor img: load failed "+ img);
+                }
+            });
+        }
+        else{Glide.with(this).load(R.drawable.ic_launcher_background).into(iv_myimg);}
+    }
+    }
     @Override
     public void onPause() {
         super.onPause();

@@ -15,10 +15,16 @@ public class ApplicationClass extends Application {
     public int level;
     public ItemInstructor itemInstructor;
     public int instructorNo;
-    public HashSet<Integer> applySchedule = new HashSet<>();//강사강의 번호
 
+
+    public HashSet<Integer> applySchedule = new HashSet<>();//강사강의 번호
     public ArrayList<Board>boards= new ArrayList<>();
 
+    //기본세팅 instructors
+    public  Instructors setupInstructors;
+
+
+    //기본세팅 보드관련
     public String board_title;
     public String board_imgpath;
     public HashMap<String,String > board_instructor= new HashMap<>();//instructor_no, instructor title+subtitle
@@ -112,6 +118,14 @@ public class ApplicationClass extends Application {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public Instructors getSetupInstructors() {
+        return setupInstructors;
+    }
+
+    public void setSetupInstructors(Instructors setupInstructors) {
+        this.setupInstructors = setupInstructors;
     }
 
     /** onCreate()

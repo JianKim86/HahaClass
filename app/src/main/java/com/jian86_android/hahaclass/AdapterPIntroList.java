@@ -11,12 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterPIntroList extends BaseAdapter {
+    private static final int img_length =60;
     ArrayList<ItemInstructor>items;
     Context context;
 
@@ -60,10 +62,28 @@ public class AdapterPIntroList extends BaseAdapter {
 
         tv_name.setText(myItem.getTitle());
         tv_desc.setText(myItem.getSubTitle());
-        if(path!=null&&!(path.equals(""))){
+
+        if(path != null && path.length() != img_length) {
             Uri uRi = Uri.parse(path);
-            Picasso.get().load(uRi).into(iv_img);
-        }else {Glide.with(context).load(R.drawable.ic_launcher_background).into(iv_img);}
+            Picasso.get().load(uRi)
+                    .resize(400,400).centerCrop().into(iv_img, new Callback() {
+                @Override
+                public void onSuccess() {
+                }
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+        }
+        else{Glide.with(context).load(R.drawable.ic_launcher_background).into(iv_img);}
+
+
+//
+//        if(path!=null&&!(path.equals(""))){
+//            Uri uRi = Uri.parse(path);
+//            Picasso.get().load(uRi).into(iv_img);
+//        }else {Glide.with(context).load(R.drawable.ic_launcher_background).into(iv_img);}
         return convertView;
     }
 

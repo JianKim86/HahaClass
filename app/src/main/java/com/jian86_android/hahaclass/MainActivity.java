@@ -239,6 +239,12 @@ public class MainActivity extends AppCompatActivity  {
        // Bundle selectTeacher =  getintent.getBundleExtra("selectTeacher");
         instructor = applicationClass.getItemInstructor();
 
+        //TODO:DB작업: instructor에 스케쥴 담기
+        //강사 번호로 강의 검색 리스트에서 검색
+        //classlist 에서 강사별 클레스 검색 ->list
+        //classdetaillist에서 세부 내용 검색 -> 세부 
+
+
         state = applicationClass.getState();
         if(state.equals(USER)){
             userInfo= applicationClass.getUserInfo();
