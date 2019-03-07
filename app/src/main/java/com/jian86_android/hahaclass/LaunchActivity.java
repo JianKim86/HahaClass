@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
@@ -25,10 +27,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class LaunchActivity extends AppCompatActivity {
+
     Lunch binding;
     Timer timer = new Timer();
     private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
-    ApplicationClass applicationClass;
+    ApplicationClass applicationClass=null;
     //RelativeLayout relativeLayout;
     private ArrayList<Board>boards= new ArrayList<>();
     @Override
@@ -151,13 +154,10 @@ public class LaunchActivity extends AppCompatActivity {
     ItemInstructor itemInstructor;
     //기본세팅
     void DBgetInstructorsList(){
-        new Thread(){
-            @Override
-            public void run() {
                 //db table : instructor_list 에서 정보 읽어와서 setupInstructors에 담음
                 String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_instructor_list.php";
 
-                StringRequest stringRequest = new StringRequest(serverURL, new Response.Listener<String>() {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST,serverURL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
@@ -165,13 +165,13 @@ public class LaunchActivity extends AppCompatActivity {
                             String l_num;
                             String title;
                             String subTitle;
-                            String imgPath;
+                            String imgPath="";
                             String l_license;
                             String l_field;
                             String l_career;
                             //확인용 버퍼
-                            StringBuffer buffer = new StringBuffer();
 
+                            StringBuffer buffer = new StringBuffer();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 l_num = jsonObject.getString("l_num");
@@ -181,6 +181,7 @@ public class LaunchActivity extends AppCompatActivity {
                                 l_field = jsonObject.getString("l_field");
                                 l_career = jsonObject.getString("l_career");
                                 imgPath = jsonObject.getString("l_project_image_path");
+                                Log.i("imgpathtt",imgPath);
                                 imgPath = baseImgePath + imgPath;
 
 //                                buffer.append(l_num);
@@ -188,7 +189,8 @@ public class LaunchActivity extends AppCompatActivity {
 //                                buffer.append(subTitle);
 //                                buffer.append(imgPath);
                                 itemInstructor = new ItemInstructor(l_num,title,subTitle,imgPath,l_license,l_field,l_career);
-                                setupInstructors.getItemInstructors().add(itemInstructor);
+                                setupInstructors.getItemInstructors().add(itemInstructor);// 선생님 리스트에 추가
+
                             }//for
 
                         } catch (JSONException e) {
@@ -208,9 +210,7 @@ public class LaunchActivity extends AppCompatActivity {
                 applicationClass.setSetupInstructors(setupInstructors);
 
             }
-        }.start();
 
-    }
 
     @Override
     public void onPause() {

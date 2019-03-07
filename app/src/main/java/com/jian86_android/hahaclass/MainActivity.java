@@ -30,16 +30,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity  {
+    private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
     private static final int img_length =60;
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
@@ -240,12 +253,10 @@ public class MainActivity extends AppCompatActivity  {
         instructor = applicationClass.getItemInstructor();
 
         //TODO:DB작업: instructor에 스케쥴 담기
-        //강사 번호로 강의 검색 리스트에서 검색
-        //classlist 에서 강사별 클레스 검색 ->list
-        //classdetaillist에서 세부 내용 검색 -> 세부 
-
+        DBgetClassDetailList();
 
         state = applicationClass.getState();
+        
         if(state.equals(USER)){
             userInfo= applicationClass.getUserInfo();
             name =userInfo.getName();
@@ -259,6 +270,94 @@ public class MainActivity extends AppCompatActivity  {
         }
 
     }//getIntentData;
+
+    private void DBgetClassDetailList() {
+
+        //classlist 에서 강사별 클레스 검색 ->list
+        //classdetaillist에서 세부 내용 검색 -> 세부
+        //instructor 에 스케쥴 담기
+
+        //강사 번호로 강의 검색 리스트에서 검색
+        final String l_num = instructor.getL_num();
+
+
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_instructor_detail_info.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                new AlertDialog.Builder(MainActivity.this).setMessage(response).show();
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String class_code = jsonObject.getString("class_code");
+                        String class_host = jsonObject.getString("class_host");
+                        String class_title = jsonObject.getString("class_title");
+                        String start_day = jsonObject.getString("start_day");
+                        String finish_day = jsonObject.getString("finish_day");
+                        String class_image_path = jsonObject.getString("class_image_path");
+                        String class_support = jsonObject.getString("class_support");
+
+                        //String date = jsonObject.getString("date");
+                        //파일경로가 서버 IP가 제외된 주소임
+                        class_image_path = baseImgePath + class_image_path;
+
+                        //스케쥴에 넣기
+                        Schedule schedule = new Schedule(class_title,class_image_path,class_host,class_support,start_day,finish_day,class_code);
+                        instructor.getSchedules().add(schedule);
+
+                    }//for
+
+                    //  applicationClass.setUserInfo(userinfo);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                return;
+
+
+
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("l_num", l_num );
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(stringRequest);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }//getClassDetailList
+
     private void goSetting(int item){
         if(state.equals(USER)){
             Intent intent= new Intent(MainActivity.this,SettingActivity.class);

@@ -62,7 +62,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class AccountActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class AccountActivity extends AppCompatActivity {
     private static final int GOLOGIN = 3;
     private static final int GOBACK = 1;
     private static final int PIC = 1000;
@@ -86,8 +86,6 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView, mRePasswordView;
@@ -165,48 +163,12 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
 
     }//oncreate
 
-//    private void populateAutoComplete() {
-//        if (!mayRequestContacts()) {
-//            return;
-//        }
-//
-//        getLoaderManager().initLoader(0, null, this);
-//    }
-
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-
-
         switch (requestCode) {
             case REQUEST_READ_CONTACTS:
                 if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-  //                  populateAutoComplete();
                 }
                 break;
             case IMAGEUPLOAD:
@@ -216,19 +178,10 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
                 break;
 
         }
-
     }//onRequestPermissionsResult
 
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -300,18 +253,27 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
 
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+                //에러
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-         //   showProgress(true);
-            mAuthTask = new UserLoginTask(name, email, phone, password);
-            mAuthTask.execute((Void) null);
+            //성공
+            if(rb.isChecked()){
+                //Toast.makeText(applicationClass, ""+picPath, Toast.LENGTH_SHORT).show();
+                if(picPath!= null&&(!(picPath.equals("")))) {userInfo = new UserInfo(name , email, phone, password, picPath, ADMINLEVEL);}
+                else userInfo = new UserInfo(name, email, phone, password,"",ADMINLEVEL);
+                //moveActivity(GOLOGIN);
+                //   showProgress(true);
+            }else{
+                if(picPath!= null&&(!(picPath.equals("")))) userInfo = new UserInfo(name, email, phone, password, picPath, CUSTOMERLEVEL);
+                else userInfo = new UserInfo(name, email, phone, password,"",CUSTOMERLEVEL);
+                //
+            }
+            saveDB();
+
         }
     }
 
+    /**검사*/
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
@@ -325,11 +287,11 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         return name.length() > 1;
     }
     private boolean isPasswordValid(String password,String repassword) {
-        return (password.length() > 4) && (password.equals(repassword));
+        return (password.length() > 4)&&(password.length() < 20) && (password.equals(repassword));
     }
-    /**
-     * Shows the progress UI and hides the login form.
-     */
+
+
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -363,129 +325,10 @@ public class AccountActivity extends AppCompatActivity implements LoaderCallback
         }
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
 
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
 
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(AccountActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        private final String mName;
-        private final String mPhone;
-
-        UserLoginTask(String name, String email, String phone, String password) {
-            mEmail = email;
-            mPassword = password;
-            mName = name;
-            mPhone = phone;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            if(rb.isChecked()){
-                //Toast.makeText(applicationClass, ""+picPath, Toast.LENGTH_SHORT).show();
-                if(picPath!= null&&(!(picPath.equals("")))) {userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, ADMINLEVEL);}
-                else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",ADMINLEVEL);
-                //moveActivity(GOLOGIN);
-             //   showProgress(true);
-            }else{
-                if(picPath!= null&&(!(picPath.equals("")))) userInfo = new UserInfo(mName, mEmail, mPhone, mPassword, picPath, CUSTOMERLEVEL);
-                else userInfo = new UserInfo(mName, mEmail, mPhone, mPassword,"",CUSTOMERLEVEL);
-               //
-            }
-            //네트워크 작업
-            saveDB();
-
-                //비교
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-           // showProgress(false);
-
-            if (success) {
-
-               // Toast.makeText(AccountActivity.this, ""+picPath, Toast.LENGTH_SHORT).show();
-
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-          //  showProgress(false);
-        }
-    }
 
 
     public void moveActivity(int state){

@@ -10,6 +10,7 @@ public class Schedule {
     private String date;
     private String start;
     private String end;
+    private String class_code;
     //detailed schedule
     private ArrayList<DatasItem>datas= new ArrayList<>();
     public Schedule(){}
@@ -86,5 +87,24 @@ public class Schedule {
 
     public void setDatas(ArrayList<DatasItem> datas) {
         this.datas = datas;
+    }
+
+    public String getClass_code() {
+        return class_code;
+    }
+
+    public void setClass_code(String class_code) {
+        this.class_code = class_code;
+    }
+
+    public Schedule(String projectTitle, String projectImgPath, String host, String support, String start, String end, String class_code) {
+        this.projectTitle = projectTitle;
+        this.projectImgPath = projectImgPath;
+        this.host = host;
+        this.support = support;
+        this.start = start;
+        this.end = end;
+        this.class_code = class_code;
+        setDate(start+"~"+end);
     }
 }

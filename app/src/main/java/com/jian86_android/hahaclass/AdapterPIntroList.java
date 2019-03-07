@@ -2,6 +2,7 @@ package com.jian86_android.hahaclass;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,14 +65,17 @@ public class AdapterPIntroList extends BaseAdapter {
         tv_desc.setText(myItem.getSubTitle());
 
         if(path != null && path.length() != img_length) {
+            final String pp =path;
             Uri uRi = Uri.parse(path);
             Picasso.get().load(uRi)
                     .resize(400,400).centerCrop().into(iv_img, new Callback() {
                 @Override
                 public void onSuccess() {
+                    Log.i("imgeppath_s",pp);
                 }
                 @Override
                 public void onError(Exception e) {
+                    Log.i("imgeppath_e",pp);
 
                 }
             });

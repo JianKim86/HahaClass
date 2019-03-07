@@ -147,18 +147,6 @@ public class PIntroActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent;
-//                Bundle userBundle = new Bundle();
-//
-//
-//                userBundle.putString("state",state);
-//                if(state.equals(USER)){
-//                    userBundle.putString("Name",userInfo.getName());
-//                    userBundle.putString("Email",userInfo.getEmail());
-//                    userBundle.putString("Phone",userInfo.getPhone());
-//                    userBundle.putString("Pass",userInfo.getPassword());
-//                    userBundle.putString("Image",userInfo.getImagePath());
-//                    userBundle.putInt("Level",userInfo.getLevel());
-//                }
                 applicationClass.setItemInstructor(null);
                 Bundle selectTeacher = new Bundle();
                 selectTeacher.putString("Instructor",itemInstructors.get(position).getSubTitle());
@@ -200,7 +188,6 @@ public class PIntroActivity extends AppCompatActivity {
     }
 
 
-
     private void  getIntentData(){
         state = applicationClass.getState();
         if(state.equals(USER)){
@@ -215,18 +202,6 @@ public class PIntroActivity extends AppCompatActivity {
         }else{
             userInfo = null;
         }
-//        Bundle bundle = getintent.getBundleExtra("Bundle");
-//         state = bundle.getString("state");
-//        if(state.equals(USER)) {
-//             name = bundle.getString("Name");
-//             email = bundle.getString("Email");
-//             phone = bundle.getString("Phone");
-//             pass = bundle.getString("Pass");
-//             img = bundle.getString("Image");
-//             level = bundle.getInt("Level", 0);
-//            userInfo = new UserInfo(name, email, phone, pass, img, level);
-//        }else userInfo = null;
-
 
     }//getIntentData;
 
@@ -241,47 +216,14 @@ public class PIntroActivity extends AppCompatActivity {
     private String itemConfiguration;
     private void dataSetting(){
         int instructorsSize = applicationClass.getSetupInstructors().getItemInstructors().size();
-        for (int i=0; i< instructorsSize; i++){ //launch에서 담은 헤더 정보
+
+
+        for (int i=0; i< instructorsSize; i++){ //launch에서 담은 헤더 정보 //강사 리스트뷰
             ItemInstructor headeritem = applicationClass.getSetupInstructors().getItemInstructors().get(i);
             itemInstructors.add(headeritem);
         }
-//
-//        String title ="윤나영";
-//        String subTitle ="하하 웃음 클레스";
-//
-//        String license = "웃음치료1급자격, 레크레이션1급자격, 실버 웃음 전문지도사자격 ,케어세라피1급자격, 시낭송1급지도사자격 스피치 1급 지도자 자격, 명강사 1급 지도사자격, 펀리더십지도사1급자격, 금연 금주 예방지도사자격, 창의인성교육지도사 자격, 부모코칭지도사자격, 평생교육사 2급 자격,  사회복지사 2급 자격, 심리웃음치료사1급 자격, 건강걷기2급지도사자격, 산업카운셀러1급자격, 심리상담 2급자격(논문: 유머감각이 자아 존중감과 대인관계에 미치는 영향)"
-//        ;
-//        String field ="감성 리더십, 펀(웃음) 리더십(자아,관계,미래리더십), 감성 스피치,  소통, 강의 코칭, 자원봉사교육, 스피치코칭 PING과 함께 (청소년, 기업, 학부모) 동기부여, 펀 리더십강사 양성 과정, 생애재설계교육, 인성, 금연,금주 학부모코칭, 시낭송 코칭"
-//        ;
-//        String career ="학력:명지대 사회교육대학원 졸업\n"+
-//        "現) (행복을 만드는)창의융합교육 연구소(대표)\n"+
-//        "現) 구리아리랑연구보존회 이사 및 사무국장\n"+
-//        "現) 아리랑컨텐츠협의회 회장\n"+
-//        "現) (행복한 세상 만들기) 하하하웃음크럽 회장\n"+
-//        "現) 구리시 평화통일 자문위원회 위원\n"+
-//        "現) 구리전통시장ict보이는 라디오 DJ\n"+
-//        "現) 이천여성장애인자립센터\n"+
-//        "웃음 지도사자격과정 전임강사\n"+
-//        "前) 고대평교명품명강사과정,스피치과정지도강사\n"+
-//        "前) 한성대 평생교육원 명강사과정 코칭교수\n"+
-//        "前) 명지대 사회교육대학원 3대 총동문회장\n"+
-//        "前) 시니어 파트너즈  리스타트 전문강사\n"+
-//        "前) 한울촌 노인요양원  요양보호사 힐링전문강사\n"+
-//        "前) 서울특별시새마을협의회 부설 사회교육원  웃음전문강사\n"+
-//        "前) 이대최고명강사과정 코칭교수,\n"+
-//        "      구리경찰서 보안협력위원회 위원\n"+
-//        "前) 동인초등학교 운영위원장\n"+
-//        "前) 대한적십자 경기도지사 구리나누미 회장,\n"+
-//        "구리남양주교육지원청\n"+
-//        "      (교육공무원(영양교사)인사위원회 위원,친절평가위원)\n"+
-//        "前) 구리청소년통합지원체계(CYS_NET) 운영협의회 위원\n";
-//        String imgPath = "";
-//        ItemInstructor item = new ItemInstructor(title,subTitle,imgPath,license, field, career);
-
-
         /**
          * 서버에서 instructors 정보 읽어와서 add시키기 **서버작업시 따로 리스트로 빼야됨 db따로 설계**/
-
 
 
         ptitle ="하박수웃음지도사 12주 프로그램";

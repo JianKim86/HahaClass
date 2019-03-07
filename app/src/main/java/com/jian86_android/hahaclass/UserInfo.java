@@ -7,6 +7,7 @@ public class UserInfo {
     private  String password;
     private  String imagePath;
     private  int level;
+    private String l_num;
     private ItemInstructor itemInstructor;
     public int getLevel() {
         return level;
@@ -70,5 +71,13 @@ public class UserInfo {
         this.name = name;
         this.email = email;
         this.level = level;
+    }
+
+    public String getL_num() {
+        return l_num;
+    }
+
+    public void setL_num(String l_num) {
+        this.l_num = l_num;
     }
 }

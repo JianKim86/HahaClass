@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity  {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -172,64 +171,12 @@ public class LoginActivity extends AppCompatActivity  {
 
     }//onCreate
 
-//    private void populateAutoComplete() {
-//        if (!mayRequestContacts()) {
-//            return;
-//        }
-//
-//        getLoaderManager().initLoader(0, null, this);
-//    }
-//
-//    private boolean mayRequestContacts() {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            return true;
-//        }
-//        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//            return true;
-//        }
-//        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(android.R.string.ok, new View.OnClickListener() {
-//                        @Override
-//                        @TargetApi(Build.VERSION_CODES.M)
-//                        public void onClick(View v) {
-//                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//                        }
-//                    });
-//        } else {
-//            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-//        }
-//        return false;
-//    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        if (requestCode == REQUEST_READ_CONTACTS) {
-//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                populateAutoComplete();
-//            }
-//        }
-//    }
-
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-
     private boolean isUser = false;
     private static final int LEVELCUSTOMER = 0;
     private static final int LEVELADMIN = 1;
     private static final int LEVELSUPERADMIN = 2;
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -270,15 +217,11 @@ public class LoginActivity extends AppCompatActivity  {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+           // showProgress(true);
+            DBaddUserInfo();
         }
     }
 
@@ -329,221 +272,138 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public  String mEmail;
-    public String mPassword;
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
 
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            /**서버에서 이메일 유무 확인*/
-            DBaddUserInfo();
-            // TODO: register the new account here.
-            return true;
-        }
-
-    private void searchEmailDB(){
-        new Thread(){
-            @Override
-            public void run() {
-                //1. userinfo 에 있는 정보 유저 테이블에 넣기
-                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
-
-
-
-                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl , new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        if(response.equals("nohave")){
-                            isUser = false;
-                            new AlertDialog.Builder(LoginActivity.this).setMessage(response).show();
-                        }
-                        else{
-                            isUser = true;
-                            //비밀번호 비교 TODO:비밀번호 비교해서 userInfo에 담아 글로벌로
-                            //response 가 0이면 비밀번호 맞음
-                            if(response.equals("0")) {
-                               // new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 맞음").show();
-                                DBaddUserInfo(); return;
-                            }else { new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show(); return;}
-                            //new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show();
-
-
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //서버 요청중 에거라 발생하면 자동 실행
-                        Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                        finish(); //화면 종료
-                    }
-                });//세번째 파라미터가 응답을 받아옴
-
-
-                //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
-                multiPartRequest.addStringParam("email", mEmail);
-                multiPartRequest.addStringParam("password", mPassword);
-
-                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
-                RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-
-                //요청 객체를 우체통에 넣기
-                requestQueue.add(multiPartRequest);
-
-            }//run
-        }.start();
-
-
-
-
-    }//searchEmailDB
+//    private void searchEmailDB(){
+//        new Thread(){
+//            @Override
+//            public void run() {
+//                //1. userinfo 에 있는 정보 유저 테이블에 넣기
+//                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
+//
+//
+//
+//                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl , new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                        if(response.equals("nohave")){
+//                            isUser = false;
+//                            new AlertDialog.Builder(LoginActivity.this).setMessage(response).show();
+//                        }
+//                        else{
+//                            isUser = true;
+//                            //비밀번호 비교 TODO:비밀번호 비교해서 userInfo에 담아 글로벌로
+//                            //response 가 0이면 비밀번호 맞음
+//                            if(response.equals("0")) {
+//                               // new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 맞음").show();
+//                                DBaddUserInfo(); return;
+//                            }else { new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show(); return;}
+//                            //new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show();
+//
+//
+//                        }
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        //서버 요청중 에거라 발생하면 자동 실행
+//                        Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+//                        finish(); //화면 종료
+//                    }
+//                });//세번째 파라미터가 응답을 받아옴
+//
+//
+//                //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
+//                multiPartRequest.addStringParam("email", mEmail);
+//                multiPartRequest.addStringParam("password", mPassword);
+//
+//                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
+//                RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+//
+//                //요청 객체를 우체통에 넣기
+//                requestQueue.add(multiPartRequest);
+//
+//            }//run
+//        }.start();
+//
+//
+//
+//
+//    }//searchEmailDB
 
 //이메일유무및 비밀번호 확인
-
-
-//액티비티 넘기기
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-
-
-//            if(isUser) {new AlertDialog.Builder(LoginActivity.this).setMessage("회원입니다").show();}//
-//            else new AlertDialog.Builder(LoginActivity.this).setMessage("회원이 아닙니다").show();
-
-            } else {
-
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
     //정보 불러와서 저장하기
     public void DBaddUserInfo(){
-        new Thread(){
-            @Override
-            public void run() {
-                String serverURL = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
-//            Map<String, String> params = new HashMap<>();
-//            params.put("email",mEmailView.getText().toString() );
-//            params.put("password", mPasswordView.getText().toString());
-                //결과를 json array로 받을 것임으로 JsonArrayRequest요청 객체 생성
-                StringRequest jsonArrayRequest = new StringRequest(serverURL, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
 
-                        //받음
-                        //서버로 부터 에코된 데이터 가 JSONArray response
-//                    if(response==null){
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
+
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+             //   new AlertDialog.Builder(LoginActivity.this).setMessage(response).show();
+
+                //받음
+                //서버로 부터 에코된 데이터 가 JSONArray response
+//                    if(response.equals("")){
 //                        isUser = false;  new AlertDialog.Builder(LoginActivity.this).setMessage("이메일이 없습니다").show(); return;
 //                    }
-                        userinfo =null;
-                        isUser = true;
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String name = jsonObject.getString("name");
-                                String email = jsonObject.getString("email");
-                                String phone = jsonObject.getString("phone");
-                                String password = jsonObject.getString("password");
-                                String level = jsonObject.getString("level");
-                                String image_path = jsonObject.getString("image_path");
-                                String date = jsonObject.getString("date");
-                                //파일경로가 서버 IP가 제외된 주소임
-                                image_path = baseImgePath + image_path;
-                                //userinfo 추가
-                                if (mPassword.equals(password)) {
-                                    userinfo = new UserInfo(name, email, phone, password, image_path, Integer.parseInt(level));
-                                    moveActivity(GOMAIN, userinfo);
-                                } else
-                                    new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 다릅니다").show();
-
-
-                            }
-
-
-                            //  applicationClass.setUserInfo(userinfo);
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-                        //new AlertDialog.Builder(LoginActivity.this).setMessage(str.toString()).show();
-                        return;
-
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //에러남 아이디가 없음
-
-                        //new AlertDialog.Builder(LoginActivity.this).setMessage(String.valueOf(error)).show();
-                        //Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                        new AlertDialog.Builder(LoginActivity.this).setMessage("회원이 아닙니다").show();
+                userinfo =null;
+                isUser = true;
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        String email = jsonObject.getString("email");
+                        String phone = jsonObject.getString("phone");
+                        String password = jsonObject.getString("password");
+                        String level = jsonObject.getString("level");
+                        String image_path = jsonObject.getString("image_path");
+                        String date = jsonObject.getString("date");
+                        //파일경로가 서버 IP가 제외된 주소임
+                        image_path = baseImgePath + image_path;
+                        //userinfo 추가
+                        if ( mPasswordView.getText().toString().equals(password)) {
+                            userinfo = new UserInfo(name, email, phone, password, image_path, Integer.parseInt(level));
+                            moveActivity(GOMAIN, userinfo);
+                        } else
+                            new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 다릅니다").show();
                     }
 
 
-                })
-                {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        // Posting parameters to login url
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("email", mEmail);
-                        params.put("password", mPassword);
-                        return params;
-                    }
+                    //  applicationClass.setUserInfo(userinfo);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                return;
 
-                    @Override
-                    public int getMethod() {
-                        return Method.POST;
-                    }
-                };
 
-//            {
-//                //Pass Your Parameters here
-//                @Override
-//                protected Map<String, String> getParams() throws AuthFailureError{
-//                    Map<String, String> params = new HashMap<>();
-//                    params.put("email", mEmail);
-//                    params.put("password", mPassword);
-//                    return params;
-//                }
-//            };
-//        Map<String, String> params = new HashMap<>();
-//        params.put("email", mEmail);
-//      //  params.put("password", mPassword);
-//
-//        jsonArrayRequest.setParams(params);
-
-                //우체통
-                RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-                requestQueue.add(jsonArrayRequest);
             }
-        }.start();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //에러남 아이디가 없음
+                new AlertDialog.Builder(LoginActivity.this).setMessage("회원이 아닙니다").show();
+            }
 
+
+        })
+            {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email",mEmailView.getText().toString() );
+                params.put("password", mPasswordView.getText().toString());
+                return params;
+            }
+
+        };
+
+        //우체통
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        requestQueue.add(jsonArrayRequest);
     }
 
 
