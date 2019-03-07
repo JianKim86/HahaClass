@@ -641,7 +641,7 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onResume() {
         super.onResume();
         if(applicationClass!=null&&applicationClass.getUserInfo()!=null){
-        DBaddUserInfo();
+       // DBaddUserInfo();
         if(userinfo.getImagePath() != null && userinfo.getImagePath().length()!=img_length) {
             Uri uRi = Uri.parse(userinfo.getImagePath());
 
