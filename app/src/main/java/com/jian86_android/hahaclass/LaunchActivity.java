@@ -160,6 +160,7 @@ public class LaunchActivity extends AppCompatActivity {
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,serverURL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.i("rrii",response);
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             String l_num;
@@ -190,6 +191,7 @@ public class LaunchActivity extends AppCompatActivity {
 //                                buffer.append(imgPath);
                                 itemInstructor = new ItemInstructor(l_num,title,subTitle,imgPath,l_license,l_field,l_career);
                                 setupInstructors.getItemInstructors().add(itemInstructor);// 선생님 리스트에 추가
+                                Log.i("setupInstructors",setupInstructors.getItemInstructors().size()+"");
 
                             }//for
 

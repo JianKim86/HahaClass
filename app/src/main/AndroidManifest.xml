@@ -46,7 +46,7 @@
         <activity android:name=".SettingActivity" />
         <activity
             android:name=".ApplyActivity"
-            android:windowSoftInputMode="stateUnspecified"></activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".BoardActivity"  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".BoarderDetailsActivity" />
         <activity android:name=".TestActivity" android:windowSoftInputMode="adjustPan">

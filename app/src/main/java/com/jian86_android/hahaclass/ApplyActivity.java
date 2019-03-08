@@ -30,8 +30,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,7 +70,7 @@ public class ApplyActivity extends AppCompatActivity {
     private AdapterDetailedSchedule mMyAdapter;
     private TextInputEditText et_name,et_phone,et_email,et_pwd;
     private Button btn_apply;
-    private LinearLayout submit_form;
+    private ScrollView submit_form;
     private int isFocus;
     private static final int PHONE = 0;
     private static final int PASSWORD = 1;
@@ -131,10 +139,9 @@ public boolean onCreateOptionsMenu(Menu menu) {
         }
 
     }//getIntentData
+
     public void setData(){
         getSupportActionBar().setTitle("강의 신청하기");
-
-
         //리스트뷰
         header = getLayoutInflater().inflate(R.layout.pchalendar_apply_list_header, null, false);
         mMyAdapter = new AdapterDetailedSchedule(datasItems, this);
@@ -142,13 +149,12 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
         /* 리스트뷰에 어댑터 등록 */
         lv_apply.setAdapter(mMyAdapter);
-            submit_form = (LinearLayout)header.findViewById(R.id.submit_form);
+            submit_form = (ScrollView) header.findViewById(R.id.submit_form);
             et_name = (TextInputEditText) header.findViewById(R.id.name);
             et_email = (TextInputEditText) header.findViewById(R.id.email);
             et_phone = (TextInputEditText) header.findViewById(R.id.phone);
             et_pwd = (TextInputEditText) header.findViewById(R.id.password);
             btn_apply = header.findViewById(R.id.btn_apply);
-
 
             layout_not_user= header.findViewById(R.id.layout_not_user);
             sign_up_btn= header.findViewById(R.id.sign_up_btn);
@@ -191,7 +197,7 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 
 
-
+    //신청한 강의면 false
     private boolean checkLap(int position){
         HashSet<Integer> set = applicationClass.getApplySchedule();
         Iterator<Integer> it = set.iterator();
@@ -238,9 +244,10 @@ public boolean onCreateOptionsMenu(Menu menu) {
                     .setPositiveButton("신청", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 
-                            //강사 번호와 포지션 저장
-                            //schedule = applicationClass.getItemInstructor().getSchedules().get(position);
-                            applicationClass.setApplySchedule(position);
+                           //디비저장
+                            DBinsultApply();
+
+
                             //Toast.makeText(applicationClass, "성공", Toast.LENGTH_SHORT).show();
                             ApplyActivity.this.finish();
                             dialog.dismiss();
@@ -281,6 +288,66 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 
     }
+
+    //디비저장
+    private void DBinsultApply(){
+
+
+        //강사 번호와 신청 코드 저장 (lunch에서 함께 읽어옴)
+        //schedule = applicationClass.getItemInstructor().getSchedules().get(position);
+        //스케쥴에 정보가 있음
+
+        //php에 보낼 parms
+        final String l_num = schedule.getL_num();
+        final String class_code = schedule.getClass_code();
+        final String apply_name =userInfo.getName();
+        final String apply_phone =userInfo.getPhone();
+        final String email = userInfo.getEmail();
+        //php: info_list DB에서  email로 user_num 조회 -> apply_user_num 에 삽입
+        //php: DB class_apply_list에 보내는 parms와 user_num 저장
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/apply_class_list_insert.php";
+
+                //1. userinfo 에 있는 정보 유저 테이블에 넣기
+                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/info_list_insert.php";
+                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl , new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //서버로부터 응답을 받을때 자동 실행
+                        //매개변수로 받은 Stringdl echo된 결과값
+
+                        //TODO:: 확인 하기
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //서버 요청중 에거라 발생하면 자동 실행
+                        Toast.makeText(ApplyActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        finish(); // 두번째 화면 종료
+                    }
+                });//세번째 파라미터가 응답을 받아옴
+
+
+                //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
+                multiPartRequest.addStringParam("l_num", l_num );
+                multiPartRequest.addStringParam("class_code", class_code);
+                multiPartRequest.addStringParam("apply_name", apply_name);
+                multiPartRequest.addStringParam("apply_phone", apply_phone);
+                multiPartRequest.addStringParam("email", email);
+
+                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
+                RequestQueue requestQueue = Volley.newRequestQueue(ApplyActivity.this);
+
+                //요청 객체를 우체통에 넣기
+                requestQueue.add(multiPartRequest);
+
+
+
+        applicationClass.setApplySchedule(position);
+        //강사 번호와 신청코드 저장
+
+
+    }// DBinsultApply
+
     //입력정보 확인
     private void confirmUserInfo(){
         boolean cancel = false;

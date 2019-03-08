@@ -92,23 +92,20 @@ public class FragCalendar extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         lv_schedule = view.findViewById(R.id.lv_schedule);
-
+     //   Log.i("schedules_length",schedules.size()+"");
 
         if(schedules != null && schedules.size()>0) setData();
         else{ new AlertDialog.Builder(context).setMessage("강의가 준비중입니다").show();}
 
     }//onViewCreated
 
-
-
+    //강의 신청 다이알로그
     EditDialogShowSchedule customDialog;
     private void editDial(int[] position, String today){
         //Todo:커스텀 다이얼 로그
         customDialog = new EditDialogShowSchedule(context, this);
         customDialog.callFunction(today, position);
     }//editDial
-
-
 
     void setupCalender() {
         materialCalendarView = header.findViewById(R.id.calendarView);

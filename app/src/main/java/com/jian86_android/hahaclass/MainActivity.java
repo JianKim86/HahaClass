@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity  {
     }//getIntentData;
 
     private void DBgetClassDetailList() {
-
+        instructor.setSchedules(new ArrayList<Schedule>());
         //classlist 에서 강사별 클레스 검색 ->list
         //classdetaillist에서 세부 내용 검색 -> 세부
         //instructor 에 스케쥴 담기
@@ -280,17 +280,15 @@ public class MainActivity extends AppCompatActivity  {
         //강사 번호로 강의 검색 리스트에서 검색
         final String l_num = instructor.getL_num();
 
-
         String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_instructor_detail_info.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                new AlertDialog.Builder(MainActivity.this).setMessage(response).show();
+               Log.i("responsei",response);
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
-
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String class_code = jsonObject.getString("class_code");
                         String class_host = jsonObject.getString("class_host");
@@ -305,7 +303,45 @@ public class MainActivity extends AppCompatActivity  {
                         class_image_path = baseImgePath + class_image_path;
 
                         //스케쥴에 넣기
-                        Schedule schedule = new Schedule(class_title,class_image_path,class_host,class_support,start_day,finish_day,class_code);
+                        Schedule schedule = new Schedule(l_num, class_title,class_image_path,class_host,class_support,start_day,finish_day,class_code);
+                        String l_number="";
+                        String class_code_recheck="";
+                        String week="";
+                        String c_day="";
+                        String title="";
+                        String configuration="";
+                        String date="";
+                        //확인용 버퍼
+                        StringBuffer buffer = new StringBuffer();
+                        JSONObject jsonkeyArray = jsonObject.getJSONObject("key");
+
+                     //   JSONArray jsonkeyArray = jsonArray.getJSONArray(i);
+                     //   Log.i("responseii",jsonkeyArray.toString());
+                     //   Log.i("responseii_",jsonkeyArray.length()+"");
+                        if(jsonkeyArray!=null) {
+                            schedule.setDatas(new ArrayList<DatasItem>());
+                            for (int y = 0; y < jsonkeyArray.length(); y++) {
+                                JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
+
+                                l_number = jsonObject1.getString("l_num");
+                                class_code_recheck = jsonObject1.getString("class_code");
+                                week = jsonObject1.getString("week");
+                                c_day = jsonObject1.getString("c_day");
+                                title = jsonObject1.getString("title");
+                                configuration = jsonObject1.getString("configuration");
+                                date = jsonObject1.getString("date");
+
+                                DatasItem datasItem = new DatasItem(l_number, class_code_recheck, week, c_day, title, configuration);
+                                schedule.getDatas().add(datasItem);
+
+                                buffer.append(l_number);
+                                buffer.append(class_code_recheck);
+                                buffer.append(week);
+                                buffer.append(c_day);
+                                buffer.append(title);
+                                buffer.append(configuration);
+                            }
+                        }
                         instructor.getSchedules().add(schedule);
 
                     }//for
@@ -339,21 +375,6 @@ public class MainActivity extends AppCompatActivity  {
 
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
         requestQueue.add(stringRequest);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }//getClassDetailList

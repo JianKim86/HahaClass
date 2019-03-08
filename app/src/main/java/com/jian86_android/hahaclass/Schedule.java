@@ -3,6 +3,7 @@ package com.jian86_android.hahaclass;
 import java.util.ArrayList;
 
 public class Schedule {
+    private String l_num;
     private String projectTitle;
     private String projectImgPath;
     private String host;
@@ -97,7 +98,18 @@ public class Schedule {
         this.class_code = class_code;
     }
 
-    public Schedule(String projectTitle, String projectImgPath, String host, String support, String start, String end, String class_code) {
+
+    public String getL_num() {
+        return l_num;
+    }
+
+    public void setL_num(String l_num) {
+        this.l_num = l_num;
+    }
+
+
+    public Schedule(String l_num, String projectTitle, String projectImgPath, String host, String support, String start, String end, String class_code) {
+        this.l_num = l_num;
         this.projectTitle = projectTitle;
         this.projectImgPath = projectImgPath;
         this.host = host;
@@ -107,4 +119,7 @@ public class Schedule {
         this.class_code = class_code;
         setDate(start+"~"+end);
     }
+
+
+
 }

@@ -62,7 +62,6 @@ public class EditDialogShowSchedule {
 
 
     private String edited_msg;
-    //수정
     public void callFunction(String today, int[] position){
         mkdlg();
 
