@@ -341,15 +341,10 @@ public class LoginActivity extends AppCompatActivity  {
         StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-             //   new AlertDialog.Builder(LoginActivity.this).setMessage(response).show();
-
-                //받음
-                //서버로 부터 에코된 데이터 가 JSONArray response
-//                    if(response.equals("")){
-//                        isUser = false;  new AlertDialog.Builder(LoginActivity.this).setMessage("이메일이 없습니다").show(); return;
-//                    }
                 userinfo =null;
                 isUser = true;
+                //new AlertDialog.Builder(LoginActivity.this).setMessage(response).show();
+                Log.i("this_apply", response);
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -366,11 +361,32 @@ public class LoginActivity extends AppCompatActivity  {
                         //userinfo 추가
                         if ( mPasswordView.getText().toString().equals(password)) {
                             userinfo = new UserInfo(name, email, phone, password, image_path, Integer.parseInt(level));
+
+                            //강의 코드 글로벌에 담음
+                            //런처때 내 이메일로 검색해서 강의 코드가 있는지 확인 있으면 담음
+                            //글로벌에 담긴 강의 코드와 비교해서 이미 수강신청한 코드인지 확인
+                           // applicationClass.setApplySchedule(new ApplyClassInfo(l_num,class_code));
+                            //apply 정보 받기
+                            if(jsonObject.has("has_apply_class")) {
+                                JSONObject jsonkeyArray = jsonObject.getJSONObject("has_apply_class");
+                                if (jsonkeyArray != null) {
+                                    for (int y = 0; y < jsonkeyArray.length(); y++) {
+                                        JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
+
+                                        String l_num = jsonObject1.getString("l_num");
+                                        String class_code = jsonObject1.getString("class_code");
+                                        //   apply_user_num = jsonObject1.getString("apply_user_num");
+                                        ApplyClassInfo applyClassInfo = new ApplyClassInfo(l_num, class_code);
+                                        applicationClass.setApplySchedule(applyClassInfo); //헤시에 add로 들어감
+                                    }
+
+                                }
+                            }
+                            // Log.i("cont_hashs",applicationClass.getApplySchedule().size()+"");
                             moveActivity(GOMAIN, userinfo);
                         } else
                             new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 다릅니다").show();
                     }
-
 
                     //  applicationClass.setUserInfo(userinfo);
                 } catch (JSONException e1) {

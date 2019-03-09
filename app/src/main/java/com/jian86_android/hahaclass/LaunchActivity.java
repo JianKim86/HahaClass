@@ -59,13 +59,14 @@ public class LaunchActivity extends AppCompatActivity {
         String board_img= "";
         applicationClass.setBoard_imgpath(board_img);
 
-
+        //서버에서  클레스코드와 강사정보를 읽어와서 담기
         HashMap<String, String> board_write_spinner= new HashMap<>();
         board_write_spinner.put("1","윤나영"+ "하하 웃음 클레스");//instructor_no, instructor title+subtitle
         board_write_spinner.put("2","윤나영"+ "하하 호호 클레스");
         board_write_spinner.put("3","윤나영"+ "하하 흐흐 클레스");
         board_write_spinner.put("4","윤나영"+ "하하 히히 클레스");
         board_write_spinner.put("5","윤나영"+ "하하 용용 클레스");
+
         applicationClass.setBoard_instructor(board_write_spinner);
 
 
@@ -156,11 +157,10 @@ public class LaunchActivity extends AppCompatActivity {
     void DBgetInstructorsList(){
                 //db table : instructor_list 에서 정보 읽어와서 setupInstructors에 담음
                 String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_instructor_list.php";
-
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,serverURL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i("rrii",response);
+                       // Log.i("rrii",response);
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             String l_num;
@@ -170,9 +170,6 @@ public class LaunchActivity extends AppCompatActivity {
                             String l_license;
                             String l_field;
                             String l_career;
-                            //확인용 버퍼
-
-                            StringBuffer buffer = new StringBuffer();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 l_num = jsonObject.getString("l_num");
@@ -184,11 +181,6 @@ public class LaunchActivity extends AppCompatActivity {
                                 imgPath = jsonObject.getString("l_project_image_path");
                                 Log.i("imgpathtt",imgPath);
                                 imgPath = baseImgePath + imgPath;
-
-//                                buffer.append(l_num);
-//                                buffer.append(title);
-//                                buffer.append(subTitle);
-//                                buffer.append(imgPath);
                                 itemInstructor = new ItemInstructor(l_num,title,subTitle,imgPath,l_license,l_field,l_career);
                                 setupInstructors.getItemInstructors().add(itemInstructor);// 선생님 리스트에 추가
                                 Log.i("setupInstructors",setupInstructors.getItemInstructors().size()+"");
@@ -210,7 +202,6 @@ public class LaunchActivity extends AppCompatActivity {
                 requestQueue.add(stringRequest);
 
                 applicationClass.setSetupInstructors(setupInstructors);
-
             }
 
 

@@ -120,7 +120,8 @@ public boolean onCreateOptionsMenu(Menu menu) {
         instructor= applicationClass.getItemInstructor();
         schedule = applicationClass.getItemInstructor().getSchedules().get(position);
         datasItems = schedule.getDatas(); //null일수 있음 유의
-
+        l_num= schedule.getL_num();
+        class_code= schedule.getClass_code();
 
 //유저정보 가져오기
         state = applicationClass.getState();
@@ -198,15 +199,15 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 
     //신청한 강의면 false
-    private boolean checkLap(int position){
-        HashSet<Integer> set = applicationClass.getApplySchedule();
-        Iterator<Integer> it = set.iterator();
-        Log.i("its_p",position+"");
+    private boolean checkLap(){
+        HashSet<ApplyClassInfo> set = applicationClass.getApplySchedule();
+        Iterator<ApplyClassInfo> it = set.iterator();
+     //   Log.i("its_p",position+"");
         Object[] myArr = set.toArray();
         if(set.size()>0) {
             for (int i = 0; i < myArr.length; i++) {
-                int z = (Integer) myArr[i];
-                if (z == position) {
+                ApplyClassInfo z = (ApplyClassInfo) myArr[i];
+                if (z.getL_num().equals(l_num)&&z.getClass_code().equals(class_code)) {
                     return false;
                 }
             }
@@ -227,7 +228,7 @@ public boolean onCreateOptionsMenu(Menu menu) {
     //데이터 업데이트
     public void submitForm(){ //다이알로그
 
-        if(checkLap(position)) {
+        if(checkLap()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(ApplyActivity.this);
 
             TextView title = new TextView(this);
@@ -288,34 +289,34 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 
     }
-
+     String l_num;
+     String class_code;
     //디비저장
     private void DBinsultApply(){
 
+                //강사 번호와 신청 코드 저장 (lunch에서 함께 읽어옴)
+                //schedule = applicationClass.getItemInstructor().getSchedules().get(position);
+                //스케쥴에 정보가 있음
 
-        //강사 번호와 신청 코드 저장 (lunch에서 함께 읽어옴)
-        //schedule = applicationClass.getItemInstructor().getSchedules().get(position);
-        //스케쥴에 정보가 있음
-
-        //php에 보낼 parms
-        final String l_num = schedule.getL_num();
-        final String class_code = schedule.getClass_code();
-        final String apply_name =userInfo.getName();
-        final String apply_phone =userInfo.getPhone();
-        final String email = userInfo.getEmail();
-        //php: info_list DB에서  email로 user_num 조회 -> apply_user_num 에 삽입
-        //php: DB class_apply_list에 보내는 parms와 user_num 저장
-        String serverURL = "http://jian86.dothome.co.kr/HahaClass/apply_class_list_insert.php";
-
+                //php에 보낼 parms
+                final String apply_name = userInfo.getName();
+                final String apply_phone = userInfo.getPhone();
+                final String email = userInfo.getEmail();
+                //php: info_list DB에서  email로 user_num 조회 -> apply_user_num 에 삽입
+                //php: DB class_apply_list에 보내는 parms와 user_num 저장
+                String serverURL = "http://jian86.dothome.co.kr/HahaClass/apply_class_list_insert.php";
                 //1. userinfo 에 있는 정보 유저 테이블에 넣기
-                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/info_list_insert.php";
-                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl , new Response.Listener<String>() {
+                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         //서버로부터 응답을 받을때 자동 실행
                         //매개변수로 받은 Stringdl echo된 결과값
-
-                        //TODO:: 확인 하기
+                        new AlertDialog.Builder(ApplyActivity.this).setMessage("신청이 접수되었습니다.").show();
+                        //강의 코드 글로벌에 담음
+                        //로그인시 내 이메일로 검색해서 강의 코드가 있는지 확인 있으면 담음
+                        //글로벌에 담긴 강의 코드와 비교해서 이미 수강신청한 코드인지 확인
+                        applicationClass.setApplySchedule(new ApplyClassInfo(l_num,class_code));
+                        //강사 번호와 신청코드 저장
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -328,7 +329,7 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 
                 //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
-                multiPartRequest.addStringParam("l_num", l_num );
+                multiPartRequest.addStringParam("l_num", l_num);
                 multiPartRequest.addStringParam("class_code", class_code);
                 multiPartRequest.addStringParam("apply_name", apply_name);
                 multiPartRequest.addStringParam("apply_phone", apply_phone);
@@ -339,12 +340,6 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
                 //요청 객체를 우체통에 넣기
                 requestQueue.add(multiPartRequest);
-
-
-
-        applicationClass.setApplySchedule(position);
-        //강사 번호와 신청코드 저장
-
 
     }// DBinsultApply
 

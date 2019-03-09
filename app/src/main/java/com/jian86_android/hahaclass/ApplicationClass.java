@@ -17,7 +17,7 @@ public class ApplicationClass extends Application {
     public int instructorNo;
 
 
-    public HashSet<Integer> applySchedule = new HashSet<>();//강사강의 번호
+    public HashSet<ApplyClassInfo> applySchedule = new HashSet<>();//강사강의 번호// 내가 신청한 강의 확인을 하기위한
     public ArrayList<Board>boards= new ArrayList<>();
 
     //기본세팅 instructors
@@ -67,11 +67,11 @@ public class ApplicationClass extends Application {
         this.boards = boards;
     }
 
-    public HashSet<Integer> getApplySchedule() {
+    public HashSet<ApplyClassInfo> getApplySchedule() {
         return applySchedule;
     }//강사별 스케쥴을 담음
 
-    public void setApplySchedule(int applySchedule) {
+    public void setApplySchedule(ApplyClassInfo applySchedule) {
 
         this.applySchedule.add(applySchedule);
     }

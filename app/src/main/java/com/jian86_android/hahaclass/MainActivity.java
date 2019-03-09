@@ -313,6 +313,8 @@ public class MainActivity extends AppCompatActivity  {
                         String date="";
                         //확인용 버퍼
                         StringBuffer buffer = new StringBuffer();
+
+                        //세부 디테일 받기
                         JSONObject jsonkeyArray = jsonObject.getJSONObject("key");
 
                      //   JSONArray jsonkeyArray = jsonArray.getJSONArray(i);
@@ -333,13 +335,6 @@ public class MainActivity extends AppCompatActivity  {
 
                                 DatasItem datasItem = new DatasItem(l_number, class_code_recheck, week, c_day, title, configuration);
                                 schedule.getDatas().add(datasItem);
-
-                                buffer.append(l_number);
-                                buffer.append(class_code_recheck);
-                                buffer.append(week);
-                                buffer.append(c_day);
-                                buffer.append(title);
-                                buffer.append(configuration);
                             }
                         }
                         instructor.getSchedules().add(schedule);
@@ -404,7 +399,6 @@ public class MainActivity extends AppCompatActivity  {
             builder.show();
         }
     }
-
     void takePic(){
         Intent intent=new Intent();
         intent.setAction(Intent.ACTION_PICK);
@@ -438,10 +432,7 @@ public class MainActivity extends AppCompatActivity  {
                         if(pagerLayout.getCurrentItem()==0) {
                             ((FragInfo)fragment).setPic(bm);
                         }
-
-
                     }
-
                 }//if
 
                 break;

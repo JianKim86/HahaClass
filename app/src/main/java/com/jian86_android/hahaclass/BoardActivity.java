@@ -412,6 +412,9 @@ public class BoardActivity extends AppCompatActivity {
         if(iv_img!=null&& isupload){ board.setImg(true); board.setBoard_imgpath(picPath); }
         else {board.setBoard_imgpath(null); board.setImg(false);}
 
+       //서버에 저장
+       DBsaveBoardData(board);
+
        //TODO:서버에 다시 알림
         applicationClass.getBoards().add(board);
    //     Log.i("position",applicationClass.getBoards().size()+"");
@@ -421,6 +424,13 @@ public class BoardActivity extends AppCompatActivity {
 
 
     }
+
+    //디비에 넣는 작업
+    private void DBsaveBoardData(Board board){
+        if(board != null) return;
+
+    }//DBsaveBoardData
+
     private void reLoaddata(){
         setData();
         getData();
@@ -453,7 +463,7 @@ public class BoardActivity extends AppCompatActivity {
 
     //서브밋전 확인
     private boolean isPasswordValid(String password) {
-        return (password.length() > 4);
+        return (password.length() > 4 && password.length() < 21);
     }
     private boolean isTitleValid(String title, int len ) {
         return (title.length() <= len);
