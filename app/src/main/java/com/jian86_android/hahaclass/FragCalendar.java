@@ -185,7 +185,6 @@ public class FragCalendar extends Fragment {
 
         for (Schedule s : schedules) {
 
-
             String start =s.getStart();
             String end =s.getEnd();
             int size = (int) (doDiffOfDate(start, end));

@@ -82,7 +82,6 @@ public class AdapterPIntroList extends BaseAdapter {
         }
         else{Glide.with(context).load(R.drawable.ic_launcher_background).into(iv_img);}
 
-
 //
 //        if(path!=null&&!(path.equals(""))){
 //            Uri uRi = Uri.parse(path);

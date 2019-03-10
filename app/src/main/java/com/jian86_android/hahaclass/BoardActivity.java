@@ -3,8 +3,10 @@ package com.jian86_android.hahaclass;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -33,9 +35,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.AuthFailureError;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.SimpleMultiPartRequest;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class BoardActivity extends AppCompatActivity {
@@ -71,7 +85,7 @@ public class BoardActivity extends AppCompatActivity {
     private EditText edit_title,edit_msg,repassword;
     private TextInputLayout input_layout_title,input_layout_msg;
     private ImageView iv_img, btn_upload_img,btn_upload_cancel;
-    private HashMap<String,String> spinnerHash;
+    private HashMap<String,SpinnerInfo> spinnerHash;
     private TextView tv_total_count,tv_board_title;
     private ImageView iv_title_img,iv_edit_img,iv_edit_title;
     private ArrayList<String> spinnerItems = new ArrayList<>();
@@ -228,7 +242,7 @@ public class BoardActivity extends AppCompatActivity {
                     case R.id.iv_edit_title:
                         if(level==4); break;
                     case R.id.btn_upload_img: iv_img.setVisibility(View.VISIBLE); takePic(); isupload =true; break;
-                    case R.id.btn_upload_cancel: if(isupload) { isupload =false; iv_img.setVisibility(View.GONE);  btn_upload_cancel.setVisibility(View.GONE); picPath = null; btmapPicPath =null; } break;
+                    case R.id.btn_upload_cancel: if(isupload) { isupload =false; iv_img.setVisibility(View.GONE);  btn_upload_cancel.setVisibility(View.GONE); } break;
                     case R.id.btn_save:  editSave();  break;
                     case R.id.btn_return:  returnList();  break;
                     case R.id.btn_write:
@@ -314,11 +328,14 @@ public class BoardActivity extends AppCompatActivity {
         input_layout_title.setCounterMaxLength(30);
         input_layout_msg.setCounterMaxLength(500);
 
-//스피너에 값넣기
+//스피너에 값넣기 , Launch에서 받는 DB에서 넘어온 스피너 값 뿌리기
         for (String mapkey : spinnerHash.keySet()){
-            spinnerItems.add(spinnerHash.get(mapkey));
+            SpinnerInfo s = spinnerHash.get(mapkey);
+            spinnerItems.add(s.getSpinner_title()); //스피너 헤시에서 타이틀만 담음
         }
-        spinnerAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerItems);
+      //  spinnerAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerItems);
+        spinnerAdapter = new ArrayAdapter(this, R.layout.spinner_layout, spinnerItems);
+
         spinner.setAdapter(spinnerAdapter);
         //event listener
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -326,7 +343,6 @@ public class BoardActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 tv_instructor.setText(spinner.getItemAtPosition(position).toString());
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 tv_instructor.setText(spinner.getItemAtPosition(0).toString());
@@ -384,7 +400,7 @@ public class BoardActivity extends AppCompatActivity {
     //닫기
     private void resetWrite(){
         isupload=false;
-        picPath=null;
+        picPath="";
         btmapPicPath=null;
         edit_msg.setText("");
         edit_title.setText("");
@@ -403,22 +419,27 @@ public class BoardActivity extends AppCompatActivity {
         board.setBoard_msg(changemsg);
         board.setBoard_id(userInfo.getEmail());
         board.setBoard_writer(userInfo.getName());
-        board.setBoard_instructor(tv_instructor.getText().toString());
+
+        //hash에서 밸류로 정보 찾아 보드에 저장
+        String spinnerValue =tv_instructor.getText().toString();
+
+        for (String mapkey : spinnerHash.keySet()){
+            SpinnerInfo s = spinnerHash.get(mapkey);
+            if(s.getSpinner_title().equals(spinnerValue)){
+                board.setBoard_instructor(s); break;
+            }
+        }
         board.setBoard_pwd(repassword.getText().toString());
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 String time = df.format(new Date());
         board.setBoard_date(time);
         //이미지
-        if(iv_img!=null&& isupload){ board.setImg(true); board.setBoard_imgpath(picPath); }
+        if(iv_img!=null && isupload){ board.setImg(true); board.setBoard_imgpath(picPath); }
         else {board.setBoard_imgpath(null); board.setImg(false);}
-
        //서버에 저장
        DBsaveBoardData(board);
-
        //TODO:서버에 다시 알림
-        applicationClass.getBoards().add(board);
-   //     Log.i("position",applicationClass.getBoards().size()+"");
-        reLoaddata();
+
         //
 
 
@@ -426,9 +447,42 @@ public class BoardActivity extends AppCompatActivity {
     }
 
     //디비에 넣는 작업
-    private void DBsaveBoardData(Board board){
-        if(board != null) return;
+    private void DBsaveBoardData(final Board board){
+        if(board == null) return;
+        new Thread(){
+            @Override
+            public void run() {
+                //php url
+                String serverURL = "http://jian86.dothome.co.kr/HahaClass/board_insert_data.php";
+                SimpleMultiPartRequest simpleMultiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        new AlertDialog.Builder(BoardActivity.this).setMessage(response).show();
+                        //확인용 창 띄우기 성공하면 성공맨트 돌려받음
+                        applicationClass.getBoards().add(board);
+                        reLoaddata();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
+                    }
+                });
+                simpleMultiPartRequest.addStringParam("board_user_email",userInfo.getEmail());
+                simpleMultiPartRequest.addStringParam("class_code",board.getBoard_instructor().getClass_code());
+                simpleMultiPartRequest.addStringParam("l_num",board.getBoard_instructor().getL_num());
+                simpleMultiPartRequest.addStringParam("board_title",board.getBoard_title());
+                simpleMultiPartRequest.addStringParam("board_msg",board.getBoard_msg());
+                simpleMultiPartRequest.addStringParam("board_pwd",board.getBoard_pwd());
+                simpleMultiPartRequest.addStringParam("date",board.getBoard_date());
+                simpleMultiPartRequest.addFile("board_image_path",picPath);
+                Log.i("picpathtt",picPath);
+                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
+                RequestQueue requestQueue = Volley.newRequestQueue(BoardActivity.this);
+                //요청 객체를 우체통에 넣기
+                requestQueue.add(simpleMultiPartRequest);
+            }//run
+        }.start();
     }//DBsaveBoardData
 
     private void reLoaddata(){
@@ -513,7 +567,7 @@ public class BoardActivity extends AppCompatActivity {
         ImageView iv;
         if(isupload){ iv = btn_upload_img;}else{ iv =iv_title_img; }
         Glide.with(this).load(pic).into(iv);
-        picPath=null;
+       // picPath=null;
     }
 //네비
     private void goSetting(int item){
@@ -555,16 +609,30 @@ public class BoardActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
 
                     Uri uri = data.getData();
-                    picPath = uri.toString();
+                    picPath = getRealPathFromUri(uri);
                     if (uri != null) {
-                        setPic(picPath);
+                            ImageView iv;
+                            if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);  } else{ iv =iv_title_img; }
+                            Picasso.get().load(uri)
+                                    .resize(400, 400).into(iv, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Log.d("picPath ", "pIntor img: load failed " + picPath);
+                                }
+                            });
 
                     } else {
+                        ImageView iv;
+                        if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);  } else{ iv =iv_title_img; }
                         //아니면 Intent 에 Extra 데이터로 Bitmap 이 전달되어 옴
                         Bundle bundle = data.getExtras();
                         Bitmap bm = (Bitmap) bundle.get("data"); // key 값 "data" 는 정해진거야
                         //iv.setImageBitmap(bm);
-
+                         Glide.with(this).load(bm).into(iv);
                         setPic(bm);
                     }
 
@@ -575,5 +643,15 @@ public class BoardActivity extends AppCompatActivity {
         }
     }
 
-
+    //이미지 절대경로로 바꾸기
+    String getRealPathFromUri(Uri uri){
+        String[] proj= {MediaStore.Images.Media.DATA};
+        android.support.v4.content.CursorLoader loader= new android.support.v4.content.CursorLoader(this, uri, proj, null, null, null);
+        Cursor cursor= loader.loadInBackground();
+        int column_index= cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result= cursor.getString(column_index);
+        cursor.close();
+        return  result;
+    }
 }//onCreate

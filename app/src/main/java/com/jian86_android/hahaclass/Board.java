@@ -8,11 +8,11 @@ public class Board {
 
 
     private boolean isImg;// 보드 리스트뷰에 들어가는 이미지 확인
-    private String board_imgpath;// 이미지 패스
+    private String board_imgpath = "";// 이미지 패스
     private String board_header_title;
     private String board_writer;//작성자
 
-    private String board_instructor;//분류
+    private SpinnerInfo board_instructor;//분류
 
     private String board_msg;//메세지
     private String board_pwd;//업로드시 비밀번호
@@ -54,11 +54,11 @@ public class Board {
         this.board_writer = board_writer;
     }
 
-    public String getBoard_instructor() {
+    public SpinnerInfo getBoard_instructor() {
         return board_instructor;
     }
 
-    public void setBoard_instructor(String board_instructor) {
+    public void setBoard_instructor(SpinnerInfo board_instructor) {
         this.board_instructor = board_instructor;
     }
 
@@ -109,5 +109,22 @@ public class Board {
 
     public void setImg(boolean img) {
         isImg = img;
+    }
+
+    public Board() {
+    }
+
+    public Board(String board_title, String board_date, String board_reply, boolean isImg, String board_imgpath, String board_header_title, String board_writer, SpinnerInfo board_instructor, String board_msg, String board_pwd, String board_id) {
+        this.board_title = board_title;
+        this.board_date = board_date;
+        this.board_reply = board_reply;
+        this.isImg = isImg;
+        this.board_imgpath = board_imgpath;
+        this.board_header_title = board_header_title;
+        this.board_writer = board_writer;
+        this.board_instructor = board_instructor;
+        this.board_msg = board_msg;
+        this.board_pwd = board_pwd;
+        this.board_id = board_id;
     }
 }//Board

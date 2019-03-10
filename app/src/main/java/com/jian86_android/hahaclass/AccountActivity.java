@@ -409,9 +409,6 @@ public class AccountActivity extends AppCompatActivity {
             }//run
         }.start();
 
-
-
-
     }//saveDB
 
 

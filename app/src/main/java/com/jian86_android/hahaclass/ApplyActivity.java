@@ -105,10 +105,19 @@ public boolean onCreateOptionsMenu(Menu menu) {
         setContentView(R.layout.activity_apply);
         getintent = getIntent();
         applicationClass =(ApplicationClass)getApplicationContext();
+
+
         getData();
+
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);
         setData();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -118,10 +127,13 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
 //강사정보 가져오기
         instructor= applicationClass.getItemInstructor();
+        schedule = null;
+        datasItems.clear();
         schedule = applicationClass.getItemInstructor().getSchedules().get(position);
         datasItems = schedule.getDatas(); //null일수 있음 유의
+       // Log.i("scr_schedule",applicationClass.getItemInstructor().getSchedules().get(1).getDatas().size()+"");
         l_num= schedule.getL_num();
-        class_code= schedule.getClass_code();
+        class_code = schedule.getClass_code();
 
 //유저정보 가져오기
         state = applicationClass.getState();
@@ -247,8 +259,6 @@ public boolean onCreateOptionsMenu(Menu menu) {
 
                            //디비저장
                             DBinsultApply();
-
-
                             //Toast.makeText(applicationClass, "성공", Toast.LENGTH_SHORT).show();
                             ApplyActivity.this.finish();
                             dialog.dismiss();

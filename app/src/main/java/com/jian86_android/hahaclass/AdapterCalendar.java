@@ -82,7 +82,7 @@ public class AdapterCalendar extends BaseAdapter {
 
 
                     Intent intent = new Intent(context, ApplyActivity.class);
-                    intent.putExtra("position", i);
+                    intent.putExtra("position", i);//스케쥴을 담당할 포지션을 보냄
                     context.startActivity(intent);
 
 

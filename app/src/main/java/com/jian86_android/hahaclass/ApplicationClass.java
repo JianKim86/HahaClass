@@ -27,19 +27,15 @@ public class ApplicationClass extends Application {
     //기본세팅 보드관련
     public String board_title;
     public String board_imgpath;
-    public HashMap<String,String > board_instructor= new HashMap<>();//instructor_no, instructor title+subtitle
-
-
-
-
+    public HashMap<String,SpinnerInfo > board_instructor= new HashMap<>();//instructor_no, instructor title+subtitle
 
     //게터 셋터
 
-    public HashMap<String, String> getBoard_instructor() {
+    public HashMap<String, SpinnerInfo> getBoard_instructor() {
         return board_instructor;
     }
 
-    public void setBoard_instructor(HashMap<String, String> board_instructor) {
+    public void setBoard_instructor(HashMap<String, SpinnerInfo> board_instructor) {
         this.board_instructor = board_instructor;
     }
 

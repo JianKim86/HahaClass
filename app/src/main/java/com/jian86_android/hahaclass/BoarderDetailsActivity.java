@@ -49,7 +49,7 @@ public class BoarderDetailsActivity extends AppCompatActivity {
 
     private View edit;
     private ImageView  btn_upload_img, btn_upload_cancel;
-    private HashMap<String,String> spinnerHash;
+    private HashMap<String,SpinnerInfo> spinnerHash;
     private TextView tv_total_count,tv_board_title;
     private ImageView iv_title_img, iv_edit_img, iv_edit_title;
     private ArrayList<String> spinnerItems = new ArrayList<>();
@@ -196,8 +196,10 @@ public class BoarderDetailsActivity extends AppCompatActivity {
 
 //스피너에 값넣기
         for (String mapkey : spinnerHash.keySet()){
-            spinnerItems.add(spinnerHash.get(mapkey));
+            SpinnerInfo s = spinnerHash.get(mapkey);
+            spinnerItems.add(s.getSpinner_title()); //스피너 헤시에서 타이틀만 담음
         }
+
         spinnerAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, spinnerItems);
         spinner.setAdapter(spinnerAdapter);
         //event listener
@@ -331,7 +333,7 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         tv_user_name.setText(board.getBoard_writer()+"("+strId+")");
         tv_title.setText(changetitle);
         tv_msg.setText(changemsg);
-        tv_instructor.setText(board.getBoard_instructor());
+        tv_instructor.setText(board.getBoard_instructor().getSpinner_title());
 
         if(board.getBoard_imgpath() !=null && board.getBoard_imgpath() != ""){
             iv_img_show.setVisibility(View.VISIBLE); setPic(board.getBoard_imgpath()); isupload = true;

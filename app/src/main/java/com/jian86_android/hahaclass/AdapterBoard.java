@@ -63,7 +63,7 @@ public class AdapterBoard extends BaseAdapter {
         tv_date.setText(myItem.getBoard_date());
         tv_reply.setText(myItem.getBoard_reply());
         tv_writer.setText(myItem.getBoard_writer());
-        tv_instructor.setText(myItem.getBoard_instructor());
+        if(myItem.getBoard_instructor().getSpinner_title() != null&& myItem.getBoard_instructor().getSpinner_title().length()>0) tv_instructor.setText(myItem.getBoard_instructor().getSpinner_title());
 
 
         if(myItem.isImg()) Glide.with(context).load(R.drawable.ic_launcher_background).into(iv_img);

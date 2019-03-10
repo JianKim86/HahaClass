@@ -311,20 +311,18 @@ public class MainActivity extends AppCompatActivity  {
                         String title="";
                         String configuration="";
                         String date="";
-                        //확인용 버퍼
-                        StringBuffer buffer = new StringBuffer();
 
                         //세부 디테일 받기
                         JSONObject jsonkeyArray = jsonObject.getJSONObject("key");
 
                      //   JSONArray jsonkeyArray = jsonArray.getJSONArray(i);
-                     //   Log.i("responseii",jsonkeyArray.toString());
+                      // Log.i("jsonkeyArray",response);
                      //   Log.i("responseii_",jsonkeyArray.length()+"");
+
                         if(jsonkeyArray!=null) {
                             schedule.setDatas(new ArrayList<DatasItem>());
                             for (int y = 0; y < jsonkeyArray.length(); y++) {
                                 JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
-
                                 l_number = jsonObject1.getString("l_num");
                                 class_code_recheck = jsonObject1.getString("class_code");
                                 week = jsonObject1.getString("week");
@@ -332,9 +330,10 @@ public class MainActivity extends AppCompatActivity  {
                                 title = jsonObject1.getString("title");
                                 configuration = jsonObject1.getString("configuration");
                                 date = jsonObject1.getString("date");
-
-                                DatasItem datasItem = new DatasItem(l_number, class_code_recheck, week, c_day, title, configuration);
-                                schedule.getDatas().add(datasItem);
+                                if(class_code_recheck.equals(class_code)){
+                                    DatasItem datasItem = new DatasItem(l_number, class_code_recheck, week, c_day, title, configuration);
+                                    schedule.getDatas().add(datasItem);
+                                }
                             }
                         }
                         instructor.getSchedules().add(schedule);
@@ -346,11 +345,6 @@ public class MainActivity extends AppCompatActivity  {
                     e1.printStackTrace();
                 }
                 return;
-
-
-
-
-
 
             }
         }, new Response.ErrorListener() {
