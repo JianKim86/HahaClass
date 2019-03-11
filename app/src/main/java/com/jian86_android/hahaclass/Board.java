@@ -1,7 +1,7 @@
 package com.jian86_android.hahaclass;
 
 public class Board {
-    private String board_no; //보드 넘버
+    private String b_num; //보드 넘버
     private String board_title;//보드 타이틀
     private String board_date;//보드 리스트뷰에 들어가는 데이트
     private String board_reply;//리플수
@@ -70,12 +70,12 @@ public class Board {
         return board_header_title;
     }
 
-    public String getBoard_no() {
-        return board_no;
+    public String getB_num() {
+        return b_num;
     }
 
-    public void setBoard_no(String board_no) {
-        this.board_no = board_no;
+    public void setB_num(String b_num) {
+        this.b_num = b_num;
     }
 
     public String getBoard_title() {
@@ -114,7 +114,8 @@ public class Board {
     public Board() {
     }
 
-    public Board(String board_title, String board_date, String board_reply, boolean isImg, String board_imgpath, String board_header_title, String board_writer, SpinnerInfo board_instructor, String board_msg, String board_pwd, String board_id) {
+    public Board(String b_num, String board_title, String board_date, String board_reply, boolean isImg, String board_imgpath, String board_header_title, String board_writer, SpinnerInfo board_instructor, String board_msg, String board_pwd, String board_id) {
+        this.b_num = b_num;
         this.board_title = board_title;
         this.board_date = board_date;
         this.board_reply = board_reply;

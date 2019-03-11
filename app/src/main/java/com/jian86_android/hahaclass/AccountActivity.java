@@ -66,7 +66,6 @@ public class AccountActivity extends AppCompatActivity {
     private static final int GOLOGIN = 3;
     private static final int GOBACK = 1;
     private static final int PIC = 1000;
-    private static final int IMAGEUPLOAD = 100;
     private static final String CUSTOMER = "customer";
     private static final int CUSTOMERLEVEL = 1;
     private static final int ADMINLEVEL = 2;
@@ -154,12 +153,7 @@ public class AccountActivity extends AppCompatActivity {
           rg = (RadioGroup)findViewById(R.id.radioGroup1);
           rb = (RadioButton) findViewById(R.id.radio0);
 
-          //외부저장소에 있는 이미지 파일을 서버로 보내기 위한 퍼미션
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},IMAGEUPLOAD);
-            }
-        }
+
 
     }//oncreate
 
@@ -169,11 +163,6 @@ public class AccountActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_READ_CONTACTS:
                 if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                }
-                break;
-            case IMAGEUPLOAD:
-                if(grantResults[0]== PackageManager.PERMISSION_DENIED){
-                    Toast.makeText(this, "외부저장소 사용 불가 \n 이미지 저장 불가", Toast.LENGTH_SHORT).show();
                 }
                 break;
 

@@ -1,11 +1,14 @@
 package com.jian86_android.hahaclass;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,6 +52,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -60,6 +64,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class BoardActivity extends AppCompatActivity {
+    private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
+    private static final int img_length ="uploads/20190310031854".length();
+    private static final int DATACHANGE =100;
+
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
@@ -121,6 +129,7 @@ public class BoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_board);
         applicationClass =(ApplicationClass)getApplicationContext();
         getData();
+
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);
         navMenu = findViewById(R.id.nav_menu);
@@ -133,7 +142,7 @@ public class BoardActivity extends AppCompatActivity {
         edit =findViewById(R.id.edit);
 
         spinner =findViewById(R.id.spinner);
-        tv_instructor =findViewById(R.id.tv_instructor);
+        tv_instructor =findViewById(R.id.tv_instructors);
         tv_user_name = findViewById(R.id.tv_user_name);
 
         btn_save = findViewById(R.id.btn_save);
@@ -146,6 +155,7 @@ public class BoardActivity extends AppCompatActivity {
         edit_msg = findViewById(R.id.edit_msg);
         repassword = findViewById(R.id.repassword);
         iv_img= findViewById(R.id.iv_img);
+
 
         input_layout_title = (TextInputLayout)findViewById(R.id.input_layout_title);
         input_layout_msg = (TextInputLayout)findViewById(R.id.input_layout_msg);
@@ -213,14 +223,15 @@ public class BoardActivity extends AppCompatActivity {
 
     }//navSetting
     private void setData(){
-        isupload= false;
 
+        isupload= false; //new board를 위한 is upload
         tv_total_count = header.findViewById(R.id.tv_total_count);
         iv_title_img = header.findViewById(R.id.iv_title_img);
         iv_edit_img = header.findViewById(R.id.iv_edit);
 
         tv_board_title = header.findViewById(R.id.tv_board_title);
         iv_edit_title = header.findViewById(R.id.iv_edit_title);
+        //기본 해더 관련
         if(level==4){
             iv_edit_img.setVisibility(View.VISIBLE);
             iv_edit_title.setVisibility(View.VISIBLE);
@@ -228,10 +239,9 @@ public class BoardActivity extends AppCompatActivity {
         tv_board_title.setText(applicationClass.getBoard_title());
         tv_total_count.setText(boards.size()+"");
 
-        if(applicationClass.getBoard_imgpath()!=null&&!(applicationClass.getBoard_imgpath().equals(""))){
-            setPic(img);
+        if(applicationClass.getBoard_imgpath()!=null&&(applicationClass.getBoard_imgpath().length()>img_length)){ //게시판 기본 이미지 설정
+            isupload = false; setPic(applicationClass.getBoard_imgpath());
         }
-
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,7 +251,7 @@ public class BoardActivity extends AppCompatActivity {
                         if(level==4); isupload =false; break;
                     case R.id.iv_edit_title:
                         if(level==4); break;
-                    case R.id.btn_upload_img: iv_img.setVisibility(View.VISIBLE); takePic(); isupload =true; break;
+                    case R.id.btn_upload_img: iv_img.setVisibility(View.VISIBLE); isupload =true; takePic();  break; //게시판 사진
                     case R.id.btn_upload_cancel: if(isupload) { isupload =false; iv_img.setVisibility(View.GONE);  btn_upload_cancel.setVisibility(View.GONE); } break;
                     case R.id.btn_save:  editSave();  break;
                     case R.id.btn_return:  returnList();  break;
@@ -299,7 +309,7 @@ public class BoardActivity extends AppCompatActivity {
                     Intent intent = new Intent(BoardActivity.this,BoarderDetailsActivity.class);
                     intent.putExtra("position",cPosition);
 //                    Log.i("itemcont",adapterBoard.getCount()+"");
-                    startActivity(intent);
+                    startActivityForResult(intent,DATACHANGE);
                 }//if 헤더 제외
             }
         });
@@ -320,6 +330,8 @@ public class BoardActivity extends AppCompatActivity {
         builder.setNegativeButton("아니오", null);
         builder.show();
     }
+
+//new 보드 작성 : 새글 쓰기 기본 세팅
     private void writeBoard(){
 
         edit.setVisibility(View.VISIBLE);
@@ -354,27 +366,22 @@ public class BoardActivity extends AppCompatActivity {
         tv_user_name.setText(userInfo.getName()+"("+strId+")"+"님 안녕하세요 !");
 
     }//writeBoard
-
-    private String changetitle;
-    private String changemsg;
-
-
+    private String changetitle; //보드 타이틀 저장을 위한
+    private String changemsg; // 보드 내용을 저장하기 위한
+//new 보드 저장
     private  void editSave(){
         boolean cancel = false;
         View focusView = null;
-        String password = repassword.getText().toString();
-        changetitle= edit_title.getText().toString();
-        changemsg= edit_msg.getText().toString();
-
+        String password = repassword.getText().toString(); //번호
+        changetitle= edit_title.getText().toString(); // 타이틀
+        changemsg= edit_msg.getText().toString(); //메세지
         edit_title.setError(null);
         edit_msg.setError(null);
         repassword.setError(null);
-
+        //업로드 체크
         if (TextUtils.isEmpty(changetitle)||!isTitleValid(changetitle,30)) {
-
             focusView = edit_title;
             cancel = true;
-
         } else if(TextUtils.isEmpty(changemsg)||!isTitleValid(changemsg,500)) {
             focusView = edit_msg;
             cancel = true;
@@ -388,30 +395,15 @@ public class BoardActivity extends AppCompatActivity {
             cancel = true;
         }
 
+        //내용 확인후 저장
         if (cancel) {
             focusView.requestFocus();
         } else {
-            dataChange();  //성공하면 정보 저장 및 전송송
-            resetWrite();// 리셋
-
+            dataChange();  //성공하면 저장을 위한 작업 method로 이동
         }
 
     }
-    //닫기
-    private void resetWrite(){
-        isupload=false;
-        picPath="";
-        btmapPicPath=null;
-        edit_msg.setText("");
-        edit_title.setText("");
-        repassword.setText("");
-        spinnerItems.clear();
-        iv_img.setImageBitmap(null);
-        iv_edit_img.setVisibility(View.GONE);
-        btn_upload_cancel.setVisibility(View.GONE);
-        spinner.setSelection(0);
-        edit.setVisibility(View.GONE);
-    }
+
 //정보저장
     private void dataChange(){
         Board board = new Board();
@@ -419,10 +411,8 @@ public class BoardActivity extends AppCompatActivity {
         board.setBoard_msg(changemsg);
         board.setBoard_id(userInfo.getEmail());
         board.setBoard_writer(userInfo.getName());
-
-        //hash에서 밸류로 정보 찾아 보드에 저장
+        //spinner hash에서 밸류로 정보 찾아 보드에 저장
         String spinnerValue =tv_instructor.getText().toString();
-
         for (String mapkey : spinnerHash.keySet()){
             SpinnerInfo s = spinnerHash.get(mapkey);
             if(s.getSpinner_title().equals(spinnerValue)){
@@ -433,20 +423,16 @@ public class BoardActivity extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 String time = df.format(new Date());
         board.setBoard_date(time);
+
         //이미지
-        if(iv_img!=null && isupload){ board.setImg(true); board.setBoard_imgpath(picPath); }
-        else {board.setBoard_imgpath(null); board.setImg(false);}
+        if(isupload){ board.setImg(true); board.setBoard_imgpath(realPicPath); }
+        else {board.setBoard_imgpath(""); board.setImg(false);}
        //서버에 저장
        DBsaveBoardData(board);
-       //TODO:서버에 다시 알림
-
-        //
-
-
 
     }
 
-    //디비에 넣는 작업
+//디비에 넣는 작업 new 보드 업로드
     private void DBsaveBoardData(final Board board){
         if(board == null) return;
         new Thread(){
@@ -459,8 +445,11 @@ public class BoardActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         new AlertDialog.Builder(BoardActivity.this).setMessage(response).show();
                         //확인용 창 띄우기 성공하면 성공맨트 돌려받음
-                        applicationClass.getBoards().add(board);
-                        reLoaddata();
+
+                        //applicationClass.getBoards().add(board);
+                        DBgetBoardInfo();
+                        resetWrite();// 리셋
+                        reLoaddata();// 리로드
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -475,8 +464,8 @@ public class BoardActivity extends AppCompatActivity {
                 simpleMultiPartRequest.addStringParam("board_msg",board.getBoard_msg());
                 simpleMultiPartRequest.addStringParam("board_pwd",board.getBoard_pwd());
                 simpleMultiPartRequest.addStringParam("date",board.getBoard_date());
-                simpleMultiPartRequest.addFile("board_image_path",picPath);
-                Log.i("picpathtt",picPath);
+                simpleMultiPartRequest.addFile("board_image_path",board.getBoard_imgpath());
+//                Log.i("picpathtt",realPicPath);
                 //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
                 RequestQueue requestQueue = Volley.newRequestQueue(BoardActivity.this);
                 //요청 객체를 우체통에 넣기
@@ -484,7 +473,21 @@ public class BoardActivity extends AppCompatActivity {
             }//run
         }.start();
     }//DBsaveBoardData
-
+//닫기
+    private void resetWrite(){
+        isupload=false;
+        picPath="";
+        btmapPicPath=null;
+        edit_msg.setText("");
+        edit_title.setText("");
+        repassword.setText("");
+        spinnerItems.clear();
+        iv_img.setImageBitmap(null);
+        iv_edit_img.setVisibility(View.GONE);
+        btn_upload_cancel.setVisibility(View.GONE);
+        spinner.setSelection(0);
+        edit.setVisibility(View.GONE);
+    }
     private void reLoaddata(){
         setData();
         getData();
@@ -492,9 +495,9 @@ public class BoardActivity extends AppCompatActivity {
     }
 
     private void getData(){
+
         boards = applicationClass.getBoards();
         spinnerHash = applicationClass.getBoard_instructor();
-
         state = applicationClass.getState();
         if(state.equals(USER)){
             userInfo= applicationClass.getUserInfo();
@@ -508,12 +511,7 @@ public class BoardActivity extends AppCompatActivity {
             level = 0;
             userInfo = null;
         }
-
-
     }//getData
-
-
-
 
     //서브밋전 확인
     private boolean isPasswordValid(String password) {
@@ -528,20 +526,15 @@ public class BoardActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
     }
 //사진관련
-    private Boolean isupload;
-    private void takePic(){
-        Intent intent=new Intent();
-        intent.setAction(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, PIC);
-    }
+    private Boolean isupload; //사진을 업로드 했으면 true
 
+    //디비에서 오는 이미지인지 핸드폰에서 오는 이미지인지 구별
     public void setPic(String pic) {
         picPath = pic;
         if (picPath != null && !(picPath.equals(""))) {
             Uri uRi = Uri.parse(picPath);
             ImageView iv;
-            if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);  } else{ iv =iv_title_img; }
+            if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);} else{ iv =iv_title_img; }
             Picasso.get().load(uRi)
                     .resize(400, 400).into(iv, new Callback() {
                 @Override
@@ -597,6 +590,13 @@ public class BoardActivity extends AppCompatActivity {
         }
     }
 //사진
+    private String realPicPath;
+    private void takePic(){
+        Intent intent=new Intent();
+        intent.setAction(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PIC);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -609,16 +609,17 @@ public class BoardActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
 
                     Uri uri = data.getData();
-                    picPath = getRealPathFromUri(uri);
+                    picPath = uri.toString();
+                    realPicPath = getRealPathFromUri(uri);
                     if (uri != null) {
                             ImageView iv;
-                            if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);  } else{ iv =iv_title_img; }
+                            if(isupload){iv = iv_img; btn_upload_cancel.setVisibility(View.VISIBLE);} else{ iv =iv_title_img; }
+
                             Picasso.get().load(uri)
                                     .resize(400, 400).into(iv, new Callback() {
                                 @Override
                                 public void onSuccess() {
                                 }
-
                                 @Override
                                 public void onError(Exception e) {
                                     Log.d("picPath ", "pIntor img: load failed " + picPath);
@@ -636,10 +637,20 @@ public class BoardActivity extends AppCompatActivity {
                         setPic(bm);
                     }
 
-
                 }//if
 
                 break;
+            case DATACHANGE:
+
+                //갤러리 화면에서 이미지를 선택하고 돌아왔는지 체크
+                //두 번째 파라미터 : resultCode
+                if (resultCode == RESULT_OK) {
+                    adapterBoard.notifyDataSetChanged();
+                }
+
+                break;
+
+
         }
     }
 
@@ -654,4 +665,85 @@ public class BoardActivity extends AppCompatActivity {
         cursor.close();
         return  result;
     }
+
+
+
+    //보드 정보 얻어오기
+    void DBgetBoardInfo(){
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_board_info_list.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(boards.size()>0) boards.clear();
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(response);
+                    String b_num;
+                    String board_user_email;
+                    String name;
+                    String class_code;
+                    String l_num;
+                    String board_title;
+                    String board_msg;
+                    String board_image_path="";
+                    String board_pwd;
+                    String board_cnt_reply;
+                    String date;
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        b_num = jsonObject.getString("b_num"); //보드 확인용
+                        board_user_email = jsonObject.getString("board_user_email");
+                        class_code = jsonObject.getString("class_code");
+                        l_num = jsonObject.getString("l_num");
+                        board_title = jsonObject.getString("board_title");
+                        board_msg = jsonObject.getString("board_msg");
+                        board_pwd = jsonObject.getString("board_pwd");
+                        board_cnt_reply = jsonObject.getString("board_cnt_reply");
+                        date = jsonObject.getString("date");
+                        name = jsonObject.getString("name");
+                        board_image_path = jsonObject.getString("board_image_path");
+                        boolean is_img;
+
+                        if(board_image_path!=null && board_image_path.length()>"uploads/20190310044626".length()) is_img = true;
+                        else is_img= false;
+                        board_image_path = baseImgePath + board_image_path;
+                        String spinner_title="";
+                        String spinner_l_name="";
+                        String spinner_l_project_title="";
+                        if(jsonObject.has("class_title")) { spinner_title =  jsonObject.getString("class_title"); }
+                        if(jsonObject.has("l_name")) {spinner_l_name =  jsonObject.getString("l_name"); }
+                        if(jsonObject.has("l_project_title")) {spinner_l_project_title =  jsonObject.getString("l_project_title"); }
+                        String spinnerTitle="";
+                        if(spinner_title == null || spinner_title.length() <= 0) spinnerTitle = "테스트용";
+                        else spinnerTitle = spinner_l_name + " / "+spinner_l_project_title + " / "+ spinner_title;
+                        SpinnerInfo spinnerInfo = new SpinnerInfo(l_num,class_code,spinnerTitle);
+
+                        Board board = new Board(b_num,board_title,date,"( "+board_cnt_reply+" ) ",is_img,board_image_path,board_title,name,spinnerInfo,board_msg,board_pwd,board_user_email);
+                        boards.add(board);
+
+                    }//for
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(BoardActivity.this);
+        requestQueue.add(stringRequest);
+        applicationClass.setBoards(boards);
+
+    }//DBgetBoardInfo
+
+
 }//onCreate

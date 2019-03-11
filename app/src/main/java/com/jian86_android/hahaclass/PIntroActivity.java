@@ -33,7 +33,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class PIntroActivity extends AppCompatActivity {
-    private static final int img_length =60;
+    private static final int img_length ="uploads/20190310031854".length();
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";

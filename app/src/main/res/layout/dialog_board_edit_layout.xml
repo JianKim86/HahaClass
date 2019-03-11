@@ -117,26 +117,33 @@
                 >
                 <Spinner
                     android:id="@+id/spinner"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
                     android:layout_gravity="center_vertical"
                     ></Spinner>
                 <TextView
-                    android:id="@+id/tv_instructor"
+                    android:id="@+id/tv_instructors"
                     android:layout_width="2dp"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:text=""
                     android:maxLines="1"
                     android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/tv_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text=""
+                    android:maxLines="1"
+                    android:layout_gravity="center_vertical"
+                    />
             </LinearLayout>
             <ImageView
                 android:id="@+id/btn_upload_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_gravity="right"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
                 android:textColor="@color/colorWhite"

@@ -67,7 +67,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity  {
 //implements LoaderCallbacks<Cursor>
     private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
-    private static final int img_length =60;
+    private static final int img_length ="uploads/20190310031854".length();
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
     private static final String HELLOLOGIN = "환영합니다!";

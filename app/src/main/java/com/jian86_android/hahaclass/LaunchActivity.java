@@ -1,12 +1,17 @@
 package com.jian86_android.hahaclass;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,18 +37,36 @@ public class LaunchActivity extends AppCompatActivity {
     Timer timer = new Timer();
     private static final int img_length =60;
     private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
+    private static final int IMAGEUPLOAD = 100;
     ApplicationClass applicationClass=null;
     //RelativeLayout relativeLayout;
     private ArrayList<Board>boards= new ArrayList<>();
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case IMAGEUPLOAD:
+                if(grantResults[0]== PackageManager.PERMISSION_DENIED){
+                    Toast.makeText(this, "외부저장소 사용 불가 \n 이미지 저장 불가", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
+    }//onRequestPermissionsResult
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_launch);
+        //외부저장소에 있는 이미지 파일을 서버로 보내기 위한 퍼미션
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},IMAGEUPLOAD);
+            }
+        }
+
+
+
         binding.setLaunch(this);
-//        setContentView(R.layout.activity_launch);
-//        relativeLayout =findViewById(R.id.relativeLayout);
-//        Animation animation = AnimationUtils.loadAnimation(LaunchActivity.this,R.anim.appear_logo);
-//        binding.layoutRelative.startAnimation(animation);
         Glide.with(this).load(R.drawable.loding).into(binding.ivLoding);
 
         applicationClass = (ApplicationClass)getApplicationContext();
@@ -198,6 +221,7 @@ public class LaunchActivity extends AppCompatActivity {
                                 }
                                 applicationClass.setBoard_instructor(board_write_spinner); //스피너 리스트 추가
                             }//for
+                            //게시판
                             DBgetBoardInfo();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -225,7 +249,7 @@ public class LaunchActivity extends AppCompatActivity {
                 JSONArray jsonArray = null;
                 try {
                     jsonArray = new JSONArray(response);
-
+                    String b_num;
                     String board_user_email;
                     String name;
                     String class_code;
@@ -238,6 +262,7 @@ public class LaunchActivity extends AppCompatActivity {
                     String date;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        b_num = jsonObject.getString("b_num"); //보드 확인용
                         board_user_email = jsonObject.getString("board_user_email");
                         class_code = jsonObject.getString("class_code");
                         l_num = jsonObject.getString("l_num");
@@ -249,7 +274,8 @@ public class LaunchActivity extends AppCompatActivity {
                         name = jsonObject.getString("name");
                         board_image_path = jsonObject.getString("board_image_path");
                         boolean is_img;
-                        if(board_image_path!=null && board_image_path.length()>img_length) is_img = true;
+
+                        if(board_image_path!=null && board_image_path.length()>"uploads/20190310044626".length()) is_img = true;
                         else is_img= false;
                         board_image_path = baseImgePath + board_image_path;
                         String spinner_title="";
@@ -263,7 +289,7 @@ public class LaunchActivity extends AppCompatActivity {
                         else spinnerTitle = spinner_l_name + " / "+spinner_l_project_title + " / "+ spinner_title;
                         SpinnerInfo spinnerInfo = new SpinnerInfo(l_num,class_code,spinnerTitle);
 
-                        Board board = new Board(board_title,date,"( "+board_cnt_reply+" ) ",is_img,board_image_path,board_title,name,spinnerInfo,board_msg,board_pwd,board_user_email);
+                        Board board = new Board(b_num,board_title,date,"( "+board_cnt_reply+" ) ",is_img,board_image_path,board_title,name,spinnerInfo,board_msg,board_pwd,board_user_email);
                         boards.add(board);
 
                     }//for

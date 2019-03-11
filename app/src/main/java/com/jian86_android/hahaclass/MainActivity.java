@@ -53,7 +53,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity  {
     private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
-    private static final int img_length =60;
+    private static final int img_length ="uploads/20190310031854".length();
+
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
