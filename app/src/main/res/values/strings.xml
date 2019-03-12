@@ -49,8 +49,8 @@
     <string name="title_activity_apply">ApplyActivity</string>
 
 
-    <string name="title_setting_myclass">내 강의 확인</string>
-    <string name="title_setting_mylog">내 활동 Log 확인</string>
+    <string name="title_setting_apply_class">신청 강의 리스트</string>
+    <string name="title_setting_my_class">내 강의 리스트</string>
 
 
 </resources>

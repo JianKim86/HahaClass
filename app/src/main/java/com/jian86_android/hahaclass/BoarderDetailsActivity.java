@@ -331,13 +331,15 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         SimpleMultiPartRequest simpleMultiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(!is_delete && isupload) {real_img_Path[0][0] = response;
-                    Log.i("real_img_Path",real_img_Path[0][0]);
-                   applicationClass.getBoards().get(position).setImg(true); applicationClass.getBoards().get(position).setBoard_imgpath(baseImgePath+real_img_Path[0][0]); //실제 경로 주소를 담음
-                }
 
-                if(is_delete) { applicationClass.getBoards().remove(position); finish(); }
+                        Log.i("Logresponn",response);
+                if(is_delete) { applicationClass.getBoards().remove(position);  setResult(RESULT_OK, getintent); finish(); }
                 else {
+                    if(!is_delete && isupload) {real_img_Path[0][0] = response;
+                        Log.i("real_img_Path",real_img_Path[0][0]);
+                        applicationClass.getBoards().get(position).setImg(true); applicationClass.getBoards().get(position).setBoard_imgpath(baseImgePath+real_img_Path[0][0]); //실제 경로 주소를 담음
+
+                    }
                     applicationClass.getBoards().get(position).setBoard_title(changetitle);
                     applicationClass.getBoards().get(position).setBoard_msg(changemsg);
                     edit.setVisibility(View.GONE);

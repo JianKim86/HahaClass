@@ -443,11 +443,11 @@ public class BoardActivity extends AppCompatActivity {
                 SimpleMultiPartRequest simpleMultiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        new AlertDialog.Builder(BoardActivity.this).setMessage(response).show();
+                        new AlertDialog.Builder(BoardActivity.this).setMessage("성공하였습니다").show();
                         //확인용 창 띄우기 성공하면 성공맨트 돌려받음
-
-                        //applicationClass.getBoards().add(board);
-                        DBgetBoardInfo();
+                        board.setBoard_imgpath(baseImgePath+response);
+                        applicationClass.getBoards().add(board);
+                        //DBgetBoardInfo();
                         resetWrite();// 리셋
                         reLoaddata();// 리로드
                     }
@@ -667,83 +667,83 @@ public class BoardActivity extends AppCompatActivity {
     }
 
 
-
-    //보드 정보 얻어오기
-    void DBgetBoardInfo(){
-        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_board_info_list.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if(boards.size()>0) boards.clear();
-                JSONArray jsonArray = null;
-                try {
-                    jsonArray = new JSONArray(response);
-                    String b_num;
-                    String board_user_email;
-                    String name;
-                    String class_code;
-                    String l_num;
-                    String board_title;
-                    String board_msg;
-                    String board_image_path="";
-                    String board_pwd;
-                    String board_cnt_reply;
-                    String date;
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        b_num = jsonObject.getString("b_num"); //보드 확인용
-                        board_user_email = jsonObject.getString("board_user_email");
-                        class_code = jsonObject.getString("class_code");
-                        l_num = jsonObject.getString("l_num");
-                        board_title = jsonObject.getString("board_title");
-                        board_msg = jsonObject.getString("board_msg");
-                        board_pwd = jsonObject.getString("board_pwd");
-                        board_cnt_reply = jsonObject.getString("board_cnt_reply");
-                        date = jsonObject.getString("date");
-                        name = jsonObject.getString("name");
-                        board_image_path = jsonObject.getString("board_image_path");
-                        boolean is_img;
-
-                        if(board_image_path!=null && board_image_path.length()>"uploads/20190310044626".length()) is_img = true;
-                        else is_img= false;
-                        board_image_path = baseImgePath + board_image_path;
-                        String spinner_title="";
-                        String spinner_l_name="";
-                        String spinner_l_project_title="";
-                        if(jsonObject.has("class_title")) { spinner_title =  jsonObject.getString("class_title"); }
-                        if(jsonObject.has("l_name")) {spinner_l_name =  jsonObject.getString("l_name"); }
-                        if(jsonObject.has("l_project_title")) {spinner_l_project_title =  jsonObject.getString("l_project_title"); }
-                        String spinnerTitle="";
-                        if(spinner_title == null || spinner_title.length() <= 0) spinnerTitle = "테스트용";
-                        else spinnerTitle = spinner_l_name + " / "+spinner_l_project_title + " / "+ spinner_title;
-                        SpinnerInfo spinnerInfo = new SpinnerInfo(l_num,class_code,spinnerTitle);
-
-                        Board board = new Board(b_num,board_title,date,"( "+board_cnt_reply+" ) ",is_img,board_image_path,board_title,name,spinnerInfo,board_msg,board_pwd,board_user_email);
-                        boards.add(board);
-
-                    }//for
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(BoardActivity.this);
-        requestQueue.add(stringRequest);
-        applicationClass.setBoards(boards);
-
-    }//DBgetBoardInfo
+//
+//    //보드 정보 얻어오기
+//    void DBgetBoardInfo(){
+//        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_board_info_list.php";
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                if(boards.size()>0) boards.clear();
+//                JSONArray jsonArray = null;
+//                try {
+//                    jsonArray = new JSONArray(response);
+//                    String b_num;
+//                    String board_user_email;
+//                    String name;
+//                    String class_code;
+//                    String l_num;
+//                    String board_title;
+//                    String board_msg;
+//                    String board_image_path="";
+//                    String board_pwd;
+//                    String board_cnt_reply;
+//                    String date;
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                        b_num = jsonObject.getString("b_num"); //보드 확인용
+//                        board_user_email = jsonObject.getString("board_user_email");
+//                        class_code = jsonObject.getString("class_code");
+//                        l_num = jsonObject.getString("l_num");
+//                        board_title = jsonObject.getString("board_title");
+//                        board_msg = jsonObject.getString("board_msg");
+//                        board_pwd = jsonObject.getString("board_pwd");
+//                        board_cnt_reply = jsonObject.getString("board_cnt_reply");
+//                        date = jsonObject.getString("date");
+//                        name = jsonObject.getString("name");
+//                        board_image_path = jsonObject.getString("board_image_path");
+//                        boolean is_img;
+//
+//                        if(board_image_path!=null && board_image_path.length()>"uploads/20190310044626".length()) is_img = true;
+//                        else is_img= false;
+//                        board_image_path = baseImgePath + board_image_path;
+//                        String spinner_title="";
+//                        String spinner_l_name="";
+//                        String spinner_l_project_title="";
+//                        if(jsonObject.has("class_title")) { spinner_title =  jsonObject.getString("class_title"); }
+//                        if(jsonObject.has("l_name")) {spinner_l_name =  jsonObject.getString("l_name"); }
+//                        if(jsonObject.has("l_project_title")) {spinner_l_project_title =  jsonObject.getString("l_project_title"); }
+//                        String spinnerTitle="";
+//                        if(spinner_title == null || spinner_title.length() <= 0) spinnerTitle = "테스트용";
+//                        else spinnerTitle = spinner_l_name + " / "+spinner_l_project_title + " / "+ spinner_title;
+//                        SpinnerInfo spinnerInfo = new SpinnerInfo(l_num,class_code,spinnerTitle);
+//
+//                        Board board = new Board(b_num,board_title,date,"( "+board_cnt_reply+" ) ",is_img,board_image_path,board_title,name,spinnerInfo,board_msg,board_pwd,board_user_email);
+//                        boards.add(board);
+//
+//                    }//for
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//
+//
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(BoardActivity.this);
+//        requestQueue.add(stringRequest);
+//        applicationClass.setBoards(boards);
+//
+//    }//DBgetBoardInfo
 
 
 }//onCreate

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    >
+    <TextView
+        android:id="@+id/tv_apply_cnt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="신청자 : 4"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_gravity="center"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019.10.22~2019.12.11"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:id="@+id/tv_d_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="d-day : 4"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="하박수웃음지도사 12주 프로그램"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        />
+
+
+        <Button
+            android:layout_marginTop="6dp"
+            android:id="@+id/btn_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="신청자 확인"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/btn_str"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="2dp"
+            />
+
+</LinearLayout>

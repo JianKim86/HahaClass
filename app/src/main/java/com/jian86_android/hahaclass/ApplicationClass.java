@@ -29,7 +29,32 @@ public class ApplicationClass extends Application {
     public String board_imgpath; //기본 이미지
     public HashMap<String,SpinnerInfo > board_instructor= new HashMap<>();//instructor_no, instructor title+subtitle
 
+    //세팅로그에서 보는 applyClass 리스트용
+    public  ArrayList<Schedule> myApplyClass = new ArrayList<>();
+    public  ArrayList<RecivedApplicant> myReceivedClass = new ArrayList<>();
+
+
     //게터 셋터
+
+    public void setApplySchedule(HashSet<ApplyClassInfo> applySchedule) {
+        this.applySchedule = applySchedule;
+    }
+
+    public ArrayList<RecivedApplicant> getMyReceivedClass() {
+        return myReceivedClass;
+    }
+
+    public void setMyReceivedClass(ArrayList<RecivedApplicant> myReceivedClass) {
+        this.myReceivedClass = myReceivedClass;
+    }
+
+    public ArrayList<Schedule> getMyApplyClass() {
+        return myApplyClass;
+    }
+
+    public void setMyApplyClass(ArrayList<Schedule> myApplyClass) {
+        this.myApplyClass = myApplyClass;
+    }
 
     public HashMap<String, SpinnerInfo> getBoard_instructor() {
         return board_instructor;
