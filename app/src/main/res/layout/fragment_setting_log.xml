@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/FragTeme"
-    android:orientation="vertical"
-    >
-    <ScrollView
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_weight="1"
-
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:orientation="vertical">
-            <ListView
-                android:id="@+id/lv_apply_list"
-                android:layout_gravity="top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
-            <ListView
-                android:id="@+id/lv_my_class_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
-
-        </LinearLayout>
-
-    </ScrollView>
-
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:orientation="vertical">
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
+    <!--
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/lv_apply_list"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+    <ListView
+        android:id="@+id/lv_my_class_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+
+    </LinearLayout>
+    -->

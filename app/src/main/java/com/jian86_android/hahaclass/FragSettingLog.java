@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,10 +38,14 @@ public class FragSettingLog extends Fragment {
     String state,name,email,phone,pass,img;
     int level;
 
-    private ListView lv_apply_list,lv_my_class_list; //lv_my_class_list 레벨 2
-    private View header_apply,header_my_class;// 내가 신청한 리스트 해더 , 내 강의 리스트 헤더
-    private TextView tv_title_apply,tv_title_myclass;
-    private LinearLayout empty_list1,empty_list2;
+    private RecyclerView recyclerView;
+    //private ListView lv_apply_list,lv_my_class_list; //lv_my_class_list 레벨 2
+    //private View header_apply,header_my_class;// 내가 신청한 리스트 해더 , 내 강의 리스트 헤더
+    //private TextView tv_title_apply,tv_title_myclass;
+    //private LinearLayout empty_list1,empty_list2;
+
+
+
     private HashMap<String,Schedule> applyClasses = new HashMap<>(); //서버에서 나의 apply 를 담음
     private  HashMap<String,RecivedApplicant> received_classes = new HashMap<>(); //서버에서 내 강의를 신청한 사람들의 정보를 담음
 
@@ -53,8 +58,8 @@ public class FragSettingLog extends Fragment {
         View view = inflater.inflate(R.layout.fragment_setting_log,container,false);
         context = container.getContext();
         applicationClass = (ApplicationClass) (context.getApplicationContext());
-        header_apply = inflater.inflate(R.layout.psetting_log_list_header, null, false);
-        header_my_class = inflater.inflate(R.layout.psetting_log_list_header, null, false); //레벨 2용
+      //  header_apply = inflater.inflate(R.layout.psetting_log_list_header, null, false);
+      //  header_my_class = inflater.inflate(R.layout.psetting_log_list_header, null, false); //레벨 2용
         getData();
         return view;
     }
@@ -62,16 +67,16 @@ public class FragSettingLog extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //리스트뷰
 
-        lv_apply_list =view.findViewById(R.id.lv_apply_list);
-        lv_my_class_list =view.findViewById(R.id.lv_my_class_list);
-        tv_title_apply= header_apply.findViewById(R.id.tv_header);
-
-        tv_title_myclass= header_my_class.findViewById(R.id.tv_header);
-        lv_apply_list.addHeaderView(header_apply);
-        lv_my_class_list.addHeaderView(header_my_class);
-        tv_title_apply.setText(context.getResources().getString(R.string.title_setting_apply_class));
-        tv_title_myclass.setText(context.getResources().getString(R.string.title_setting_my_class));
-
+//        lv_apply_list =view.findViewById(R.id.lv_apply_list);
+//        lv_my_class_list =view.findViewById(R.id.lv_my_class_list);
+//        tv_title_apply= header_apply.findViewById(R.id.tv_header);
+//
+//        tv_title_myclass= header_my_class.findViewById(R.id.tv_header);
+//        lv_apply_list.addHeaderView(header_apply);
+//        lv_my_class_list.addHeaderView(header_my_class);
+//        tv_title_apply.setText(context.getResources().getString(R.string.title_setting_apply_class));
+//        tv_title_myclass.setText(context.getResources().getString(R.string.title_setting_my_class));
+        recyclerView = view.findViewById(R.id.recycle_view);
         setData(); // header 달기 , adapter 연결
     }
     ArrayList<Schedule> arrApplylist = new ArrayList<>();
@@ -80,25 +85,25 @@ public class FragSettingLog extends Fragment {
     void setData(){
      //   mMyAdapter = new AdapterSettingApplyClass (applyClasses, context);
         //adapterclass MyApplyclass 추가 필요
-        lv_apply_list.addHeaderView(header_apply);
-        if(userInfo.getLevel()>1) lv_my_class_list.addHeaderView(header_my_class); //일반 레벨은 안보임
+//        lv_apply_list.addHeaderView(header_apply);
+//        if(userInfo.getLevel()>1) lv_my_class_list.addHeaderView(header_my_class); //일반 레벨은 안보임
         /** 서버에서 읽어온 정보를 컬랙션에 Schedule로 담고 리스트뷰에 어댑터로 등록 */
 
 
         AdapterSettingLogApply mMyAdapter = new AdapterSettingLogApply(arrApplylist,context);
         /**서버에서 읽어온 정보를 컬랙션에 RecivedApplicant로  담고 리스트 뷰에 어댑터로 등록*/
         AdapterSettingLogRecivedApplicant recivedApplicant = new AdapterSettingLogRecivedApplicant(arrRecivedlist,context);
-        //어뎁터 연결
-        lv_apply_list.setAdapter(mMyAdapter);
-        lv_my_class_list.setAdapter(recivedApplicant);
-        empty_list2 = header_apply.findViewById(R.id.empty_list);
-        empty_list1 =header_my_class.findViewById(R.id.empty_list);
+//        //어뎁터 연결
+//        lv_apply_list.setAdapter(mMyAdapter);
+//        lv_my_class_list.setAdapter(recivedApplicant);
+//        empty_list2 = header_apply.findViewById(R.id.empty_list);
+//        empty_list1 =header_my_class.findViewById(R.id.empty_list);
 
-        if(arrRecivedlist.size()<=0) empty_list2.setVisibility(View.GONE);
+//        if(arrRecivedlist.size()<=0) empty_list2.setVisibility(View.GONE);
         //empty_message
-        else empty_list2.setVisibility(View.VISIBLE);
-        if(arrApplylist.size()<=0) empty_list1.setVisibility(View.GONE);
-        else empty_list1.setVisibility(View.VISIBLE);
+//        else empty_list2.setVisibility(View.VISIBLE);
+//        if(arrApplylist.size()<=0) empty_list1.setVisibility(View.GONE);
+//        else empty_list1.setVisibility(View.VISIBLE);
 
      //   setListViewHeightBasedOnChildren(lv_my_class_list);
      //   setListViewHeightBasedOnChildren(lv_apply_list);
