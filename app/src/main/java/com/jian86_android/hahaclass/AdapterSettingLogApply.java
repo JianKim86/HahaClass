@@ -112,7 +112,7 @@ public class AdapterSettingLogApply extends BaseAdapter {
             long sCalDate = nDay.getTime() - sDay.getTime(); //음수면 아직 강의 전임 d_day 보내기
 
             if (eCalDate>0) { returnValue = "강의종료";} //강의 날짜 지남
-            else if(sCalDate>=0||eCalDate<=0){returnValue = "진행중인 강의";}
+            else if(sCalDate>=0 && eCalDate<=0){returnValue = "진행중인 강의";}
             else {
                 long calDateDays = sCalDate / (24 * 60 * 60 * 1000); //날짜 차이를 날수로
                 calDateDays = Math.abs(calDateDays);

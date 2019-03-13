@@ -4,9 +4,6 @@
     android:theme="@style/FragTeme"
     android:orientation="vertical"
     >
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -15,6 +12,19 @@
                 android:id="@+id/lv_apply_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></ListView>
+            <LinearLayout
+                android:id="@android:id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="120dip"
+                android:gravity="center_horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="내용이 없습니다"
+                    />
+            </LinearLayout>
             <ListView
                 android:id="@+id/lv_my_class_list"
                 android:layout_width="match_parent"
@@ -34,5 +44,5 @@
             </LinearLayout>
         </LinearLayout>
 
-    </ScrollView>
+
 </LinearLayout>

@@ -423,6 +423,12 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
 
+
+
+
+
+
+
 //액티비티 이동
     public void moveActivity(int state, UserInfo userInfo){
 

@@ -120,6 +120,12 @@ public class Schedule {
         setDate(start+"~"+end);
     }
 
-
-
+    public Schedule(String l_num, String projectTitle, String start, String end, String class_code) { //apply용
+        this.l_num = l_num;
+        this.projectTitle = projectTitle;
+        this.start = start;
+        this.end = end;
+        this.class_code = class_code;
+        setDate(start+"~"+end);
+    }
 }

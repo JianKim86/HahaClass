@@ -1,6 +1,7 @@
 package com.jian86_android.hahaclass;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,37 +56,26 @@ public class AdapterSettingLogRecivedApplicant extends BaseAdapter {
 
 
         /* 각 리스트에 뿌려줄 아이템을 받아오는데 mMyItem 재활용 */
-//        Schedule myItem = (Schedule) getItem(position);
+        RecivedApplicant myItem = (RecivedApplicant) getItem(position);
 
         /* 각 위젯에 세팅된 아이템을 뿌려준다 */
 //        String path = myItem.getProjectImgPath();
 
-//        tv_date.setText(myItem.getDate());
-//        String d_day= checkDate(myItem.getStart(), myItem.getEnd());
+        tv_date.setText(myItem.getDate());
+        String d_day ="";
+
+        if(items.size()>0){ d_day= checkDate(myItem.getStart(), myItem.getEnd());
+            Log.i("sdsdsds",myItem.getStart()+"**"+ myItem.getEnd());
+        }
         //현재 날짜와 비교 끝날보다 d_day가 지났으면 강의가 끝났음 을 알림
         //강의시작 날짜 보다 적으면 d_day 설정
         //강의 중이면 진행중 표시
-
-//        tv_d_day.setText(d_day);
-//        tv_title.setText(myItem.getProjectTitle());
+        tv_d_day.setText(d_day);
+        tv_title.setText(myItem.getProjectTitle());
+        tv_date.setText(myItem.getDate());
 
         //TODO : btn 버튼
-//        final int i = position;
-//        btn_apply.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//                    Intent intent = new Intent(context, ApplyActivity.class);
-//                    intent.putExtra("position", i);//스케쥴을 담당할 포지션을 보냄
-//                    context.startActivity(intent);
-//
-//
-//
-//
-//              //  Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
 
         return convertView;
     }
@@ -106,7 +96,7 @@ public class AdapterSettingLogRecivedApplicant extends BaseAdapter {
             long sCalDate = nDay.getTime() - sDay.getTime(); //음수면 아직 강의 전임 d_day 보내기
 
             if (eCalDate>0) { returnValue = "강의종료";} //강의 날짜 지남
-            else if(sCalDate>=0||eCalDate<=0){returnValue = "진행중인 강의";}
+            else if(sCalDate>=0 && eCalDate<=0){returnValue = "진행중인 강의";}
             else {
                 long calDateDays = sCalDate / (24 * 60 * 60 * 1000); //날짜 차이를 날수로
                 calDateDays = Math.abs(calDateDays);

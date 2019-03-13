@@ -11,8 +11,6 @@ public class ItemInstructor {
     private ArrayList<Schedule>schedules;
 
 
-
-
     public ArrayList<Schedule> getSchedules() {
         return schedules;
     }

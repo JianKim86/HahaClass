@@ -26,11 +26,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
     private ApplicationClass applicationClass;
@@ -151,8 +163,13 @@ public class SettingActivity extends AppCompatActivity {
         } else {
             userInfo = null;
         }
+        //데이터 얻어오기
+        DBsetData();
+        if(userInfo.getLevel()>1) DBsetMyClassData();
+
     }
     public void setUpNav(){
+        //데이터 받기
         getIntentData();
       // Toast.makeText(applicationClass, "2::"+applicationClass.getUserInfo().getImagePath(), Toast.LENGTH_SHORT).show();
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
@@ -206,7 +223,149 @@ public class SettingActivity extends AppCompatActivity {
         //TODO: 프레그먼트 이동
     }
 
+    private HashMap<String,Schedule>applyClasses = new HashMap<String,Schedule>(); //내신청강의 담기
+    private  HashMap<String,RecivedApplicant> recivedclasses = new HashMap<>();
+//데이터 얻어오기
+    private void DBsetData(){
+        /**서버에 담을때 스케쥴로 어레이에 담음 */
+        /**DB: class_apply_list에서 filter : userEmail -> l_num과 class_code를 얻어 DB: class_list에서 정보 검색하여 schadule에 담음*/
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_apply_class_list.php";
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
+                    JSONArray jsonArray = null;
+                    Log.i("gresponsesg",response);
+                    try {
+                        jsonArray = new JSONArray(response);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                            if (jsonObject.has("my_apply_class_info")) {
+                                JSONObject jsonkeyArray = jsonObject.getJSONObject("my_apply_class_info");
+                                if (jsonkeyArray != null) {
+                                    //  applicationClass.getMyApplyClasses().clear();
+                                    for (int y = 0; y < jsonkeyArray.length(); y++) {
+                                        JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
+                                        String l_num = jsonObject1.getString("l_num");
+                                        String class_code = jsonObject1.getString("class_code");
+                                        String class_title = jsonObject1.getString("class_title");
+                                        String 	start_day = jsonObject1.getString("start_day");
+                                        String 	finish_day = jsonObject1.getString("finish_day");
+                                        Schedule applyClassInfo = new Schedule(l_num,class_title,start_day,finish_day,class_code);
+                                        applyClasses.put(class_code,applyClassInfo);
+
+                                    }//for
+                                }//if
+                            }//if
+
+                            //내가 신청한 강의에 담음
+                            applicationClass.setMyApplyClasses(applyClasses);
+                            // Log.i("gstts",applicationClass.getMyApplyClasses().size()+"");
+                        }//for
+                        //log: my_apply
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("apply_user_email",userInfo.getEmail());
+                if(userInfo.getLevel()>1) { params.put("l_num",userInfo.getL_num()); }
+                return params;
+            }
+        };
+
+        //우체통
+        RequestQueue requestQueue = Volley.newRequestQueue(SettingActivity.this);
+        requestQueue.add(jsonArrayRequest);
+    }//DBsetData
+   private void DBsetMyClassData(){
+       /**서버에 담을때 스케쥴로 어레이에 담음 */
+       String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_my_class_list.php";
+       StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+           @Override
+           public void onResponse(String response) {
+            JSONArray jsonArray = null;
+               Log.i("gresponsesg",response);
+               try {
+                   jsonArray = new JSONArray(response);
+
+                   for (int i = 0; i < jsonArray.length(); i++) {
+                       JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                       if (jsonObject.has("r_class_info")) {
+                           JSONObject jsonkeyArray = jsonObject.getJSONObject("r_class_info");
+                           if (jsonkeyArray != null) {
+                               //  applicationClass.getMyApplyClasses().clear();
+                               for (int y = 0; y < jsonkeyArray.length(); y++) {
+                                   JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
+                                   String l_num = jsonObject1.getString("l_num");
+                                    String class_code = jsonObject1.getString("class_code");
+                                    String class_title = jsonObject1.getString("class_title");
+                                    String 	start_day = jsonObject1.getString("start_day");
+                                    String 	finish_day = jsonObject1.getString("finish_day");
+
+                                    RecivedApplicant recivedApply = new RecivedApplicant(start_day+"~"+finish_day,class_title);
+                                    recivedApply.setL_num(l_num);
+                                    recivedApply.setClass_code(class_code);
+                                    recivedApply.setStart(start_day);
+                                    recivedApply.setEnd(finish_day);
+
+                                     recivedclasses.put(class_code,recivedApply);
+
+
+                               }//for
+                           }//if
+                       }//if
+
+                       //내가 신청한 강의에 담음
+
+                       applicationClass.setMyReceivedClass(recivedclasses);
+                   }//for
+                   //log: my_apply
+
+
+               } catch (JSONException e) {
+                   e.printStackTrace();
+               }
+
+           }
+       }, new Response.ErrorListener() {
+           @Override
+           public void onErrorResponse(VolleyError error) {
+
+           }
+       }){
+           @Override
+           protected Map<String, String> getParams() {
+               // Posting parameters to login url
+               Map<String, String> params = new HashMap<String, String>();
+               params.put("apply_user_email",userInfo.getEmail());
+               params.put("l_num",userInfo.getL_num());
+               return params;
+           }
+       };
+
+       //우체통
+       RequestQueue requestQueue = Volley.newRequestQueue(SettingActivity.this);
+       requestQueue.add(jsonArrayRequest);
+   }//DBsetMyClassData
+
+
+//사진
     void takePic(){
 
         Intent intent=new Intent();
@@ -245,8 +404,6 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }//onActivityResult
-
-
 
     //이미지 절대경로로 바꾸기
     String getRealPathFromUri(Uri uri){

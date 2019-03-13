@@ -30,8 +30,8 @@ public class ApplicationClass extends Application {
     public HashMap<String,SpinnerInfo > board_instructor= new HashMap<>();//instructor_no, instructor title+subtitle
 
     //세팅로그에서 보는 applyClass 리스트용
-    public  ArrayList<Schedule> myApplyClass = new ArrayList<>();
-    public  ArrayList<RecivedApplicant> myReceivedClass = new ArrayList<>();
+    public  HashMap<String,Schedule> myApplyClasses = new HashMap<>();
+    public  HashMap<String, RecivedApplicant> myReceivedClass = new HashMap<>();
 
 
     //게터 셋터
@@ -40,20 +40,20 @@ public class ApplicationClass extends Application {
         this.applySchedule = applySchedule;
     }
 
-    public ArrayList<RecivedApplicant> getMyReceivedClass() {
+    public  HashMap<String, RecivedApplicant> getMyReceivedClass() {
         return myReceivedClass;
     }
 
-    public void setMyReceivedClass(ArrayList<RecivedApplicant> myReceivedClass) {
+    public void setMyReceivedClass( HashMap<String, RecivedApplicant> myReceivedClass) {
         this.myReceivedClass = myReceivedClass;
     }
 
-    public ArrayList<Schedule> getMyApplyClass() {
-        return myApplyClass;
+    public  HashMap<String,Schedule> getMyApplyClasses() {
+        return myApplyClasses;
     }
 
-    public void setMyApplyClass(ArrayList<Schedule> myApplyClass) {
-        this.myApplyClass = myApplyClass;
+    public void setMyApplyClasses(HashMap<String,Schedule> myApplyClasses) {
+        this.myApplyClasses = myApplyClasses;
     }
 
     public HashMap<String, SpinnerInfo> getBoard_instructor() {
