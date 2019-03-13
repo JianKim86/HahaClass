@@ -89,61 +89,7 @@ public class PIntroActivity extends AppCompatActivity {
 
        // navMenu.setNavigationItemSelectedListener(this);
 
-        View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
-        //View nav_header_view = navigationView.getHeaderView(0);
-       // String name = getintent.getBundleExtra("Bundle").getString("Name");
-        TextView nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.tv_name);
-        ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
-        if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
-            else nav_header_id_text.setText(name);
-
-//        if(state.equals(USER)){img = applicationClass.getUserInfo().getImagePath();
-//            Toast.makeText(applicationClass, "pIntor img :"+ img, Toast.LENGTH_SHORT).show();
-//            Log.d("picPath ", "pIntor img:"+img);
-//        }
-
-        if(img != null && img.length() != img_length) {
-            Uri uRi = Uri.parse(img);
-
-//            Picasso picasso = new Picasso.Builder(PIntroActivity.this).listener(new Picasso.Listener(){
-//                @Override
-//                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-//                    exception.printStackTrace();
-//                    Log.d("picPath ", "pIntor img: load failed "+ img);
-//                }
-//            }).build();
-//            picasso.load(uRi).fit().centerCrop().into(profile_image);
-                Picasso.get().load(uRi)
-                        .resize(400,400).centerCrop().into(profile_image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Log.d("picPath ", "pIntor img: load failed "+ img);
-                    }
-                });
-        }
-        else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
-
-
-        navMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                //Todo: 아이탬 연결
-                    case R.id.item1 :goSetting(0);break;
-                    case R.id.item2 :goSetting(1);break;
-                    case R.id.item3 :goSetting(2);break;
-                    case R.id.item4 :goSetting(3);break;
-
-                }//switch
-                drawerLayout.closeDrawer(navMenu,true);
-                return false;
-            }//onNavigationItemSelected
-        });//listener
+        navSetting();
         dataSetting();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -176,7 +122,51 @@ public class PIntroActivity extends AppCompatActivity {
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록
         drawerLayout.addDrawerListener(drawerToggle);
     }//onCreate
+    View nav_header_view=null;
+    private  void navSetting(){
 
+        if (nav_header_view == null) nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
+        //View nav_header_view = navigationView.getHeaderView(0);
+        // String name = getintent.getBundleExtra("Bundle").getString("Name");
+        TextView nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.tv_name);
+        ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
+
+        if(state.equals(CUSTOMER)) nav_header_id_text.setText(CUSTOMER);
+        else nav_header_id_text.setText(name);
+
+        if(img != null && img.length() != img_length) {
+            Uri uRi = Uri.parse(img);
+            Picasso.get().load(uRi)
+                    .resize(400,400).centerCrop().into(profile_image, new Callback() {
+                @Override
+                public void onSuccess() {
+                }
+                @Override
+                public void onError(Exception e) {
+                    Log.d("picPath ", "pIntor img: load failed "+ img);
+                }
+            });
+        }
+        else{Glide.with(this).load(R.drawable.ic_launcher_background).into(profile_image);}
+
+
+        navMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    //Todo: 아이탬 연결
+                    case R.id.item1 :goSetting(0);break;
+                    case R.id.item2 :goSetting(1);break;
+                    case R.id.item3 :goSetting(2);break;
+                    case R.id.item4 :goSetting(3);break;
+
+                }//switch
+                drawerLayout.closeDrawer(navMenu,true);
+                return false;
+            }//onNavigationItemSelected
+        });//listener
+
+    }
 
     //토글 버튼과 drawer 연결
     //엑티비티 입장에서 토글버튼도 액션바 메뉴 인가 느낌
@@ -368,7 +358,8 @@ public class PIntroActivity extends AppCompatActivity {
         Intent intent= new Intent(PIntroActivity.this,SettingActivity.class);
             intent.putExtra("Item",item);
             intent.putExtra("stage",1);
-        startActivity(intent);
+            startActivity(intent);
+
         }else {
             //TODO::dial 회원만 가능
             String msg =getString(R.string.cont_use_custom);
@@ -390,5 +381,10 @@ public class PIntroActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getIntentData();
+        navSetting();
+    }
 }//PIntroActivity

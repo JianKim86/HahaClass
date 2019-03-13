@@ -170,8 +170,9 @@ public class BoardActivity extends AppCompatActivity {
 
 
     }//onCreate
+    View nav_header_view =null;
     private void navSetting(){
-        View nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
+        if (nav_header_view == null) nav_header_view = navMenu.inflateHeaderView(R.layout.nav_header);
         TextView nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.tv_name);
         ImageView profile_image =(ImageView) nav_header_view.findViewById(R.id.profile_image);
         if(state.equals(CUSTOMER))nav_header_id_text.setText(CUSTOMER);
@@ -746,4 +747,11 @@ public class BoardActivity extends AppCompatActivity {
 //    }//DBgetBoardInfo
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+        navSetting();
+    }
 }//onCreate
+

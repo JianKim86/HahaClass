@@ -1,5 +1,6 @@
 package com.jian86_android.hahaclass;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +19,8 @@ public class AdapterSettingLogRecivedApplicant extends BaseAdapter {
     ArrayList<RecivedApplicant> items;
     Context context;
     ApplicationClass applicationClass;
-
+    ArrayList<ApplyClassInfo>applyClassInfos;
+    DialogSettingLogMyClass customDialog;
     public AdapterSettingLogRecivedApplicant(ArrayList<RecivedApplicant> items, Context context) {
         this.items = items;
         this.context = context;
@@ -44,19 +46,21 @@ public class AdapterSettingLogRecivedApplicant extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.psetting_log_apply_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.psetting_log_my_class_list_item, parent, false);
         }
+
 
         /* 'listview_custom'에 정의된 위젯에 대한 참조 획득 */
         TextView tv_date = (TextView) convertView.findViewById(R.id.tv_date) ;
+        TextView tv_apply_cnt = (TextView) convertView.findViewById(R.id.tv_apply_cnt) ;
         TextView tv_d_day = (TextView) convertView.findViewById(R.id.tv_d_day) ;
         TextView tv_title = (TextView) convertView.findViewById(R.id.tv_title) ;
+
         Button btn_desc = (Button)convertView.findViewById(R.id.btn_desc);
-        Button btn_cancel_or_modify = (Button)convertView.findViewById(R.id.btn_cancel_or_modify);
 
 
         /* 각 리스트에 뿌려줄 아이템을 받아오는데 mMyItem 재활용 */
-        RecivedApplicant myItem = (RecivedApplicant) getItem(position);
+        final RecivedApplicant myItem = (RecivedApplicant) getItem(position);
 
         /* 각 위젯에 세팅된 아이템을 뿌려준다 */
 //        String path = myItem.getProjectImgPath();
@@ -70,12 +74,32 @@ public class AdapterSettingLogRecivedApplicant extends BaseAdapter {
         //현재 날짜와 비교 끝날보다 d_day가 지났으면 강의가 끝났음 을 알림
         //강의시작 날짜 보다 적으면 d_day 설정
         //강의 중이면 진행중 표시
+        tv_apply_cnt.setText(myItem.getCnt());
         tv_d_day.setText(d_day);
         tv_title.setText(myItem.getProjectTitle());
         tv_date.setText(myItem.getDate());
-
+        applyClassInfos= new ArrayList<>();
         //TODO : btn 버튼
+        btn_desc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //applyClassInfos , context 보냄
+                //확인 클릭시 리스트를 보여줄 정보 모으기
+                if(applyClassInfos.size()>0) applyClassInfos.clear();
+                for(int i = 0; i<applicationClass.getApplyClassUserInfos().size(); i++){
+                    if(applicationClass.getApplyClassUserInfos().get(i).getClass_code().equals(myItem.getClass_code()))
+                        applyClassInfos.add(applicationClass.getApplyClassUserInfos().get(i));
+                }
+                Log.i("lengthdd",applyClassInfos.size()+"");
+                if(applyClassInfos.size()<=0){new AlertDialog.Builder(context).setMessage("신청자 정보가 없습니다").show(); return;
+                }
 
+                //Todo:커스텀 다이얼 로그
+                    customDialog = new DialogSettingLogMyClass(context);
+                    customDialog.callFunction(applyClassInfos);
+
+            }
+        });
 
         return convertView;
     }

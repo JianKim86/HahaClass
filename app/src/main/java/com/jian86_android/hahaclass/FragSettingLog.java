@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class FragSettingLog extends Fragment {
     private ListView lv_apply_list,lv_my_class_list; //lv_my_class_list 레벨 2
     private View header_apply,header_my_class;// 내가 신청한 리스트 해더 , 내 강의 리스트 헤더
     private TextView tv_title_apply,tv_title_myclass;
+    private LinearLayout empty_list1,empty_list2;
     private HashMap<String,Schedule> applyClasses = new HashMap<>(); //서버에서 나의 apply 를 담음
     private  HashMap<String,RecivedApplicant> received_classes = new HashMap<>(); //서버에서 내 강의를 신청한 사람들의 정보를 담음
 
@@ -62,6 +65,7 @@ public class FragSettingLog extends Fragment {
         lv_apply_list =view.findViewById(R.id.lv_apply_list);
         lv_my_class_list =view.findViewById(R.id.lv_my_class_list);
         tv_title_apply= header_apply.findViewById(R.id.tv_header);
+
         tv_title_myclass= header_my_class.findViewById(R.id.tv_header);
         lv_apply_list.addHeaderView(header_apply);
         lv_my_class_list.addHeaderView(header_my_class);
@@ -81,17 +85,23 @@ public class FragSettingLog extends Fragment {
         /** 서버에서 읽어온 정보를 컬랙션에 Schedule로 담고 리스트뷰에 어댑터로 등록 */
 
 
-
         AdapterSettingLogApply mMyAdapter = new AdapterSettingLogApply(arrApplylist,context);
         /**서버에서 읽어온 정보를 컬랙션에 RecivedApplicant로  담고 리스트 뷰에 어댑터로 등록*/
         AdapterSettingLogRecivedApplicant recivedApplicant = new AdapterSettingLogRecivedApplicant(arrRecivedlist,context);
         //어뎁터 연결
         lv_apply_list.setAdapter(mMyAdapter);
         lv_my_class_list.setAdapter(recivedApplicant);
+        empty_list2 = header_apply.findViewById(R.id.empty_list);
+        empty_list1 =header_my_class.findViewById(R.id.empty_list);
 
+        if(arrRecivedlist.size()<=0) empty_list2.setVisibility(View.GONE);
+        //empty_message
+        else empty_list2.setVisibility(View.VISIBLE);
+        if(arrApplylist.size()<=0) empty_list1.setVisibility(View.GONE);
+        else empty_list1.setVisibility(View.VISIBLE);
 
-
-
+     //   setListViewHeightBasedOnChildren(lv_my_class_list);
+     //   setListViewHeightBasedOnChildren(lv_apply_list);
     }//setData()
 
     //비교
@@ -142,4 +152,25 @@ public class FragSettingLog extends Fragment {
             Collections.sort(arrRecivedlist, sorts);
         }
     }//getData
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 }//FragSettingAccount

@@ -32,9 +32,17 @@ public class ApplicationClass extends Application {
     //세팅로그에서 보는 applyClass 리스트용
     public  HashMap<String,Schedule> myApplyClasses = new HashMap<>();
     public  HashMap<String, RecivedApplicant> myReceivedClass = new HashMap<>();
-
+    public  ArrayList<ApplyClassInfo> applyClassUserInfos = new ArrayList<>();
 
     //게터 셋터
+
+    public ArrayList<ApplyClassInfo> getApplyClassUserInfos() {
+        return applyClassUserInfos;
+    }
+
+    public void setApplyClassUserInfos(ArrayList<ApplyClassInfo> applyClassUserInfos) {
+        this.applyClassUserInfos = applyClassUserInfos;
+    }
 
     public void setApplySchedule(HashSet<ApplyClassInfo> applySchedule) {
         this.applySchedule = applySchedule;

@@ -1,18 +1,20 @@
 package com.jian86_android.hahaclass;
 
+import java.util.ArrayList;
+
 public class RecivedApplicant extends Schedule {
     //강의 신청자 정보를 담는 클레스
 
     private String date;
     private String projectTitle;
     private String cnt;
-    private ApplyClassInfo classInfo; //l_num, class_code
+    private ArrayList<ApplyClassInfo> classInfo = new ArrayList<>(); //l_num, class_code
 
-    public ApplyClassInfo getClassInfo() {
+    public ArrayList<ApplyClassInfo> getClassInfo() {
         return classInfo;
     }
 
-    public void setClassInfo(ApplyClassInfo classInfo) {
+    public void setClassInfo(ArrayList<ApplyClassInfo> classInfo) {
         this.classInfo = classInfo;
     }
 
@@ -42,6 +44,6 @@ public class RecivedApplicant extends Schedule {
     }
 
     public void setCnt(String cnt) {
-        this.cnt = cnt;
+        this.cnt ="신청자 : "+ cnt;
     }
 }

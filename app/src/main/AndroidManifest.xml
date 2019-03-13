@@ -49,14 +49,6 @@
             android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name=".BoardActivity"  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".BoarderDetailsActivity" />
-        <activity android:name=".TestActivity" android:windowSoftInputMode="adjustPan">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-
-        </activity>
     </application>
 
 </manifest>

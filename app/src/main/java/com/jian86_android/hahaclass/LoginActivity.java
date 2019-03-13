@@ -269,70 +269,10 @@ public class LoginActivity extends AppCompatActivity  {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
+    }//showProgress
 
 
-
-
-//    private void searchEmailDB(){
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                //1. userinfo 에 있는 정보 유저 테이블에 넣기
-//                String serverUrl = "http://jian86.dothome.co.kr/HahaClass/check_is_user.php";
-//
-//
-//
-//                SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl , new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//
-//                        if(response.equals("nohave")){
-//                            isUser = false;
-//                            new AlertDialog.Builder(LoginActivity.this).setMessage(response).show();
-//                        }
-//                        else{
-//                            isUser = true;
-//                            //비밀번호 비교 TODO:비밀번호 비교해서 userInfo에 담아 글로벌로
-//                            //response 가 0이면 비밀번호 맞음
-//                            if(response.equals("0")) {
-//                               // new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 맞음").show();
-//                                DBaddUserInfo(); return;
-//                            }else { new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show(); return;}
-//                            //new AlertDialog.Builder(LoginActivity.this).setMessage("비밀번호가 틀림").show();
-//
-//
-//                        }
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        //서버 요청중 에거라 발생하면 자동 실행
-//                        Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-//                        finish(); //화면 종료
-//                    }
-//                });//세번째 파라미터가 응답을 받아옴
-//
-//
-//                //포스트 방식으로 보낼 데이터들 요청 객체에 추가하기
-//                multiPartRequest.addStringParam("email", mEmail);
-//                multiPartRequest.addStringParam("password", mPassword);
-//
-//                //요청객체를 실제 서버쪽으로 보내기 위해 우체통같은 객체
-//                RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-//
-//                //요청 객체를 우체통에 넣기
-//                requestQueue.add(multiPartRequest);
-//
-//            }//run
-//        }.start();
-//
-//
-//
-//
-//    }//searchEmailDB
-
-//이메일유무및 비밀번호 확인
+//이메일유무및 비밀번호 먼저 확인
     //정보 불러와서 저장하기
     public void DBaddUserInfo(){
 
@@ -356,6 +296,7 @@ public class LoginActivity extends AppCompatActivity  {
                         String level = jsonObject.getString("level");
                         String image_path = jsonObject.getString("image_path");
                         String date = jsonObject.getString("date");
+                        String getl_num = jsonObject.getString("l_num");
                         //파일경로가 서버 IP가 제외된 주소임
                         image_path = baseImgePath + image_path;
                         //userinfo 추가
@@ -375,13 +316,18 @@ public class LoginActivity extends AppCompatActivity  {
 
                                         String l_num = jsonObject1.getString("l_num");
                                         String class_code = jsonObject1.getString("class_code");
-                                        //   apply_user_num = jsonObject1.getString("apply_user_num");
+                                        //apply_user_num = jsonObject1.getString("apply_user_num");
                                         ApplyClassInfo applyClassInfo = new ApplyClassInfo(l_num, class_code);
                                         applicationClass.setApplySchedule(applyClassInfo); //헤시에 add로 들어감
                                     }
 
                                 }
                             }
+
+                            //setting_log 데이터 얻어오기
+                            DBsetData(email);
+                            if(Integer.parseInt(level)>1) { DBsetMyClassData(email, getl_num); DBsetData_myclass_userInfo(getl_num); }
+
                             // Log.i("cont_hashs",applicationClass.getApplySchedule().size()+"");
                             moveActivity(GOMAIN, userinfo);
                         } else
@@ -400,7 +346,7 @@ public class LoginActivity extends AppCompatActivity  {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //에러남 아이디가 없음
-                new AlertDialog.Builder(LoginActivity.this).setMessage("회원이 아닙니다").show();
+                new AlertDialog.Builder(LoginActivity.this).setMessage("인터넷이 원활하지 않습니다.").show();
             }
 
 
@@ -422,6 +368,205 @@ public class LoginActivity extends AppCompatActivity  {
         requestQueue.add(jsonArrayRequest);
     }
 
+    private HashMap<String,Schedule>applyClasses = new HashMap<String,Schedule>(); //내신청강의 담기
+    private  HashMap<String,RecivedApplicant> recivedclasses = new HashMap<String,RecivedApplicant>();
+    //setting_log데이터 얻어오기
+    private void DBsetData(final String email){
+        /**서버에 담을때 스케쥴로 어레이에 담음 */
+        /**DB: class_apply_list에서 filter : userEmail -> l_num과 class_code를 얻어 DB: class_list에서 정보 검색하여 schadule에 담음*/
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_apply_class_list.php";
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                JSONArray jsonArray = null;
+                Log.i("gresponsesg",response);
+                try {
+                    jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        if (jsonObject.has("my_apply_class_info")) {
+                            JSONObject jsonkeyArray = jsonObject.getJSONObject("my_apply_class_info");
+                            if (jsonkeyArray != null) {
+                                //  applicationClass.getMyApplyClasses().clear();
+                                for (int y = 0; y < jsonkeyArray.length(); y++) {
+                                    JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
+                                    String l_num = jsonObject1.getString("l_num");
+                                    String class_code = jsonObject1.getString("class_code");
+                                    String class_title = jsonObject1.getString("class_title");
+                                    String 	start_day = jsonObject1.getString("start_day");
+                                    String 	finish_day = jsonObject1.getString("finish_day");
+                                    Schedule applyClassInfo = new Schedule(l_num,class_title,start_day,finish_day,class_code);
+                                    applyClasses.put(class_code,applyClassInfo);
+
+                                }//for
+                            }//if
+                        }//if
+
+                        //내가 신청한 강의에 담음
+                        applicationClass.setMyApplyClasses(applyClasses);
+                        // Log.i("gstts",applicationClass.getMyApplyClasses().size()+"");
+                    }//for
+                    //log: my_apply
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("apply_user_email",email);
+//                if(userInfo.getLevel()>1) { params.put("l_num",userInfo.getL_num()); }
+                return params;
+            }
+        };
+
+        //우체통
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        requestQueue.add(jsonArrayRequest);
+    }//DBsetData
+    private void DBsetMyClassData(final String getemail, final String getl_num){
+        /**서버에 담을때 스케쥴로 어레이에 담음 */
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_my_class_list.php";
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONArray jsonArray = null;
+                String l_num="";
+                Log.i("gresponsesg",response);
+                try {
+                    jsonArray = new JSONArray(response);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        if (jsonObject.has("r_class_info")) {
+                            JSONObject jsonkeyArray = jsonObject.getJSONObject("r_class_info");
+                            if (jsonkeyArray != null) {
+                                //  applicationClass.getMyApplyClasses().clear();
+                                for (int y = 0; y < jsonkeyArray.length(); y++) {
+                                    JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
+                                    l_num = jsonObject1.getString("l_num");
+                                    String class_code = jsonObject1.getString("class_code");
+                                    String class_title = jsonObject1.getString("class_title");
+                                    String 	start_day = jsonObject1.getString("start_day");
+                                    String 	finish_day = jsonObject1.getString("finish_day");
+                                    String class_apply = jsonObject1.getString("class_apply");
+
+                                        RecivedApplicant recivedApply = new RecivedApplicant(start_day + "~" + finish_day, class_title);
+                                        recivedApply.setL_num(l_num);
+                                        recivedApply.setClass_code(class_code);
+                                        recivedApply.setStart(start_day);
+                                        recivedApply.setEnd(finish_day);
+                                        recivedApply.setCnt(class_apply);
+                                        // 헤시셋으로 정보 담기
+
+
+                                        recivedclasses.put(class_code, recivedApply);
+
+
+                                }//for
+                            }//if
+                        }//if
+
+                        //내가 신청한 강의에 담음
+
+                        if(getl_num.equals(l_num)) applicationClass.setMyReceivedClass(recivedclasses);
+                    }//for
+                    //log: my_apply
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("apply_user_email",getemail);
+                params.put("l_num",getl_num);
+                return params;
+            }
+        };
+        //우체통
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        requestQueue.add(jsonArrayRequest);
+    }//DBsetMyClassData
+
+    //for setting_log_myclass
+    private void DBsetData_myclass_userInfo(final String get_l_num){
+        /**서버에 담을때 스케쥴로 어레이에 담음 */
+        /**DB: class_apply_list에서 filter : l_num -> 정보 검색하여 ApplyClassInfo에 담음*/
+
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_apply_user_info.php";
+        StringRequest jsonArrayRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                JSONArray jsonArray = null;
+                Log.i("gresponsesg",response);
+                try {
+                    jsonArray = new JSONArray(response);
+                    ArrayList<ApplyClassInfo>arr = new ArrayList<>();
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String l_num = jsonObject.getString("l_num");
+                        String class_code = jsonObject.getString("class_code");
+                        String apply_user_email	 = jsonObject.getString("apply_user_email");
+                        String 	apply_name	 = jsonObject.getString("apply_name");
+                        String 	apply_phone	 = jsonObject.getString("apply_phone");
+                        String 	date = jsonObject.getString("date");
+
+                        ApplyClassInfo applyClassInfo = new ApplyClassInfo(l_num,class_code,apply_name,apply_phone,date,apply_user_email);
+                        arr.add(applyClassInfo);
+                    }//for
+                        applicationClass.setApplyClassUserInfos(arr);//해당 강사의 모든 강의 클레스에대한 신청유저정보가 담겨있음
+                        Log.i("dsdsdsdaaaa",applicationClass.getApplyClassUserInfos().size()+"");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("l_num",get_l_num);
+                return params;
+            }
+        };
+
+        //우체통
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        requestQueue.add(jsonArrayRequest);
+    }//DBsetData
 
 
 
@@ -429,7 +574,7 @@ public class LoginActivity extends AppCompatActivity  {
 
 
 
-//액티비티 이동
+    //액티비티 이동
     public void moveActivity(int state, UserInfo userInfo){
 
    //     new AlertDialog.Builder(LoginActivity.this).setMessage("서비스를 준비중입니다").show();
