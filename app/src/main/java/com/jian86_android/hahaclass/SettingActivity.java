@@ -3,6 +3,7 @@ package com.jian86_android.hahaclass;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -91,7 +93,9 @@ public class SettingActivity extends AppCompatActivity {
                     case R.id.item1 :goSetting(0); break;
                     case R.id.item2 :goSetting(1); break;
                     case R.id.item3 :goSetting(2); break;
-                    case R.id.item4 :goSetting(3); break;
+                   // case R.id.item4 :goSetting(3); break;
+                    case R.id.item5 :selectInstructor();break;
+                    case R.id.item6 :selectInstructor();break;
                 }//switch
                 drawerLayout.closeDrawer(navMenu,true);
                 return false;
@@ -113,7 +117,23 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }//onCreate
+    void selectInstructor (){
+        String msg ="강사 선택으로 돌아가시겠습니까?";
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+        //builder.setTitle("AlertDialog Title");
+        builder.setMessage(msg);
+        builder.setPositiveButton("예",
 
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("아니오", null);
+        builder.show();
+
+    }
     //메뉴
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -199,7 +219,7 @@ public class SettingActivity extends AppCompatActivity {
         if(img != null && !(img.equals(""))) {
             Uri uRi = Uri.parse(img);
             Picasso.get().load(uRi)
-                    .resize(400,400).into(profile_image, new Callback() {
+                    .resize(400,400).centerCrop().into(profile_image, new Callback() {
                 @Override
                 public void onSuccess() {
 

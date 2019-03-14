@@ -215,8 +215,8 @@ public class AdapterRecycleSLog extends RecyclerView.Adapter {
                  tv_date = (TextView) itemView.findViewById(R.id.tv_date) ;
                 tv_d_day = (TextView) itemView.findViewById(R.id.tv_d_day) ;
                  tv_title = (TextView) itemView.findViewById(R.id.tv_title) ;
-                 btn_desc = (Button)itemView.findViewById(R.id.btn_desc);
-                 btn_cancel_or_modify = (Button)itemView.findViewById(R.id.btn_cancel_or_modify);
+                 //btn_desc = (Button)itemView.findViewById(R.id.btn_desc);
+                // btn_cancel_or_modify = (Button)itemView.findViewById(R.id.btn_cancel_or_modify);
                 Holderid = TYPE_applyList;
             } else {
                 layoout_itemR =itemView.findViewById(R.id.layoout_item);

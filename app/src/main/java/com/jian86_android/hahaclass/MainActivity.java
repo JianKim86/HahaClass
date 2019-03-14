@@ -56,6 +56,8 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity  {
     private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
     private static final int img_length ="uploads/20190310031854".length();
+    private static final int INTRO = 1;
+    private static final int SCADULE = 2;
 
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private Animation fab_open, fab_close, fab_action_close, fab_action_open;
     private Boolean isFabOpen = false;
-    private FloatingActionButton fab, fab1, fab2,fab3 ;
+  //  private FloatingActionButton fab, fab1, fab2,fab3 ;
 
     private ViewPager pagerLayout;
     private AdapterFragment adapter;
@@ -126,10 +128,10 @@ public class MainActivity extends AppCompatActivity  {
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         fab_action_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_action_close);
         fab_action_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_action_open);
-        fab =findViewById(R.id.fab_btn);
-        fab1 =findViewById(R.id.fab1_btn);
-        fab2 =findViewById(R.id.fab2_btn);
-        fab3 =findViewById(R.id.fab3_btn);
+//        fab =findViewById(R.id.fab_btn);
+//        fab1 =findViewById(R.id.fab1_btn);
+//        fab2 =findViewById(R.id.fab2_btn);
+//        fab3 =findViewById(R.id.fab3_btn);
        // fab4 =findViewById(R.id.fab4_btn);
         pagerLayout =findViewById(R.id.pager_layout);
         adapter = new AdapterFragment(getSupportFragmentManager());
@@ -137,10 +139,10 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-        fab.setOnClickListener(onClickListener);
-        fab1.setOnClickListener(onClickListener);
-        fab2.setOnClickListener(onClickListener);
-        fab3.setOnClickListener(onClickListener);
+//        fab.setOnClickListener(onClickListener);
+//        fab1.setOnClickListener(onClickListener);
+//        fab2.setOnClickListener(onClickListener);
+//        fab3.setOnClickListener(onClickListener);
       //  fab4.setOnClickListener(onClickListener);
 
         navSetting();
@@ -178,7 +180,9 @@ public class MainActivity extends AppCompatActivity  {
                     case R.id.item1 :goSetting(0);break;
                     case R.id.item2 :goSetting(1);break;
                     case R.id.item3 :goSetting(2);break;
-                    case R.id.item4 :goSetting(3);break;
+                //    case R.id.item4 :goSetting(3);break;
+                    case R.id.item5 :select(INTRO);break;
+                    case R.id.item6 :select(SCADULE);break;
 
                 }//switch
                 drawerLayout.closeDrawer(navMenu,true);
@@ -195,80 +199,86 @@ public class MainActivity extends AppCompatActivity  {
         drawerToggle.syncState();
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록
         drawerLayout.addDrawerListener(drawerToggle);
-        //타이틀 변경
+//        //타이틀 변경
         String instructorTitle = instructor.getTitle()+"의 "+instructor.getSubTitle();
         getSupportActionBar().setTitle(instructorTitle);
+       // getSupportActionBar().setSubtitle("강사 소개");
+
 
     }//navSetting
-
-//fab버튼 클릭시 화면전환 이벤트
- View.OnClickListener onClickListener = new View.OnClickListener() {
-     @Override
-     public void onClick(View v) {
-         int id = v.getId();
-         switch (id) {
-             case R.id.fab_btn:
-                 anim();
-
-                 break;
-             case R.id.fab1_btn:
-                 anim();
-                 pagerLayout.setCurrentItem(0);
-                 Toast.makeText(MainActivity.this, "Button1", Toast.LENGTH_SHORT).show();
-                 break;
-             case R.id.fab2_btn:
-                 anim();
-                 pagerLayout.setCurrentItem(1);
-                 Toast.makeText(MainActivity.this, "Button2", Toast.LENGTH_SHORT).show();
-                 break;
-//             case R.id.fab3_btn:
-//                 anim();
-//                 pagerLayout.setCurrentItem(2);
-//                 Toast.makeText(MainActivity.this, "Button3", Toast.LENGTH_SHORT).show();
-//                 break;
-//             case R.id.fab4_btn:
-//                 anim();
-//                 pagerLayout.setCurrentItem(3);
-//                 Toast.makeText(MainActivity.this, "Button4", Toast.LENGTH_SHORT).show();
-//                 break;
-         }
-
-     }
- };
-    public void anim() {
-
-        if (isFabOpen) {
-            fab.startAnimation(fab_action_open);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab3.startAnimation(fab_close);
-     //       fab4.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
-            fab3.setClickable(false);
-      //      fab4.setClickable(false);
-            isFabOpen = false;
-        } else {
-            fab.startAnimation(fab_action_close);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab3.startAnimation(fab_open);
-   //         fab4.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
-            fab3.setClickable(true);
-  //          fab4.setClickable(true);
-            isFabOpen = true;
+    void select(int select){
+        switch (select){
+            case INTRO:   pagerLayout.setCurrentItem(0);break;
+            case SCADULE:   pagerLayout.setCurrentItem(1);break;
         }
-    }//anim
+    }
+//fab버튼 클릭시 화면전환 이벤트
+// View.OnClickListener onClickListener = new View.OnClickListener() {
+//     @Override
+//     public void onClick(View v) {
+//         int id = v.getId();
+//         switch (id) {
+//             case R.id.fab_btn:
+//                 anim();
+//
+//                 break;
+//             case R.id.fab1_btn:
+//                 anim();
+//                 pagerLayout.setCurrentItem(0);
+//                 Toast.makeText(MainActivity.this, "Button1", Toast.LENGTH_SHORT).show();
+//                 break;
+//             case R.id.fab2_btn:
+//                 anim();
+//                 pagerLayout.setCurrentItem(1);
+//                 Toast.makeText(MainActivity.this, "Button2", Toast.LENGTH_SHORT).show();
+//                 break;
+////             case R.id.fab3_btn:
+////                 anim();
+////                 pagerLayout.setCurrentItem(2);
+////                 Toast.makeText(MainActivity.this, "Button3", Toast.LENGTH_SHORT).show();
+////                 break;
+////             case R.id.fab4_btn:
+////                 anim();
+////                 pagerLayout.setCurrentItem(3);
+////                 Toast.makeText(MainActivity.this, "Button4", Toast.LENGTH_SHORT).show();
+////                 break;
+//         }
+//
+//     }
+// };
+//    public void anim() {
+//
+//        if (isFabOpen) {
+//            fab.startAnimation(fab_action_open);
+//            fab1.startAnimation(fab_close);
+//            fab2.startAnimation(fab_close);
+//            fab3.startAnimation(fab_close);
+//     //       fab4.startAnimation(fab_close);
+//            fab1.setClickable(false);
+//            fab2.setClickable(false);
+//            fab3.setClickable(false);
+//      //      fab4.setClickable(false);
+//            isFabOpen = false;
+//        } else {
+//            fab.startAnimation(fab_action_close);
+//            fab1.startAnimation(fab_open);
+//            fab2.startAnimation(fab_open);
+//            fab3.startAnimation(fab_open);
+//   //         fab4.startAnimation(fab_open);
+//            fab1.setClickable(true);
+//            fab2.setClickable(true);
+//            fab3.setClickable(true);
+//  //          fab4.setClickable(true);
+//            isFabOpen = true;
+//        }
+//    }//anim
 
     private void  getIntentData(){
       //  Bundle userBundle = getintent.getBundleExtra("userBundle");
        // Bundle selectTeacher =  getintent.getBundleExtra("selectTeacher");
         instructor = applicationClass.getItemInstructor();
 
-        //TODO:DB작업: instructor에 스케쥴 담기
-        DBgetClassDetailList();
+      //  DBgetClassDetailList();
 
         state = applicationClass.getState();
         
@@ -286,102 +296,7 @@ public class MainActivity extends AppCompatActivity  {
 
     }//getIntentData;
 
-    private void DBgetClassDetailList() {
-        instructor.setSchedules(new ArrayList<Schedule>());
-        //classlist 에서 강사별 클레스 검색 ->list
-        //classdetaillist에서 세부 내용 검색 -> 세부
-        //instructor 에 스케쥴 담기
 
-        //강사 번호로 강의 검색 리스트에서 검색
-        final String l_num = instructor.getL_num();
-
-        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_instructor_detail_info.php";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-               Log.i("responsei",response);
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String class_code = jsonObject.getString("class_code");
-                        String class_host = jsonObject.getString("class_host");
-                        String class_title = jsonObject.getString("class_title");
-                        String start_day = jsonObject.getString("start_day");
-                        String finish_day = jsonObject.getString("finish_day");
-                        String class_image_path = jsonObject.getString("class_image_path");
-                        String class_support = jsonObject.getString("class_support");
-
-                        //String date = jsonObject.getString("date");
-                        //파일경로가 서버 IP가 제외된 주소임
-                        class_image_path = baseImgePath + class_image_path;
-
-                        //스케쥴에 넣기
-                        Schedule schedule = new Schedule(l_num, class_title,class_image_path,class_host,class_support,start_day,finish_day,class_code);
-                        String l_number="";
-                        String class_code_recheck="";
-                        String week="";
-                        String c_day="";
-                        String title="";
-                        String configuration="";
-                        String date="";
-
-                        //세부 디테일 받기
-                        JSONObject jsonkeyArray = jsonObject.getJSONObject("key");
-
-                     //   JSONArray jsonkeyArray = jsonArray.getJSONArray(i);
-                      // Log.i("jsonkeyArray",response);
-                     //   Log.i("responseii_",jsonkeyArray.length()+"");
-
-                        if(jsonkeyArray!=null) {
-                            schedule.setDatas(new ArrayList<DatasItem>());
-                            for (int y = 0; y < jsonkeyArray.length(); y++) {
-                                JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
-                                l_number = jsonObject1.getString("l_num");
-                                class_code_recheck = jsonObject1.getString("class_code");
-                                week = jsonObject1.getString("week");
-                                c_day = jsonObject1.getString("c_day");
-                                title = jsonObject1.getString("title");
-                                configuration = jsonObject1.getString("configuration");
-                                date = jsonObject1.getString("date");
-                                if(class_code_recheck.equals(class_code)){
-                                    DatasItem datasItem = new DatasItem(l_number, class_code_recheck, week, c_day, title, configuration);
-                                    schedule.getDatas().add(datasItem);
-                                }
-                            }
-                        }
-                        instructor.getSchedules().add(schedule);
-
-                    }//for
-
-                    //  applicationClass.setUserInfo(userinfo);
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-                return;
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("l_num", l_num );
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-        requestQueue.add(stringRequest);
-
-
-    }//getClassDetailList
 
     private void goSetting(int item){
         if(state.equals(USER)){

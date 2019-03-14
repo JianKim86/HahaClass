@@ -184,6 +184,7 @@ public class FragInfo extends Fragment implements View.OnClickListener {
         if(getActivity()!=null){
             if(isVisibleToUser)
             {
+           //     ((MainActivity)getActivity()).getSupportActionBar().setSubtitle("강사 소개");
 
             }
             else

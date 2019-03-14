@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorAlpa"
+    android:paddingTop="4dp"
+    android:layout_marginTop="8dp">
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/colorWhite"
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:mcv_selectionColor="@color/colorPoint"
+        android:layout_margin="4dp"
         app:mcv_showOtherDates="defaults" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:background="@color/colorAlpa">
         <TextView
             android:id="@+id/tv_title"
+            android:background="@color/colorAlpa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="강의 시간표"
+            android:textColor="@color/colorWhite"
             android:layout_weight="1"
             android:textStyle="bold"
             android:layout_gravity="center_vertical"

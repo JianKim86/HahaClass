@@ -16,9 +16,9 @@
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/hahaclass_logo"
+        android:label="행복을 만드는 아리랑 하박수 웃음교실"
+        android:roundIcon="@drawable/hahaclass_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".LaunchActivity">

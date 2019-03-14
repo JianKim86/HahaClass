@@ -10,7 +10,10 @@
         android:text="ssdsdsds"
         android:textSize="20sp"
         android:padding="8dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:background="@color/colorGrayll"
+        android:layout_marginBottom="2dp"
+        />
     <LinearLayout
         android:id="@+id/empty_list"
         android:layout_width="match_parent"

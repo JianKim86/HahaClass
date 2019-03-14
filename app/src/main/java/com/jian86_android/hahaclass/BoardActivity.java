@@ -215,7 +215,12 @@ public class BoardActivity extends AppCompatActivity {
                     case R.id.item1 :goSetting(0);break;
                     case R.id.item2 :goSetting(1);break;
                     case R.id.item3 :goSetting(2);break;
-                    case R.id.item4 :goSetting(3);break;
+                    //case R.id.item4 :goSetting(3);break;
+                    case R.id.item5 :selectInstructor();break;
+                    case R.id.item6 :selectInstructor();break;
+
+                    //   case R.id.item4 :goSetting(3);break;
+
 
                 }//switch
                 drawerLayout.closeDrawer(navMenu,true);
@@ -235,6 +240,23 @@ public class BoardActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("게시판");
 
     }//navSetting
+    void selectInstructor (){
+        String msg ="강사 선택으로 돌아가시겠습니까?";
+        AlertDialog.Builder builder = new AlertDialog.Builder(BoardActivity.this);
+        //builder.setTitle("AlertDialog Title");
+        builder.setMessage(msg);
+        builder.setPositiveButton("예",
+
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("아니오", null);
+        builder.show();
+
+    }
     private void setData(){
 
         isupload= false; //new board를 위한 is upload

@@ -29,15 +29,28 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
+import com.android.volley.request.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PIntroActivity extends AppCompatActivity {
+    private static final String baseImgePath = "http://jian86.dothome.co.kr/HahaClass/";
     private static final int img_length ="uploads/20190310031854".length();
     private ApplicationClass applicationClass;
     private static final String CUSTOMER = "customer";
@@ -57,21 +70,12 @@ public class PIntroActivity extends AppCompatActivity {
     private Button tv_goto_instructor,tv_goto_board;
     private ScrollView layout_title_desc;
     private RelativeLayout layout_rv;
+    private TextView tv_text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pintro);
-        View view = getWindow().getDecorView();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (view != null) {
-                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
-                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
-            }
-        }else if (Build.VERSION.SDK_INT >= 21) {
-            // 21 버전 이상일 때
-            getWindow().setStatusBarColor(Color.BLACK);
-        }
+
         applicationClass =(ApplicationClass)getApplicationContext();
         getintent = getIntent();
         getIntentData();
@@ -85,6 +89,7 @@ public class PIntroActivity extends AppCompatActivity {
         iv_introimg =findViewById(R.id.iv_introimg);
         layout_title_desc =findViewById(R.id.layout_title_desc);
         layout_rv = findViewById(R.id.layout_rv);
+        tv_text =findViewById(R.id.tv_text);
         Glide.with(this).load(R.drawable.title_img).into(iv_introimg);
 
 //        if(itemInstructors.size()<2) listView.setVisibility(View.VISIBLE);
@@ -96,12 +101,15 @@ public class PIntroActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(listView.getVisibility()!= View.GONE){
-                    layout_title_desc.setVisibility(View.VISIBLE);
+                   // layout_title_desc.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
-                    layout_rv.setBackgroundResource(R.color.colorWhite);
-                }else{listView.setVisibility(View.VISIBLE);
-                    layout_title_desc.setVisibility(View.GONE);
-                    layout_rv.setBackgroundResource(R.color.colorGrayll);
+                    tv_text.setTextColor(getResources().getColor(R.color.colorWhite));
+                    //layout_rv.setBackgroundResource(R.color.colorWhite);
+                }else{
+                    listView.setVisibility(View.VISIBLE);
+                    tv_text.setTextColor(getResources().getColor(R.color.colorGray));
+                   // layout_title_desc.setVisibility(View.GONE);
+                   // layout_rv.setBackgroundResource(R.color.colorGrayll);
 
                 }
             }
@@ -126,18 +134,16 @@ public class PIntroActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent;
+
                 applicationClass.setItemInstructor(null);
                 Bundle selectTeacher = new Bundle();
                 selectTeacher.putString("Instructor",itemInstructors.get(position).getSubTitle());
                 ItemInstructor itemInstructor = itemInstructors.get(position);
                 applicationClass.setItemInstructor(itemInstructor); //내가 선택하는 강사를 담는다
+                instructor = applicationClass.getItemInstructor();
+                DBgetClassDetailList();
                // applicationClass.setInstructorNo(position);
 
-                intent = new Intent(PIntroActivity.this, MainActivity.class);
-               // intent.putExtra("userBundle", userBundle);
-                //intent.putExtra("selectTeacher",selectTeacher);
-                startActivity(intent);
 
             }
         });
@@ -146,12 +152,121 @@ public class PIntroActivity extends AppCompatActivity {
         //토글버튼 아이콘이 보이도록 붙이기
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.subtitle_app_name));
+        getSupportActionBar().setTitle("");
         //삼선 아이콘 모양으로 동기마추기
         drawerToggle.syncState();
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록
         drawerLayout.addDrawerListener(drawerToggle);
+
     }//onCreate
+    private ItemInstructor instructor;
+    private void DBgetClassDetailList() {
+        instructor.setSchedules(new ArrayList<Schedule>());
+        //classlist 에서 강사별 클레스 검색 ->list
+        //classdetaillist에서 세부 내용 검색 -> 세부
+        //instructor 에 스케쥴 담기
+
+        //강사 번호로 강의 검색 리스트에서 검색
+        final String l_num = instructor.getL_num();
+
+        String serverURL = "http://jian86.dothome.co.kr/HahaClass/get_instructor_detail_info.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, serverURL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("responsei",response);
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String class_code = jsonObject.getString("class_code");
+                        String class_host = jsonObject.getString("class_host");
+                        String class_title = jsonObject.getString("class_title");
+                        String start_day = jsonObject.getString("start_day");
+                        String finish_day = jsonObject.getString("finish_day");
+                        String class_image_path = jsonObject.getString("class_image_path");
+                        String class_support = jsonObject.getString("class_support");
+
+                        //String date = jsonObject.getString("date");
+                        //파일경로가 서버 IP가 제외된 주소임
+                        class_image_path = baseImgePath + class_image_path;
+
+                        //스케쥴에 넣기
+                        Schedule schedule = new Schedule(l_num, class_title,class_image_path,class_host,class_support,start_day,finish_day,class_code);
+                        String l_number="";
+                        String class_code_recheck="";
+                        String week="";
+                        String c_day="";
+                        String title="";
+                        String configuration="";
+                        String date="";
+
+                        //세부 디테일 받기
+                        JSONObject jsonkeyArray = jsonObject.getJSONObject("key");
+
+                        //   JSONArray jsonkeyArray = jsonArray.getJSONArray(i);
+                        // Log.i("jsonkeyArray",response);
+                        //   Log.i("responseii_",jsonkeyArray.length()+"");
+
+                        if(jsonkeyArray!=null) {
+                            schedule.setDatas(new ArrayList<DatasItem>());
+                            for (int y = 0; y < jsonkeyArray.length(); y++) {
+                                JSONObject jsonObject1 = jsonkeyArray.getJSONObject(y + "");
+                                l_number = jsonObject1.getString("l_num");
+                                class_code_recheck = jsonObject1.getString("class_code");
+                                week = jsonObject1.getString("week");
+                                c_day = jsonObject1.getString("c_day");
+                                title = jsonObject1.getString("title");
+                                configuration = jsonObject1.getString("configuration");
+                                date = jsonObject1.getString("date");
+                                if(class_code_recheck.equals(class_code)){
+                                    DatasItem datasItem = new DatasItem(l_number, class_code_recheck, week, c_day, title, configuration);
+                                    schedule.getDatas().add(datasItem);
+                                }
+                            }
+                        }
+                        instructor.getSchedules().add(schedule);
+
+                    }//for
+
+                    Intent intent;
+                    intent = new Intent(PIntroActivity.this, MainActivity.class);
+                    // intent.putExtra("userBundle", userBundle);
+                    //intent.putExtra("selectTeacher",selectTeacher);
+                    startActivity(intent);
+                    //  applicationClass.setUserInfo(userinfo);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                return;
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("l_num", l_num );
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(PIntroActivity.this);
+        requestQueue.add(stringRequest);
+
+
+    }//getClassDetailList
+
+
+
+
+
+
     View nav_header_view=null;
     private  void navSetting(){
 
@@ -188,7 +303,9 @@ public class PIntroActivity extends AppCompatActivity {
                     case R.id.item1 :goSetting(0);break;
                     case R.id.item2 :goSetting(1);break;
                     case R.id.item3 :goSetting(2);break;
-                    case R.id.item4 :goSetting(3);break;
+                    //case R.id.item4 :goSetting(3);break;
+                    case R.id.item5 :selectInstructor();break;
+                    case R.id.item6 :selectInstructor();break;
 
                 }//switch
                 drawerLayout.closeDrawer(navMenu,true);
@@ -228,6 +345,12 @@ public class PIntroActivity extends AppCompatActivity {
         }
 
     }//getIntentData;
+
+    void selectInstructor (){
+        new AlertDialog.Builder(this).setMessage("강사를 선택해주세요");
+        listView.setVisibility(View.VISIBLE);
+        tv_text.setTextColor(getResources().getColor(R.color.colorGray));
+    }
 
     private String ptitle;
     private String phost;

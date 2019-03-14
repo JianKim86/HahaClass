@@ -77,7 +77,7 @@ public class BoarderDetailsActivity extends AppCompatActivity {
     private  Board board;
     private Spinner spinner;
     private TextView tv_instructor, tv_date, tv_title,tv_user_name,tv_msg, tv_spinner;
-    private Button btn_reply,btn_modify, btn_save, btn_delete, btn_return;
+    private Button btn_modify, btn_save, btn_delete, btn_return;
     private LinearLayout layout_edit_title,layout_edit_msg,layout_edit_btn;
     private EditText edit_title,edit_msg,repassword;
     private TextInputLayout input_layout_title,input_layout_msg;
@@ -132,7 +132,7 @@ public class BoarderDetailsActivity extends AppCompatActivity {
         tv_date = findViewById(R.id.tv_date);
         tv_title = findViewById(R.id.tv_title);
         tv_msg = findViewById(R.id.tv_msg);
-        btn_reply = findViewById(R.id.btn_reply);
+     //   btn_reply = findViewById(R.id.btn_reply);
         btn_modify = findViewById(R.id.btn_modify);
         layout_edit_btn = findViewById(R.id.layout_edit_btn);
 
@@ -397,7 +397,7 @@ public class BoarderDetailsActivity extends AppCompatActivity {
                     case R.id.btn_modify: checkPwd(ISMODIFY);  break;//else failedChedkPwd();
                     case R.id.btn_delete: checkPwd(ISDELETE);  break;
                     case R.id.btn_save: editViewHide(); break;
-                    case R.id.btn_reply: break;
+                 //   case R.id.btn_reply: break;
                     case R.id.btn_upload_img: iv_img.setVisibility(View.VISIBLE); takePic(); isupload =true; break;
                     case R.id.btn_upload_cancel: if(isupload) { isupload =false; haveupload= false; iv_img.setVisibility(View.GONE);  btn_upload_cancel.setVisibility(View.GONE); picPath = null; btmapPicPath =null; } break;
                     case R.id.btn_return:  returnList();  break;
@@ -407,7 +407,7 @@ public class BoarderDetailsActivity extends AppCompatActivity {
 
         btn_modify.setOnClickListener(onClickListener);
         btn_delete.setOnClickListener(onClickListener);
-        btn_reply.setOnClickListener(onClickListener);
+       // btn_reply.setOnClickListener(onClickListener);
 
         btn_save.setOnClickListener(onClickListener);
         btn_return.setOnClickListener(onClickListener);

@@ -56,8 +56,8 @@ public class AdapterSettingLogApply extends BaseAdapter {
         TextView tv_date = (TextView) convertView.findViewById(R.id.tv_date) ;
         TextView tv_d_day = (TextView) convertView.findViewById(R.id.tv_d_day) ;
         TextView tv_title = (TextView) convertView.findViewById(R.id.tv_title) ;
-        Button btn_desc = (Button)convertView.findViewById(R.id.btn_desc);
-        Button btn_cancel_or_modify = (Button)convertView.findViewById(R.id.btn_cancel_or_modify);
+        //Button btn_desc = (Button)convertView.findViewById(R.id.btn_desc);
+      //  Button btn_cancel_or_modify = (Button)convertView.findViewById(R.id.btn_cancel_or_modify);
 
 
         /* 각 리스트에 뿌려줄 아이템을 받아오는데 mMyItem 재활용 */

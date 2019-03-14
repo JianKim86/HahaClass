@@ -81,6 +81,7 @@ public class FragCalendar extends Fragment {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         context = container.getContext();
         applicationClass = (ApplicationClass) (context.getApplicationContext());
+      //  ((MainActivity)getActivity()).getSupportActionBar().setSubtitle("강의 신청");
         getData();
         header = inflater.inflate(R.layout.pcalendar_list_header, null, false);
         return view;
@@ -500,6 +501,7 @@ public class FragCalendar extends Fragment {
         if(getActivity()!=null){
             if(isVisibleToUser)
             {
+          //      ((MainActivity)getActivity()).getSupportActionBar().setSubtitle("강의 신청");
 
             }
             else

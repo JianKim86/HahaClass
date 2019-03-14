@@ -106,7 +106,7 @@
                 android:id="@+id/tv_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="250dp"
+
                 android:textSize="16sp"
                 android:text="qmflsakfjlksdjlaskdjs"
                 android:layout_gravity="center"
@@ -148,13 +148,13 @@
                    android:background="@drawable/btn_str"
                    />
            </LinearLayout>
-            <Button
-                android:id="@+id/btn_reply"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="댓글 달기"
-                android:textColor="@color/colorWhite"
-                android:background="@drawable/btn_str"/>
+            <!--<Button-->
+                <!--android:id="@+id/btn_reply"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="댓글 달기"-->
+                <!--android:textColor="@color/colorWhite"-->
+                <!--android:background="@drawable/btn_str"/>-->
            <ListView
                android:layout_marginTop="8dp"
                android:id="@+id/lv_repply"
