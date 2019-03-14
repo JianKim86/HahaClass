@@ -6,7 +6,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,6 +63,18 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        View view = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+            }
+        }else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
+
         setContentView(R.layout.activity_setting);
         toolbar =findViewById(R.id.toolbar_t);
         setSupportActionBar(toolbar);

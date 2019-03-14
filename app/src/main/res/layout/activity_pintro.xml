@@ -31,126 +31,153 @@
                 ></android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize"
-            >
-            <LinearLayout
+
+            <RelativeLayout
+                android:id="@+id/layout_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_marginTop="?attr/actionBarSize"
                 android:theme="@style/AppTheme.bg"
                 >
-                <RelativeLayout
+                <android.support.v7.widget.CardView
+                    android:id="@+id/layout_iv"
                     android:layout_width="match_parent"
-                    android:layout_height="240dp">
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="4dp"
+                    android:elevation="@dimen/fab_margin"
+                    app:contentPadding="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    >
+                    <RelativeLayout
 
-                    <ImageView
-                        android:clickable="true"
-                        android:id="@+id/iv_introimg"
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_launcher_background" />
-                    <ImageView
-                        android:id="@+id/iv_edit"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@android:drawable/ic_menu_camera"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:visibility="gone"
-                        />
-                </RelativeLayout>
+                        android:layout_height="230dp">
+
+                        <ImageView
+                            android:clickable="true"
+                            android:id="@+id/iv_introimg"
+                            android:layout_width="match_parent"
+                            android:layout_height="240dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:scaleType="centerCrop"
+                            />
+                        <ImageView
+                            android:id="@+id/iv_edit"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@android:drawable/ic_menu_camera"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:visibility="gone"
+                            />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
                 <ScrollView
+                    android:layout_below="@+id/layout_iv"
+                    android:id="@+id/layout_title_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp">
-                    <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:layout_marginBottom="120dp"
+                    >
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:clickable="true">
+                        android:clickable="true"
+                        android:layout_marginBottom="16dp">
                         <TextView
+                            android:lineSpacingExtra="2sp"
+                            android:id="@+id/tv"
                             android:clickable="true"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
+                            android:padding="4dp"
                             android:textSize="16sp"
-                            android:text="하하하
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑
-이ㅏ어랑너라얼나아하하하하하
-하ㅏ하하
-하하하하하핳하핳하ㅏㅣ낭ㄹ아
-ㅓㄹ나어랑"
+                            android:gravity="center"
+                            android:layout_centerInParent="true"
+                            android:text=" 행복한 나를 찾기
+\n나의 강점과 비젼(꿈)을 찾아,
+\n주도적 삶의 역량을 기르기
+\n 타인이 나와 다름을 인식하고,
+\n대화법을 익혀 소통의 역량을 기르기
+\n\n 감성 스피치 역량 강화하기
+\n대중 앞에서 자신 있게 나를 표현하며
+\n강의 할 수 있는 역량을 기르기
+\n 하박수 웃음운동을 통하여 감성 근육을 강화
+\n스트레스 반사의 힘과 심신의 유연성,
+\n회복탄력성을 기르기
+"
+                            android:textColor="@color/colorDarkGray"
                             android:textStyle="bold"
                             />
-                    </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:layout_below="@+id/tv"
+                            android:text="(행복을 만드는)창의융합교육연구소"
+                            android:textColor="@color/colorGraym"/>
+                    </RelativeLayout>
                 </ScrollView>
 
-                <Button
-                    android:id="@+id/tv_goto_instructor"
+                    <Button
+                        android:layout_marginTop="4dp"
+                        android:id="@+id/tv_goto_board"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="게시판"
+                        android:textStyle="bold"
+                        android:layout_alignParentBottom="true"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/btn_str"
+                        />
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="강사소개"
+                    android:elevation="@dimen/fab_margin"
+                    android:layout_above="@+id/tv_goto_board"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
 
-                    android:textStyle="bold"
-                    android:textColor="@color/colorWhite"
-                    android:background="@drawable/btn_str"
-                    />
-                <ListView
-                    android:id="@+id/lv_instructor"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"></ListView>
-                <Button
-                    android:layout_marginTop="4dp"
-                    android:id="@+id/tv_goto_board"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="게시판"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorWhite"
-                    android:background="@drawable/btn_str"
-                    />
-            </LinearLayout>
+                        <Button
+                            android:id="@+id/tv_goto_instructor"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:text="강사소개"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite"
+                            android:background="@drawable/btn_str"
+                            />
+                        <ListView
 
-    </ScrollView>
+                            android:id="@+id/lv_instructor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:dividerHeight="0px"
+                            android:divider="@color/colorGrayll"
+                            android:background="@color/colorGrayll"
+                            android:visibility="gone"></ListView>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
@@ -161,6 +188,12 @@
         app:menu="@menu/nav_menu"
         />
 
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
 
+        <!--android:fillViewport="true"-->
+        <!--&gt;-->
+    <!--</ScrollView>-->
 
 </android.support.v4.widget.DrawerLayout>

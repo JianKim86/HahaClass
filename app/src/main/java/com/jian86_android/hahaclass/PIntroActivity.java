@@ -3,8 +3,10 @@ package com.jian86_android.hahaclass;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -20,7 +22,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,14 +50,28 @@ public class PIntroActivity extends AppCompatActivity {
     private UserInfo userInfo;
     private Intent getintent;
     String state,name,email,phone,pass,img;
+    private ImageView iv_introimg;
     private ArrayList<Schedule>schedules = new ArrayList<>();
     int level;
     private ActionBarDrawerToggle drawerToggle;
     private Button tv_goto_instructor,tv_goto_board;
+    private ScrollView layout_title_desc;
+    private RelativeLayout layout_rv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pintro);
+        View view = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+            }
+        }else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
         applicationClass =(ApplicationClass)getApplicationContext();
         getintent = getIntent();
         getIntentData();
@@ -63,17 +82,28 @@ public class PIntroActivity extends AppCompatActivity {
         listView = findViewById(R.id.lv_instructor);
         tv_goto_instructor =findViewById(R.id.tv_goto_instructor);
         tv_goto_board =findViewById(R.id.tv_goto_board);
+        iv_introimg =findViewById(R.id.iv_introimg);
+        layout_title_desc =findViewById(R.id.layout_title_desc);
+        layout_rv = findViewById(R.id.layout_rv);
+        Glide.with(this).load(R.drawable.title_img).into(iv_introimg);
 
-        if(itemInstructors.size()<2) listView.setVisibility(View.VISIBLE);
-
-        if(listView.getVisibility()==View.VISIBLE) Log.i("TAG", "aaaa");
+//        if(itemInstructors.size()<2) listView.setVisibility(View.VISIBLE);
+//
+//        if(listView.getVisibility()==View.VISIBLE) Log.i("TAG", "aaaa");
 
         tv_goto_instructor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(listView.getVisibility()!= View.GONE){
+                    layout_title_desc.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
-                }else{listView.setVisibility(View.VISIBLE);}
+                    layout_rv.setBackgroundResource(R.color.colorWhite);
+                }else{listView.setVisibility(View.VISIBLE);
+                    layout_title_desc.setVisibility(View.GONE);
+                    layout_rv.setBackgroundResource(R.color.colorGrayll);
+
+                }
             }
         });
         tv_goto_board.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +146,7 @@ public class PIntroActivity extends AppCompatActivity {
         //토글버튼 아이콘이 보이도록 붙이기
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setTitle(getResources().getString(R.string.subtitle_app_name));
         //삼선 아이콘 모양으로 동기마추기
         drawerToggle.syncState();
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록

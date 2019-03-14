@@ -174,4 +174,5 @@ public class ApplicationClass extends Application {
         super.onConfigurationChanged(newConfig);
     }
 
+
 }

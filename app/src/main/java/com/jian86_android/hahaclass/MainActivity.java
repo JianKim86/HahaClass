@@ -4,7 +4,9 @@ package com.jian86_android.hahaclass;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -101,6 +103,18 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        View view = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+            }
+        }else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
         getintent = getIntent();
         applicationClass =(ApplicationClass)getApplicationContext();
         getIntentData();
@@ -207,11 +221,11 @@ public class MainActivity extends AppCompatActivity  {
                  pagerLayout.setCurrentItem(1);
                  Toast.makeText(MainActivity.this, "Button2", Toast.LENGTH_SHORT).show();
                  break;
-             case R.id.fab3_btn:
-                 anim();
-                 pagerLayout.setCurrentItem(2);
-                 Toast.makeText(MainActivity.this, "Button3", Toast.LENGTH_SHORT).show();
-                 break;
+//             case R.id.fab3_btn:
+//                 anim();
+//                 pagerLayout.setCurrentItem(2);
+//                 Toast.makeText(MainActivity.this, "Button3", Toast.LENGTH_SHORT).show();
+//                 break;
 //             case R.id.fab4_btn:
 //                 anim();
 //                 pagerLayout.setCurrentItem(3);

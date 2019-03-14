@@ -48,7 +48,6 @@ public class FragSettingLog extends Fragment {
 
     private HashMap<String,Schedule> applyClasses = new HashMap<>(); //서버에서 나의 apply 를 담음
     private  HashMap<String,RecivedApplicant> received_classes = new HashMap<>(); //서버에서 내 강의를 신청한 사람들의 정보를 담음
-
    // private AdapterSettingApplyClass mMyAdapter;
 //필요한 것 number / title / date /
 //강의를 구별할 수 있는 필드 저장, 날짜 저장
@@ -70,7 +69,7 @@ public class FragSettingLog extends Fragment {
 //        lv_apply_list =view.findViewById(R.id.lv_apply_list);
 //        lv_my_class_list =view.findViewById(R.id.lv_my_class_list);
 //        tv_title_apply= header_apply.findViewById(R.id.tv_header);
-//
+
 //        tv_title_myclass= header_my_class.findViewById(R.id.tv_header);
 //        lv_apply_list.addHeaderView(header_apply);
 //        lv_my_class_list.addHeaderView(header_my_class);
@@ -81,7 +80,8 @@ public class FragSettingLog extends Fragment {
     }
     ArrayList<Schedule> arrApplylist = new ArrayList<>();
     ArrayList<RecivedApplicant> arrRecivedlist = new ArrayList<>();
-//각 리스트 해더뷰 세팅
+
+//각 리스트 해더뷰 세팅 ,어뎁터 연결
     void setData(){
      //   mMyAdapter = new AdapterSettingApplyClass (applyClasses, context);
         //adapterclass MyApplyclass 추가 필요
@@ -93,6 +93,8 @@ public class FragSettingLog extends Fragment {
         AdapterSettingLogApply mMyAdapter = new AdapterSettingLogApply(arrApplylist,context);
         /**서버에서 읽어온 정보를 컬랙션에 RecivedApplicant로  담고 리스트 뷰에 어댑터로 등록*/
         AdapterSettingLogRecivedApplicant recivedApplicant = new AdapterSettingLogRecivedApplicant(arrRecivedlist,context);
+        //리사일러뷰 어댑터 연결
+        setRecyclerView();
 //        //어뎁터 연결
 //        lv_apply_list.setAdapter(mMyAdapter);
 //        lv_my_class_list.setAdapter(recivedApplicant);
@@ -142,7 +144,6 @@ public class FragSettingLog extends Fragment {
             level = 0;
             userInfo = null;
         }
-
         /**서버에 담을때 스케쥴로 어레이에 담음 */
         /**DB: class_apply_list에서 filter : userEmail -> l_num과 class_code를 얻어 DB: class_list에서 정보 검색하여 schadule에 담음*/
         if(applicationClass.getMyApplyClasses() != null && applicationClass.getMyApplyClasses().size()>0 ) {
@@ -157,6 +158,16 @@ public class FragSettingLog extends Fragment {
             Collections.sort(arrRecivedlist, sorts);
         }
     }//getData
+
+    AdapterRecycleSLog adapter;
+    private void setRecyclerView(){
+        //recyclerView.setHasFixedSize(false);
+// RecyclerView에 Adapter를 설정해줍니다.
+        adapter = new AdapterRecycleSLog(context,arrApplylist,arrRecivedlist,arrApplylist.size(),arrRecivedlist.size());
+        recyclerView.setAdapter(adapter);
+    }
+
+
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
