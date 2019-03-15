@@ -7,11 +7,11 @@
     >
 
             <ListView
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:id="@+id/lv_schedule"
-                android:background="@drawable/back_color_b"
+                android:background="@drawable/text_layout_desc_back_color"
                 android:headerDividersEnabled="false"
-                android:paddingBottom="16dp"
+                android:paddingBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="0dp"></ListView>

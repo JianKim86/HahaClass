@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jian86_android.hahaclass">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,7 +21,10 @@
         android:label="행복을 만드는 아리랑 하박수 웃음교실"
         android:roundIcon="@drawable/hahaclass_logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"
+            tools:ignore="WrongManifestParent" />
         <activity android:name=".LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -4,13 +4,14 @@
     android:layout_height="wrap_content"
     >
     <TextView
-        android:background="@color/colorGrayl"
+        android:background="@color/colorGrayll"
 
         android:id="@+id/tv_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ssdsdsds"
         android:textSize="20sp"
+        android:layout_marginBottom="2dp"
         android:padding="8dp"
         android:textStyle="bold"/>
     <LinearLayout
@@ -19,6 +20,7 @@
         android:layout_height="120dip"
         android:gravity="center_horizontal"
         android:background="@color/colorGrayll"
+        android:layout_marginTop="2dp"
         >
         <TextView
             android:layout_width="wrap_content"

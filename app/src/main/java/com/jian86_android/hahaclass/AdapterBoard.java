@@ -66,7 +66,7 @@ public class AdapterBoard extends BaseAdapter {
         if(myItem.getBoard_instructor().getSpinner_title() != null&& myItem.getBoard_instructor().getSpinner_title().length()>0) tv_instructor.setText(myItem.getBoard_instructor().getSpinner_title());
 
 
-        if(myItem.isImg()) Glide.with(context).load(R.drawable.ic_launcher_background).into(iv_img);
+        if(myItem.isImg()) Glide.with(context).load(R.drawable.ic_c).into(iv_img);
         else iv_img.setVisibility(View.GONE);
 
 
