@@ -583,11 +583,6 @@ public class LoginActivity extends AppCompatActivity  {
     }//DBsetData
 
 
-
-
-
-
-
     //액티비티 이동
     public void moveActivity(int state, UserInfo userInfo){
 
