@@ -83,7 +83,7 @@ public class AdapterRecycleSLog extends RecyclerView.Adapter {
         } else if (aitems.size() > 0 && viewType == TYPE_applyList) {
             layout = R.layout.psetting_log_apply_list_item;
         } else if (viewType == TYPE_recivedTitle) {
-            layout = R.layout.psetting_log_r_list_header;
+            layout = R.layout.psetting_log_rlist_header;
         }else { layout = R.layout.psetting_log_myclass_listitem; }
 
         v = LayoutInflater.from(context).inflate(layout,viewGroup,false);

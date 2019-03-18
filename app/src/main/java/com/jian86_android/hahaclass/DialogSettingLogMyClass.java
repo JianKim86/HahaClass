@@ -40,7 +40,7 @@ public class DialogSettingLogMyClass {
         listView = dlg.findViewById(R.id.lv_apply_user_list);
         header_view = ((LayoutInflater)(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))).inflate(R.layout.psetting_log_myclass_header, null, false);
         listView.addHeaderView(header_view);
-        AdapterSettingLogRecivedApplicantUI adapter = new AdapterSettingLogRecivedApplicantUI(applyClassInfos,context);
+        AdapterSettingLogRApplyUI adapter = new AdapterSettingLogRApplyUI(applyClassInfos,context);
         listView.setAdapter(adapter);
     }
 

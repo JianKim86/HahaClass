@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class AdapterSettingLogRecivedApplicantUI extends BaseAdapter {
+public class AdapterSettingLogRApplyUI extends BaseAdapter {
     ArrayList<ApplyClassInfo> items;
     Context context;
 
-    public AdapterSettingLogRecivedApplicantUI(ArrayList<ApplyClassInfo> items, Context context) {
+    public AdapterSettingLogRApplyUI(ArrayList<ApplyClassInfo> items, Context context) {
         this.items = items;
         this.context = context;
 
