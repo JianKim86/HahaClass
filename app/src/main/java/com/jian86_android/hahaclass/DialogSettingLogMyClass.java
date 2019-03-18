@@ -11,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -39,7 +38,7 @@ public class DialogSettingLogMyClass {
         // 커스텀 다이얼로그의 각 위젯들을 정의.
         check_btn = dlg.findViewById(R.id.check_btn);
         listView = dlg.findViewById(R.id.lv_apply_user_list);
-        header_view = ((LayoutInflater)(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))).inflate(R.layout.psetting_log_my_class_applicant_info_header, null, false);
+        header_view = ((LayoutInflater)(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))).inflate(R.layout.psetting_log_myclass_header, null, false);
         listView.addHeaderView(header_view);
         AdapterSettingLogRecivedApplicantUI adapter = new AdapterSettingLogRecivedApplicantUI(applyClassInfos,context);
         listView.setAdapter(adapter);

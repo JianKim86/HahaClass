@@ -7,10 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class AdapterSettingLogRecivedApplicantUI extends BaseAdapter {
     ArrayList<ApplyClassInfo> items;
@@ -42,7 +39,7 @@ public class AdapterSettingLogRecivedApplicantUI extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.psetting_log_my_class_applicant_info_item, parent, false);
+            convertView = inflater.inflate(R.layout.psetting_log_myclass_item, parent, false);
 
         }
         /* 'listview_custom'에 정의된 위젯에 대한 참조 획득 */

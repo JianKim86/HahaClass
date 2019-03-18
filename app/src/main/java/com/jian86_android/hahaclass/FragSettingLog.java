@@ -92,7 +92,7 @@ public class FragSettingLog extends Fragment {
 
         AdapterSettingLogApply mMyAdapter = new AdapterSettingLogApply(arrApplylist,context);
         /**서버에서 읽어온 정보를 컬랙션에 RecivedApplicant로  담고 리스트 뷰에 어댑터로 등록*/
-        AdapterSettingLogRecivedApplicant recivedApplicant = new AdapterSettingLogRecivedApplicant(arrRecivedlist,context);
+        AdapterSettingRApplicant recivedApplicant = new AdapterSettingRApplicant(arrRecivedlist,context);
         //리사일러뷰 어댑터 연결
         setRecyclerView();
 //        //어뎁터 연결

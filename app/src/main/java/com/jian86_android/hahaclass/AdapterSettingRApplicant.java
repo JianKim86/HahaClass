@@ -15,13 +15,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AdapterSettingLogRecivedApplicant extends BaseAdapter {
+public class AdapterSettingRApplicant extends BaseAdapter {
     ArrayList<RecivedApplicant> items;
     Context context;
     ApplicationClass applicationClass;
     ArrayList<ApplyClassInfo>applyClassInfos;
     DialogSettingLogMyClass customDialog;
-    public AdapterSettingLogRecivedApplicant(ArrayList<RecivedApplicant> items, Context context) {
+    public AdapterSettingRApplicant(ArrayList<RecivedApplicant> items, Context context) {
         this.items = items;
         this.context = context;
         applicationClass= (ApplicationClass)context.getApplicationContext();
@@ -46,7 +46,7 @@ public class AdapterSettingLogRecivedApplicant extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.psetting_log_my_class_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.psetting_log_myclass_listitem, parent, false);
         }
 
 
