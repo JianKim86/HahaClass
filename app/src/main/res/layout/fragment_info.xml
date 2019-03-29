@@ -1,283 +1,274 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/FragTeme"
-    android:layout_marginBottom="16dp">
-
     <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        android:paddingBottom="16dp"
+        android:fillViewport="true"
         >
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            android:layout_margin="4dp"
-            android:elevation="@dimen/fab_margin"
-            android:background="@color/colorAlpa"
-           >
-            <RelativeLayout
-                android:background="@color/colorback"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="8dp"
-              >
-                <android.support.v7.widget.CardView
-                    android:layout_marginTop="6dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:theme="@style/FragTeme"
 
+                >
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="4dp"
-                    android:elevation="@dimen/fab_margin"
-                    android:id="@+id/layout_title_card">
-                    <LinearLayout
-                        android:id="@+id/layout_title"
+                    android:orientation="vertical"
+                    android:theme="@style/FragTeme"
+                    android:background="@drawable/flag_back"
+                    android:layout_marginBottom="16dp"
+
+                    >
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/layout_title_card"
+                        android:background="@color/colorback"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="8dp"
-                        android:background="@drawable/text_layout_title_back"
-                        >
+                        android:layout_margin="4dp"
+                        android:layout_marginTop="6dp"
+                        android:elevation="@dimen/fab_margin"
+                        app:cardCornerRadius="8dp">
 
-                        <TextView
-                            android:id="@+id/tv_name"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:id="@+id/layout_title"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="윤나영"
-                            android:background="@color/colorAlpa"
-                            android:textColor="@color/colorDarkGray"
-                            android:textSize="32sp"
-                            android:textStyle="bold" />
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/text_layout_title_back"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="8dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            android:textColor="@color/colorDarkGray"
-                            android:text="프로필"
-                            android:background="@color/colorAlpa"
-                            android:textSize="32sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                            <TextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/colorAlpa"
+                                android:text="윤나영"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="32sp"
+                                android:textStyle="bold" />
 
-
-                <RelativeLayout
-                    android:background="@color/colorAlpa"
-                    android:id="@+id/layout_relative"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
-                    android:layout_below="@+id/layout_title_card"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:padding="0dp">
-
-                    <ImageView
-                        android:id="@+id/iv_infoimg"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="4dp"
+                                android:background="@color/colorAlpa"
+                                android:text="프로필"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="32sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                    <RelativeLayout
+                        android:id="@+id/layout_relative"
                         android:layout_width="160dp"
                         android:layout_height="160dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:clickable="false"
-                        android:scaleType="centerCrop"
-                        android:background="@color/colorAlpa"
-                        android:src="@drawable/ic_launcher_background" />
-
-                    <ImageView
-
-                        android:id="@+id/iv_edit"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentBottom="true"
+                        android:layout_below="@+id/layout_title_card"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:background="@color/colorAlpa"
-                        android:src="@android:drawable/ic_menu_camera"
-                        android:visibility="gone" />
-                </RelativeLayout>
+                        android:padding="0dp">
 
-                <LinearLayout
-                    android:id="@+id/ll_v"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/layout_relative"
-                    android:orientation="vertical"
-                    android:background="@color/colorAlpa"
-                    android:padding="0dp"
-                    android:layout_marginBottom="8dp">
+                        <ImageView
+                            android:id="@+id/iv_infoimg"
+                            android:layout_width="160dp"
+                            android:layout_height="160dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:background="@color/colorAlpa"
+                            android:clickable="false"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_launcher_background" />
+
+                        <ImageView
+
+                            android:id="@+id/iv_edit"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:background="@color/colorAlpa"
+                            android:src="@android:drawable/ic_menu_camera"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_v"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_below="@+id/layout_relative"
+                        android:background="@color/colorAlpa"
+                        android:orientation="vertical"
+                        android:padding="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
-                            android:padding="0dp"
                             android:background="@color/colorAlpa"
-                            >
+                            android:orientation="vertical"
+                            android:padding="0dp">
+
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/text_layout_desc_back"
                                 android:layout_marginBottom="2dp"
+                                android:background="@drawable/text_layout_desc_back"
                                 android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
-                                >
+                                android:paddingRight="4dp">
 
                                 <TextView
-                                    android:background="@color/colorAlpa"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
+                                    android:background="@color/colorAlpa"
                                     android:text="자격"
                                     android:textSize="24sp"
                                     android:textStyle="bold" />
 
                                 <ImageView
-                                    android:background="@color/colorAlpa"
-
                                     android:id="@+id/iv_edit_license"
+
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
                                     android:layout_centerVertical="true"
+                                    android:background="@color/colorAlpa"
                                     android:clickable="true"
                                     android:src="@drawable/edit"
                                     android:visibility="gone" />
                             </RelativeLayout>
 
                             <TextView
-                                android:background="@drawable/text_layout_desc_back_bottom"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
                                 android:id="@+id/list_license"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:background="@drawable/text_layout_desc_back_bottom"
                                 android:lineSpacingMultiplier="1.2"
                                 android:padding="8dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
                                 android:text="웃음치료1급자격, 레크레이션1급자격, 실버 웃음 전문지도사자격 ,케어세라피1급자격, 시낭송1급지도사자격 스피치 1급 지도자 자격, 명강사 1급 지도사자격, 펀리더십지도사1급자격, 금연 금주 예방지도사자격, 창의인성교육지도사 자격, 부모코칭지도사자격, 평생교육사 2급 자격,  사회복지사 2급 자격, 심리웃음치료사1급 자격, 건강걷기2급지도사자격, 산업카운셀러1급자격, 심리상담 2급자격(논문: 유머감각이 자아 존중감과 대인관계에 미치는 영향)"
                                 android:textSize="16sp" />
                         </LinearLayout>
 
 
-
-
-                <LinearLayout
-                    android:background="@color/colorAlpa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:padding="0dp"
-                    >
-                    <RelativeLayout
-                        android:background="@drawable/text_layout_desc_back"
-                        android:layout_marginBottom="2dp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-
-                        <TextView
-                            android:background="@color/colorAlpa"
-
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="강의분야"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <ImageView
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:background="@color/colorAlpa"
+                            android:orientation="vertical"
+                            android:padding="0dp">
 
-                            android:id="@+id/iv_edit_field"
-                            android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:background="@drawable/text_layout_desc_back"
+
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:background="@color/colorAlpa"
+                                    android:text="강의분야"
+                                    android:textSize="24sp"
+                                    android:textStyle="bold" />
+
+                                <ImageView
+                                    android:id="@+id/iv_edit_field"
+
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:background="@color/colorAlpa"
+                                    android:clickable="true"
+                                    android:src="@drawable/edit"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/list_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_layout_desc_back_bottom"
+                                android:lineSpacingMultiplier="1.2"
+                                android:padding="8dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:text="감성 리더십, 펀(웃음) 리더십(자아,관계,미래리더십), 감성 스피치,  소통, 강의 코칭, 자원봉사교육, 스피치코칭 PING과 함께 (청소년, 기업, 학부모) 동기부여, 펀 리더십강사 양성 과정, 생애재설계교육, 인성, 금연,금주 학부모코칭, 시낭송 코칭"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:clickable="true"
-                            android:src="@drawable/edit"
-                            android:visibility="gone" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:background="@drawable/text_layout_desc_back_bottom"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:id="@+id/list_field"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingMultiplier="1.2"
-                        android:padding="8dp"
-                        android:text="감성 리더십, 펀(웃음) 리더십(자아,관계,미래리더십), 감성 스피치,  소통, 강의 코칭, 자원봉사교육, 스피치코칭 PING과 함께 (청소년, 기업, 학부모) 동기부여, 펀 리더십강사 양성 과정, 생애재설계교육, 인성, 금연,금주 학부모코칭, 시낭송 코칭"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:background="@color/colorAlpa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:padding="0dp"
-                    >
-                    <RelativeLayout
-                        android:background="@drawable/text_layout_desc_back"
-                        android:layout_marginBottom="2dp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                >
-
-                        <TextView
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             android:background="@color/colorAlpa"
+                            android:orientation="vertical"
+                            android:padding="0dp">
 
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="학력및 이력"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:background="@drawable/text_layout_desc_back"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp">
 
-                        <ImageView
-                            android:background="@color/colorAlpa"
+                                <TextView
+                                    android:layout_width="wrap_content"
 
-                            android:id="@+id/iv_edit_career"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:clickable="true"
-                            android:src="@drawable/edit"
-                            android:visibility="gone"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:background="@color/colorAlpa"
+                                    android:text="학력및 이력"
+                                    android:textSize="24sp"
+                                    android:textStyle="bold" />
 
-                            />
-                    </RelativeLayout>
+                                <ImageView
+                                    android:id="@+id/iv_edit_career"
 
-                    <TextView
-                        android:background="@drawable/text_layout_desc_back_bottom"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:background="@color/colorAlpa"
+                                    android:clickable="true"
+                                    android:src="@drawable/edit"
+                                    android:visibility="gone"
 
-                        android:id="@+id/list_career"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lineSpacingMultiplier="1.2"
-                        android:padding="8dp"
-                        android:text="학력:명지대 사회교육대학원 졸업\n
+                                    />
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/list_career"
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_layout_desc_back_bottom"
+                                android:lineSpacingMultiplier="1.2"
+                                android:padding="8dp"
+                                android:text="학력:명지대 사회교육대학원 졸업\n
 現) (행복을 만드는)창의융합교육 연구소(대표)\n
 現) 구리아리랑연구보존회 이사 및 사무국장\n
 現) 아리랑컨텐츠협의회 회장\n
@@ -300,29 +291,42 @@
        (교육공무원(영양교사)인사위원회 위원,친절평가위원)\n
 前) 구리청소년통합지원체계(CYS_NET) 운영협의회 위원\n
 "
-                        android:textSize="16sp" />
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+
+                        <Button
+                            android:id="@+id/btn_save"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/btn_str"
+                            android:text="@string/save_edit"
+                            android:textColor="@color/colorWhite"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+
+
+
+
+
+
                 </LinearLayout>
+            </LinearLayout>
 
 
 
-                    <Button
-                        android:id="@+id/btn_save"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/btn_str"
-                        android:text="@string/save_edit"
-                        android:textColor="@color/colorWhite"
-                        android:visibility="gone" />
-                </LinearLayout>
 
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+
+
+
+
+
 
 
 
     </ScrollView>
 
 
-</RelativeLayout>

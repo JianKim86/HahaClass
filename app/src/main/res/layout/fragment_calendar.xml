@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:theme="@style/FragTeme"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingTop="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
     >
 
-            <ListView
-                android:layout_marginTop="8dp"
-                android:id="@+id/lv_schedule"
-                android:background="@drawable/text_layout_desc_back_color"
-                android:headerDividersEnabled="false"
-                android:paddingBottom="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="0dp"></ListView>
-
+<ListView
+    android:id="@+id/lv_schedule"
+    android:headerDividersEnabled="false"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none"
+    android:elevation="0dp"
+    android:dividerHeight="4dp"
+    android:divider="@color/colorAlpa"
+   ></ListView>
 
 </LinearLayout>

@@ -18,13 +18,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="8dp"
-        android:background="@color/colorAlpa">
+        android:background="@drawable/text_layout_desc_dep_color">
         <TextView
             android:id="@+id/tv_title"
             android:background="@color/colorAlpa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="강의 시간표"
+            android:text="전체 강의 시간표"
             android:textColor="@color/colorWhite"
             android:layout_weight="1"
             android:textStyle="bold"

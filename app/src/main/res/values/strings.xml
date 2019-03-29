@@ -2,6 +2,7 @@
     <string name="app_name">HahaClass</string>
     <string name="title_app_name">행복을 만드는 아리랑</string>
     <string name="subtitle_app_name">하박수 웃음교실</string>
+
     <string name="forgot_pwd">비밀번호를 잊으셨나요?</string>
     <string name="goback">기존 계정으로 로그인</string>
     <string name="cont_use_custom">회원 전용입니다 회원가입하시겠습니까?</string>

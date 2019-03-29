@@ -81,10 +81,10 @@ public class AdapterRecycleSLog extends RecyclerView.Adapter {
         if (viewType == TYPE_applyTitle) {
             layout = R.layout.psetting_log_list_header;
         } else if (aitems.size() > 0 && viewType == TYPE_applyList) {
-            layout = R.layout.psetting_log_apply_list_item;
+            layout = R.layout.psetting_log_alistitem;
         } else if (viewType == TYPE_recivedTitle) {
-            layout = R.layout.psetting_log_rlist_header;
-        }else { layout = R.layout.psetting_log_myclass_listitem; }
+            layout = R.layout.psetting_log_rlistheader;
+        }else { layout = R.layout.psetting_log_rlistitem; }
 
         v = LayoutInflater.from(context).inflate(layout,viewGroup,false);
         ViewHolder vhHeader = new ViewHolder(v, viewType); //Creating ViewHolder and passing the object of type view

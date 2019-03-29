@@ -21,7 +21,7 @@
     <color name="colorDarkGray">#3a3a3a</color>
     <color name="colorDialTitle">@color/colorPoint</color>
     <color name="colorlightOrange">#f6996d</color>
-    <color name="colorback">#99423631</color>
+    <color name="colorback">#dadada</color>
     <color name="colorCel1">@color/colorGrayl</color>
     <color name="colorCel2">@color/colorGray</color>
 

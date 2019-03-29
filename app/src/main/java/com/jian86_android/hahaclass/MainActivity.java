@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity  {
             // 21 버전 이상일 때
             getWindow().setStatusBarColor(Color.BLACK);
         }
+
         getintent = getIntent();
         applicationClass =(ApplicationClass)getApplicationContext();
         getIntentData();

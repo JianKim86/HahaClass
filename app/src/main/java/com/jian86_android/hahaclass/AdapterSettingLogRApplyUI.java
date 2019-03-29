@@ -39,7 +39,7 @@ public class AdapterSettingLogRApplyUI extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.psetting_log_myclass_item, parent, false);
+            convertView = inflater.inflate(R.layout.psetting_log_ritem, parent, false);
 
         }
         /* 'listview_custom'에 정의된 위젯에 대한 참조 획득 */

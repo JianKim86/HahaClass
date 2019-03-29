@@ -4,13 +4,13 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorback</item>
+        <item name="colorPrimaryDark">@color/colorWhite</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorAlpa</item>
         <item name="colorPrimaryDark">@color/colorback</item>
         <item name="colorAccent">@color/colorAccent</item>
 
@@ -18,7 +18,7 @@
 
     <style name="AppTheme.Applayout">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimary">@color/colorAlpa</item>
         <item name="titleTextColor">@color/colorTitle</item>
         <item name="subtitleTextColor">@color/colorTitle</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
@@ -26,9 +26,9 @@
     </style>
     <style name="AppTheme.Applayoutmain">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorAlpa</item>
+        <item name="colorPrimary">@color/colorWhite</item>
         <item name="titleTextColor">@color/colorTitle</item>
-        <item name="subtitleTextColor">@color/colorTitle</item>
+        <item name="subtitleTextColor">@color/colorAccent</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
 
     </style>
@@ -55,8 +55,8 @@
         <item name="android:textColorPrimary">@color/colorPoint</item>
     </style>
     <style name="ToolbarThemeMain" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="titleTextColor">@color/colorGrayll</item>
-        <item name="android:textColorSecondary">@color/colorGrayl</item>
+        <item name="titleTextColor">@color/colorDarkGray</item>
+        <item name="android:textColorSecondary">@color/colorDarkGray</item>
         <item name="android:textColorPrimary">@color/colorPoint</item>
     </style>
     <style name="ToolbarTheme_frm" parent="Theme.AppCompat.Light.NoActionBar">
@@ -69,6 +69,13 @@
         <item name="titleTextColor">@color/colorTitle</item>
         <item name="android:textColorSecondary">@color/colorTitle</item>
         <item name="android:background">@color/colorWhite</item>
+        <item name="android:padding">4dp</item>
+
+    </style>
+    <style name="Frag">
+        <item name="titleTextColor">@color/colorTitle</item>
+        <item name="android:textColorSecondary">@color/colorTitle</item>
+        <item name="android:background">@drawable/flag_back</item>
         <item name="android:padding">4dp</item>
 
     </style>

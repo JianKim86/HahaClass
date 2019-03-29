@@ -3,40 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp"
-    android:elevation="0dp"
-    android:background="@color/colorAlpa"
+    android:background="@drawable/text_layout_stroke_noround"
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorWhite"
+        android:background="@color/colorAlpa"
         >
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:background="@color/colorAlpa"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="하박수웃음지도사 12주 프로그램"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:layout_gravity="center"
-            />
+            android:orientation="vertical"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+           >
+            <TextView
+                android:background="@color/colorAlpa"
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="하박수웃음지도사 12주 프로그램"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:layout_gravity="center"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorGrayl"/>
+        </LinearLayout>
+
     <LinearLayout
+        android:background="@color/colorAlpa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:padding="4dp"
         >
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_img"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@mipmap/ic_launcher"
+            android:background="@color/colorAlpa"
             android:layout_gravity="center_vertical"/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,9 +58,11 @@
             android:layout_weight="1"
             android:layout_marginLeft="8dp"
             android:layout_gravity="center_vertical"
+            android:background="@color/colorAlpa"
             >
 
                     <TextView
+                        android:background="@color/colorAlpa"
                         android:id="@+id/tv_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -57,6 +72,7 @@
                         android:layout_centerVertical="true"
                         />
                     <TextView
+                        android:background="@color/colorAlpa"
                         android:id="@+id/tv_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -75,7 +91,6 @@
             android:textColor="@color/colorWhite"
             android:background="@drawable/btn_str_sc"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="4dp"
            />
     </LinearLayout>
     </LinearLayout>

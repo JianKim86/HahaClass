@@ -38,7 +38,7 @@ public class DialogSettingLogMyClass {
         // 커스텀 다이얼로그의 각 위젯들을 정의.
         check_btn = dlg.findViewById(R.id.check_btn);
         listView = dlg.findViewById(R.id.lv_apply_user_list);
-        header_view = ((LayoutInflater)(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))).inflate(R.layout.psetting_log_myclass_header, null, false);
+        header_view = ((LayoutInflater)(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))).inflate(R.layout.psetting_log_rheader, null, false);
         listView.addHeaderView(header_view);
         AdapterSettingLogRApplyUI adapter = new AdapterSettingLogRApplyUI(applyClassInfos,context);
         listView.setAdapter(adapter);

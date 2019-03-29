@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 public class FragInfo extends Fragment implements View.OnClickListener {
+    private static final int img_length ="uploads/20190310031854".length();
     private static final String CUSTOMER = "customer";
     private static final String USER = "user";
     private ApplicationClass applicationClass;
@@ -89,7 +91,8 @@ public class FragInfo extends Fragment implements View.OnClickListener {
     public void setPic(String pic){
         //Toast.makeText(applicationClass, ""+pic, Toast.LENGTH_SHORT).show();
         picPath =pic;
-        if(picPath!=null&&!(picPath.equals(""))){
+        Log.i("picpathdd",picPath);
+        if(picPath!=null&& picPath.length()>img_length){
         Uri uRi = Uri.parse(picPath);
         Picasso.get().load(uRi).into(iv_infoimg);
         }else {Glide.with(this).load(R.drawable.ic_launcher_background).into(iv_infoimg);}

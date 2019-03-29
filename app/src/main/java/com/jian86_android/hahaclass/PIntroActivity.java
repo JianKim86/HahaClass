@@ -70,16 +70,29 @@ public class PIntroActivity extends AppCompatActivity {
     private Button tv_goto_instructor,tv_goto_board;
     private ScrollView layout_title_desc;
     private RelativeLayout layout_rv;
-    private TextView tv_text;
+    private TextView tv_text, toolbar_title,toolbar_subtitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pintro);
+        View view = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (view != null) {
+                // 23 버전 이상일 때 상태바 하얀 색상에 회색 아이콘 색상을 설정
+                view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+            }
+        }else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
 
         applicationClass =(ApplicationClass)getApplicationContext();
         getintent = getIntent();
         getIntentData();
         toolbar =findViewById(R.id.toolbar_t);
+        toolbar_title = findViewById(R.id.toolbar_title);
+        toolbar_subtitle = findViewById(R.id.toolbar_subtitle);
         setSupportActionBar(toolbar);
         navMenu = findViewById(R.id.nav_menu);
         drawerLayout =findViewById(R.id.drawer_layout);
@@ -92,24 +105,18 @@ public class PIntroActivity extends AppCompatActivity {
         tv_text =findViewById(R.id.tv_text);
         Glide.with(this).load(R.drawable.title_img).into(iv_introimg);
 
-//        if(itemInstructors.size()<2) listView.setVisibility(View.VISIBLE);
-//
-//        if(listView.getVisibility()==View.VISIBLE) Log.i("TAG", "aaaa");
 
         tv_goto_instructor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(listView.getVisibility()!= View.GONE){
                    // layout_title_desc.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
-                    tv_text.setTextColor(getResources().getColor(R.color.colorWhite));
-                    //layout_rv.setBackgroundResource(R.color.colorWhite);
+                    tv_text.setTextColor(getResources().getColor(R.color.colorDarkGray));
+
                 }else{
                     listView.setVisibility(View.VISIBLE);
                     tv_text.setTextColor(getResources().getColor(R.color.colorGray));
-                   // layout_title_desc.setVisibility(View.GONE);
-                   // layout_rv.setBackgroundResource(R.color.colorGrayll);
 
                 }
             }
@@ -152,11 +159,14 @@ public class PIntroActivity extends AppCompatActivity {
         //토글버튼 아이콘이 보이도록 붙이기
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        actionBar.setTitle("");
+        toolbar_title.setText(R.string.subtitle_app_name);
+        toolbar_subtitle.setText(R.string.title_app_name);
         //삼선 아이콘 모양으로 동기마추기
         drawerToggle.syncState();
         //삼선 아이콘과 화살표아이콘이 자동 변환되도록
         drawerLayout.addDrawerListener(drawerToggle);
+
 
     }//onCreate
     private ItemInstructor instructor;
@@ -263,10 +273,6 @@ public class PIntroActivity extends AppCompatActivity {
     }//getClassDetailList
 
 
-
-
-
-
     View nav_header_view=null;
     private  void navSetting(){
 
@@ -322,7 +328,6 @@ public class PIntroActivity extends AppCompatActivity {
 
         //아이템 클릭상황을 토글 버튼에 전달
         drawerToggle.onOptionsItemSelected(item);
-
         return super.onOptionsItemSelected(item);
 
 
@@ -352,15 +357,6 @@ public class PIntroActivity extends AppCompatActivity {
         tv_text.setTextColor(getResources().getColor(R.color.colorGray));
     }
 
-    private String ptitle;
-    private String phost;
-    private String pstart;
-    private String pend;
-    //datasItem
-    private String itemWeek;
-    private String itemDate;
-    private String itemTitle;
-    private String itemConfiguration;
     private void dataSetting(){
         int instructorsSize = applicationClass.getSetupInstructors().getItemInstructors().size();
 
@@ -371,134 +367,7 @@ public class PIntroActivity extends AppCompatActivity {
         }
         /**
          * 서버에서 instructors 정보 읽어와서 add시키기 **서버작업시 따로 리스트로 빼야됨 db따로 설계**/
-//
-//        ptitle ="하박수웃음지도사 12주 프로그램";
-//        phost ="(행복을 만드는)\n창의융합교육연구소";
-//        pstart = "2019-03-22";
-//        pend ="2019-04-11";
-//        Schedule sitem = new Schedule(ptitle,phost,pstart,pend);
-//        sitem.setSupport("블라블라");
-//        sitem.setProjectImgPath("");
-//
-//        ArrayList<DatasItem>datasItemArrayList = new ArrayList<>();
-//
-//        DatasItem ditem = new DatasItem();
-//        itemWeek="1";
-//        itemDate="2월14일";
-//        itemTitle="개 강 식";
-//        itemConfiguration="오랜테이션, 동기부여, 하박수란?";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//
-//        datasItemArrayList.add(ditem);
-//
-//        ditem = new DatasItem();
-//        itemWeek="2";
-//        itemDate="2월21일";
-//        itemTitle="셀프리더십1 나는 누구인가?";
-//        itemConfiguration="(DISC)나의 유형?, 스피치훈련 ,셀프웃음운동 ,시낭송(감성훈련과 심신치유)";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//        datasItemArrayList.add(ditem);
-//
-//        ditem = new DatasItem();
-//        itemWeek="3";
-//        itemDate="2월28일";
-//        itemTitle="셀프리더십2 나의 강점 찾기";
-//        itemConfiguration="다중지능, 스피치훈련, 셀프웃음 운동,시낭송(감성훈련과 심신치유)";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//        datasItemArrayList.add(ditem);
-//
-//        ditem = new DatasItem();
-//        itemWeek="4";
-//        itemDate="3월7일";
-//        itemTitle="셀프리더십3 나의꿈 나의 로드맵";
-//        itemConfiguration="꿈 지도 그려 발표하기, 스피치 훈련,셀프 웃음운동, 시낭송(감성훈련과 심신치유)";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//        datasItemArrayList.add(ditem);
-//
-//
-//        sitem.setDatas(datasItemArrayList);
-//
-//        schedules.add(sitem);
-///*************************************************************************************/
-//
-//        ptitle ="하박수웃음지도사 24주 프로그램";
-//        phost ="(행복을 만드는)\n창의융합교육연구소";
-//        pstart = "2019-03-22";
-//        pend ="2019-04-21";
-//        sitem = new Schedule(ptitle,phost,pstart,pend);
-//        sitem.setSupport("블라블라");
-//        sitem.setProjectImgPath("");
-//
-//
-//        datasItemArrayList = new ArrayList<>();
-//        ditem = new DatasItem();
-//        itemWeek="1";
-//        itemDate="3월14일";
-//        itemTitle="개 강 식";
-//        itemConfiguration="오랜테이션, 동기부여, 하박수란?";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//        datasItemArrayList.add(ditem);
-//        ditem = new DatasItem();
-//        itemWeek="2";
-//        itemDate="3월21일";
-//        itemTitle="셀프리더십1 나는 누구인가?";
-//        itemConfiguration="(DISC)나의 유형?, 스피치훈련 ,셀프웃음운동 ,시낭송(감성훈련과 심신치유)";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//        datasItemArrayList.add(ditem);
-//        ditem = new DatasItem();
-//        itemWeek="3";
-//        itemDate="2월28일";
-//        itemTitle="셀프리더십2 나의 강점 찾기";
-//        itemConfiguration="다중지능, 스피치훈련, 셀프웃음 운동,시낭송(감성훈련과 심신치유)";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//        datasItemArrayList.add(ditem);
-//        ditem = new DatasItem();
-//        itemWeek="4";
-//        itemDate="3월7일";
-//        itemTitle="셀프리더십3 나의꿈 나의 로드맵";
-//        itemConfiguration="꿈 지도 그려 발표하기, 스피치 훈련,셀프 웃음운동, 시낭송(감성훈련과 심신치유)";
-//        ditem.setWeek(itemWeek);
-//        ditem.setDate(itemDate);
-//        ditem.setTitle(itemTitle);
-//        ditem.setConfiguration(itemConfiguration);
-//        datasItemArrayList.add(ditem);
-//
-//
-//        sitem.setDatas(datasItemArrayList);
-//
-//        schedules.add(sitem);
-//
-//
-//
-///*************************************************************************************/
-//
-//
-//        sitem.setDatas(datasItemArrayList);
-//     //   item.setSchedules(schedules);
-//
-//     //   itemInstructors.add(item);
-//
+
 //        /** dataItem 등록**/
 //
         AdapterPIntroList mMyAdapter = new AdapterPIntroList(itemInstructors,PIntroActivity.this);
