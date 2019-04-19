@@ -47,6 +47,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -283,40 +284,6 @@ public class FragCalendar extends Fragment {
     }
 
 
-
-//    public void setListViewHeightBasedOnChildren(ListView listView) {
-
-//        ListAdapter listAdapter = listView.getAdapter();
-//        if (listAdapter == null) {
-//            // pre-condition
-//            return;
-//
-//        }
-//        int totalHeight = 0;
-//
-//        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
-//        int dividerHeight = listView.getDividerHeight();
-//
-//        for (int i = 0; i < listAdapter.getCount(); i++) {
-//            View listItem = listAdapter.getView(i, null, listView);
-//            //listItem.measure(0, 0);
-//            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-//            totalHeight += listItem.getMeasuredHeight()+ dividerHeight;
-//
-//        }
-//
-//        ViewGroup.LayoutParams params = listView.getLayoutParams();
-//
-//        params.height = totalHeight;
-//        listView.setLayoutParams(params);
-//
-//        listView.requestLayout();
-//
-//
-//
-//    }//setListViewHeightBasedOnChildren
-
-
     void setData(){
 
         //TODO:서버 작업 진행시 Main에서 정보 읽어서 ItemInstructor에 넣고 거기서 빼옴
@@ -397,7 +364,16 @@ public class FragCalendar extends Fragment {
                 return;
             }
 
-            materialCalendarView.addDecorator(new EventDecorator(Color.GREEN, calendarDays,getActivity()));
+
+//            Iterator<CalendarDay> ir = calendarDays.iterator();
+//            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+//            while(ir.hasNext()){//데이터 검증
+//                String strdate =null;
+//                strdate = sdf.format(ir.next().getDate());
+//                Log.d("tagdates", strdate);
+//            }
+
+            materialCalendarView.addDecorator(new EventDecorator(Color.RED, calendarDays,getActivity()));
         }
 
     }
@@ -413,6 +389,10 @@ public class FragCalendar extends Fragment {
             drawable = context.getResources().getDrawable(R.drawable.more);
             this.color = color;
             this.dates = new HashSet<>(dates);
+
+
+
+
         }
 
         @Override
@@ -424,7 +404,7 @@ public class FragCalendar extends Fragment {
         public void decorate(DayViewFacade view) {
 
             view.setSelectionDrawable(drawable);
-            view.addSpan(new DotSpan(5, color)); // 날자밑에 점
+            view.addSpan(new DotSpan(3, color)); // 날자밑에 점
 
         }
     }
@@ -447,7 +427,7 @@ public class FragCalendar extends Fragment {
         public void decorate(DayViewFacade view) {
             view.addSpan(new StyleSpan(Typeface.BOLD));
             view.addSpan(new RelativeSizeSpan(1.4f));
-            view.addSpan(new ForegroundColorSpan(Color.GRAY));
+            view.addSpan(new ForegroundColorSpan(Color.RED));
         }
 
         public void setDate(Date date) {

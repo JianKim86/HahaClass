@@ -106,14 +106,7 @@
                         android:maxLines="1"
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
-                <TextView
-                    android:id="@+id/tv_forgotpwd"
-                    android:layout_width="240dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:gravity="right"
-                    android:textSize="10sp"
-                    android:text="@string/forgot_pwd"/>
+
                 <Button
                     android:id="@+id/email_sign_in_button"
                     style="?android:textAppearanceSmall"

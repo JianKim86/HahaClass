@@ -161,13 +161,13 @@ public class LoginActivity extends AppCompatActivity  {
             }
         });
 //btn signforgotpwd
-        TextView mForgotButton = (TextView) findViewById(R.id.tv_forgotpwd);
-        mForgotButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moveActivity(GOFORGOTPWD,null);
-            }
-        });
+//        TextView mForgotButton = (TextView) findViewById(R.id.tv_forgotpwd);
+//        mForgotButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                moveActivity(GOFORGOTPWD,null);
+//            }
+//        });
 //btn signup
         Button mSignupButton = (Button) findViewById(R.id.sign_up);
         mSignupButton.setOnClickListener(new OnClickListener() {
